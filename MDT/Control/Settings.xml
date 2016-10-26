@@ -1,0 +1,71 @@
+<Settings>
+  <Version>True</Version>
+  <Description>HYDV10 - Embedded media deployment share</Description>
+  <Comments>
+  </Comments>
+  <EnableMulticast>False</EnableMulticast>
+  <SupportX86>False</SupportX86>
+  <SupportX64>True</SupportX64>
+  <UNCPath>
+  </UNCPath>
+  <PhysicalPath>C:\Setup\HYDV10\DeployMedia\Content\Deploy</PhysicalPath>
+  <MonitorHost>
+  </MonitorHost>
+  <MonitorEventPort>9800</MonitorEventPort>
+  <MonitorDataPort>9801</MonitorDataPort>
+  <SkipWimSplit>True</SkipWimSplit>
+  <Boot.x86.UseBootWim>True</Boot.x86.UseBootWim>
+  <Boot.x86.ScratchSpace>32</Boot.x86.ScratchSpace>
+  <Boot.x86.IncludeAllDrivers>True</Boot.x86.IncludeAllDrivers>
+  <Boot.x86.IncludeNetworkDrivers>True</Boot.x86.IncludeNetworkDrivers>
+  <Boot.x86.IncludeMassStorageDrivers>True</Boot.x86.IncludeMassStorageDrivers>
+  <Boot.x86.IncludeVideoDrivers>False</Boot.x86.IncludeVideoDrivers>
+  <Boot.x86.IncludeSystemDrivers>False</Boot.x86.IncludeSystemDrivers>
+  <Boot.x86.BackgroundFile>%INSTALLDIR%\Samples\Background.bmp</Boot.x86.BackgroundFile>
+  <Boot.x86.ExtraDirectory>
+  </Boot.x86.ExtraDirectory>
+  <Boot.x86.GenerateGenericWIM>False</Boot.x86.GenerateGenericWIM>
+  <Boot.x86.GenerateGenericISO>False</Boot.x86.GenerateGenericISO>
+  <Boot.x86.GenericWIMDescription>Generic Windows PE (x86)</Boot.x86.GenericWIMDescription>
+  <Boot.x86.GenericISOName>Generic_x86.iso</Boot.x86.GenericISOName>
+  <Boot.x86.GenerateLiteTouchISO>False</Boot.x86.GenerateLiteTouchISO>
+  <Boot.x86.LiteTouchWIMDescription>Lite Touch Windows PE (x86)</Boot.x86.LiteTouchWIMDescription>
+  <Boot.x86.LiteTouchISOName>LiteTouchPE_x86.iso</Boot.x86.LiteTouchISOName>
+  <Boot.x86.SelectionProfile>Nothing</Boot.x86.SelectionProfile>
+  <Boot.x86.SupportUEFI>True</Boot.x86.SupportUEFI>
+  <Boot.x86.FeaturePacks>
+  </Boot.x86.FeaturePacks>
+  <Boot.x64.UseBootWim>True</Boot.x64.UseBootWim>
+  <Boot.x64.ScratchSpace>32</Boot.x64.ScratchSpace>
+  <Boot.x64.IncludeAllDrivers>True</Boot.x64.IncludeAllDrivers>
+  <Boot.x64.IncludeNetworkDrivers>True</Boot.x64.IncludeNetworkDrivers>
+  <Boot.x64.IncludeMassStorageDrivers>True</Boot.x64.IncludeMassStorageDrivers>
+  <Boot.x64.IncludeVideoDrivers>False</Boot.x64.IncludeVideoDrivers>
+  <Boot.x64.IncludeSystemDrivers>False</Boot.x64.IncludeSystemDrivers>
+  <Boot.x64.BackgroundFile>%INSTALLDIR%\Samples\Background.bmp</Boot.x64.BackgroundFile>
+  <Boot.x64.ExtraDirectory>
+  </Boot.x64.ExtraDirectory>
+  <Boot.x64.GenerateGenericWIM>False</Boot.x64.GenerateGenericWIM>
+  <Boot.x64.GenerateGenericISO>False</Boot.x64.GenerateGenericISO>
+  <Boot.x64.GenericWIMDescription>Generic Windows PE (x64)</Boot.x64.GenericWIMDescription>
+  <Boot.x64.GenericISOName>Generic_x64.iso</Boot.x64.GenericISOName>
+  <Boot.x64.GenerateLiteTouchISO>False</Boot.x64.GenerateLiteTouchISO>
+  <Boot.x64.LiteTouchWIMDescription>Lite Touch Windows PE (x64)</Boot.x64.LiteTouchWIMDescription>
+  <Boot.x64.LiteTouchISOName>LiteTouchPE_x64.iso</Boot.x64.LiteTouchISOName>
+  <Boot.x64.SelectionProfile>Nothing</Boot.x64.SelectionProfile>
+  <Boot.x64.SupportUEFI>True</Boot.x64.SupportUEFI>
+  <Boot.x64.FeaturePacks>
+  </Boot.x64.FeaturePacks>
+  <Database.SQLServer>
+  </Database.SQLServer>
+  <Database.Instance>
+  </Database.Instance>
+  <Database.Port>
+  </Database.Port>
+  <Database.Netlib>
+  </Database.Netlib>
+  <Database.Name>
+  </Database.Name>
+  <Database.SQLShare>
+  </Database.SQLShare>
+</Settings>
