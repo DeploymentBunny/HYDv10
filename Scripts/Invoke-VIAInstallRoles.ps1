@@ -1,36 +1,30 @@
 ﻿<#
 .Synopsis
-    Script for Deployment Fundamentals Vol 6
+    Script for HYDV10
 .DESCRIPTION
-    Script for Deployment Fundamentals Vol 6
+    Script for HYDV10
 .EXAMPLE
     C:\Setup\Scripts\Install-VIARoles.ps1 -Role DEPL
 .NOTES
     Created:	 2015-12-15
-    Version:	 1.0
+    Version:	 2.0
 
     Author - Mikael Nystrom
     Twitter: @mikael_nystrom
     Blog   : http://deploymentbunny.com
 
-    Author - Johan Arwidmark
-    Twitter: @jarwidmark
-    Blog   : http://deploymentresearch.com
-
     Disclaimer:
     This script is provided "AS IS" with no warranties, confers no rights and 
-    is not supported by the authors or Deployment Artist.
+    is not supported by the author.
 .LINK
-    http://www.deploymentfundamentals.com
+    http://www.deploymentbunnycom
 #>
 
 [cmdletbinding(SupportsShouldProcess=$True)]
 Param
 (
     [parameter(mandatory=$True,ValueFromPipelineByPropertyName=$true,Position=0)]
-    [ValidateNotNullOrEmpty()]
-    [ValidateSet("FILE","RDGW","ADDS","DHCP","RRAS","RDGW","MGMT","DEPL","ADCA","WSUS","SCVM","SCVMM2016","SCOR","BitLockerAdmin","WEB","Storage","Compute","S2D")]
-    $Role
+    $Role="None"
 )
 
 # Check for elevation
@@ -44,6 +38,18 @@ If (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 
 switch ($Role)
 {
+    LABHOST
+    {
+        Write-Output "Adding Windows Features for $Role"
+        $ServicesToInstall = @(
+        "FS-FileServer",
+        "Data-Center-Bridging",
+        "Failover-Clustering",
+        "FS-Data-Deduplication",
+        "Hyper-V"
+        )
+        Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
+    }
     S2D
     {
         Write-Output "Adding Windows Features for $Role"
