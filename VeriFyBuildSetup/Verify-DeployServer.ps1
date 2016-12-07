@@ -19,7 +19,12 @@ Param
     [ValidateNotNullOrEmpty()]
     [ValidateScript({Test-Path -Path $_})]
     [String]
-    $VMlocation = "D:\VMs"
+    $VMlocation = "D:\VMs",
+
+    [parameter(Position=3,mandatory=$False)]
+    [ValidateNotNullOrEmpty()]
+    [String]
+    $LogPath
 )
 
 #Read data from XML

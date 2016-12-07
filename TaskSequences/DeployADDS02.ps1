@@ -23,7 +23,6 @@
     [String]
     $LogPath
 )
-
 #Set start time
 $StartTime = Get-Date
 
@@ -33,7 +32,7 @@ Import-Module C:\setup\Functions\VIADeployModule.psm1 -Force
 Import-Module C:\Setup\Functions\VIAUtilityModule.psm1 -Force
 
 #Set Values
-$ServerName = "ADDS01"
+$ServerName = "ADDS02"
 $DomainName = "Fabric"
 $log = "$env:TEMP\$ServerName" + ".log"
 
@@ -65,7 +64,7 @@ $SetupRoot = "C:\Setup"
 If ((Test-VIAVMExists -VMname $($ServerData.ComputerName)) -eq $true){Write-Host "$($ServerData.ComputerName) already exist";Break}
 Write-Host "Creating $($ServerData.ComputerName)"
 $VM = New-VIAVM -VMName $($ServerData.ComputerName) -VMMem $VMMemory -VMvCPU 2 -VMLocation $VMLocation -VHDFile $VHDImage -DiskMode Diff -VMSwitchName $VMSwitchName -VMGeneration 2 -Verbose
-$VIAUnattendXML = New-VIAUnattendXML -Computername $($ServerData.ComputerName) -OSDAdapter0IPAddressList $NIC001.IPAddress -DomainOrWorkGroup Workgroup -ProtectYourPC 3 -Verbose -OSDAdapter0Gateways $NIC001RelatedData.Gateway -OSDAdapter0DNS1 $NIC001RelatedData.DNS[0] -OSDAdapter0DNS2 $NIC001RelatedData.DNS[1] -OSDAdapter0SubnetMaskPrefix $NIC001RelatedData.SubNet -OrgName $CustomerData.Name -Fullname $CustomerData.Name -TimeZoneName $CommonSettingData.TimeZoneName
+$VIAUnattendXML = New-VIAUnattendXML -Computername $($ServerData.ComputerName) -OSDAdapter0IPAddressList $NIC001.IPAddress -DomainOrWorkGroup Domain -ProtectYourPC 3 -Verbose -OSDAdapter0Gateways $NIC001RelatedData.Gateway -OSDAdapter0DNS1 $NIC001RelatedData.DNS[0] -OSDAdapter0DNS2 $NIC001RelatedData.DNS[1] -OSDAdapter0SubnetMaskPrefix $NIC001RelatedData.SubNet -OrgName $CustomerData.Name -Fullname $CustomerData.Name -TimeZoneName $CommonSettingData.TimeZoneName -DNSDomain $DomainData.DNSDomain -DomainAdmin $DomainData.DomainAdmin -DomainAdminPassword $DomainData.DomainAdminPassword -DomainAdminDomain $DomainData.DomainAdminDomain
 $VIASetupCompletecmd = New-VIASetupCompleteCMD -Command $VIASetupCompletecmdCommand -Verbose
 $VHDFile = (Get-VMHardDiskDrive -VMName $($ServerData.ComputerName)).Path
 Mount-VIAVHDInFolder -VHDfile $VHDFile -VHDClass UEFI -MountFolder $MountFolder 
@@ -109,7 +108,7 @@ Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
         $Role
     )
     C:\Setup\HYDv10\Scripts\Invoke-VIAInstallRoles.ps1 -Role $Role
-} -Credential $localCred -ArgumentList $Role
+} -Credential $domainCred -ArgumentList $Role
 
 #Add role ADDS
 $DomainForestLevel = 'ws2016'
@@ -118,10 +117,12 @@ Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
         $Password,
         $FQDN,
         $NetBiosDomainName,
-        $DomainForestLevel
+        $DomainForestLevel,
+        $SiteName
     )
-    C:\Setup\HYDv10\Scripts\Set-VIARole-ADDS-FDC.ps1 -Password $Password -FQDN $FQDN -NetBiosDomainName $NetBiosDomainName -DomainForestLevel $DomainForestLevel
-} -Credential $localCred -ArgumentList $DomainData.DomainAdminPassword,$DomainData.DNSDomain,$DomainData.DomainNetBios,$DomainForestLevel
+    C:\Setup\HYDv10\Scripts\Set-VIARole-ADDS-SDC.ps1 -Password $Password -FQDN $FQDN -NetBiosDomainName $NetBiosDomainName -DomainForestLevel $DomainForestLevel -SiteName $SiteName
+} -Credential $domainCred -ArgumentList $DomainData.DomainAdminPassword,$DomainData.DNSDomain,$DomainData.DomainNetBios,$DomainForestLevel,$DomainData.sitename
+
 
 #Restart
 Restart-VIAVM -VMname $($ServerData.ComputerName)
@@ -152,19 +153,6 @@ Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
 } -Credential $domainCred
 
 #Action
-$Action = "Change AD Site name"
-Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADDSSiteName.ps1 -ArgumentList $DomainData.SiteName -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Configure Subnets"
-Write-Output "Action: $Action"
-$ADSubnets = foreach($network in $NetworksData){
-    "$($network.NetIP)/$($network.SubNet)"
-}
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADSiteSubnet.ps1 -ArgumentList $DomainData.SiteName,$ADSubnets -ErrorAction Stop -Credential $domainCred
-
-#Action
 $Action = "Configure Client DNS"
 Write-Output "Action: $Action"
 $ClientDNSServerAddr = "$($Serverdata.Networkadapters.Networkadapter.DNSServer[0]),$($Serverdata.Networkadapters.Networkadapter.DNSServer[1])"
@@ -192,45 +180,21 @@ $Role = "DHCP"
 Write-Output "Action: $Action - $Role"
 Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARoles.ps1 -ArgumentList $Role -ErrorAction Stop -Credential $domainCred
 
+
 #Action
-$Action = "Configure DHCP Scopes"
+$Action = "Configure DHCP"
 $Role = "DHCP"
-Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIADHCP.ps1 -ArgumentList $($NIC001RelatedData.NetIP), $($NIC001RelatedData.SubNet), $($NIC001RelatedData.DHCPStart), $($NIC001RelatedData.DHCPEnd), $($DomainData.DNSDomain), $($NIC001RelatedData.DNS[0]), $($NIC001RelatedData.DNS[1]), $($NIC001RelatedData.Gateway) -ErrorAction Stop -Credential $domainCred
+Write-Output "Action: $Action - $Role"
+Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+    Param(
+        $PriDHCPServer,
+        $SecDHCPServer
+    )
+    $Scopes = Get-DhcpServerv4Scope -ComputerName $PriDHCPServer
+    $Scopes.ScopeId
+    Add-DhcpServerv4Failover -ComputerName $PriDHCPServer -Name ($PriDHCPServer + '-' +$SecDHCPServer) -PartnerServer $SecDHCPServer -ScopeId $Scopes.ScopeId -LoadBalancePercent 70 -MaxClientLeadTime 2:00:00 -AutoStateTransition $true -StateSwitchInterval 2:00:00
+} -Credential $domainCred -ArgumentList ($Settings.FABRIC.Servers.Server | Where-Object -Property Name -EQ ADDS01).computername,($Settings.FABRIC.Servers.Server | Where-Object -Property Name -EQ ADDS02).computername
 
-#Action
-$Action = "Create base OU"
-Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADBaseOU.ps1 -ArgumentList $DomainData.BaseOU -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Create Sub OUs"
-Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADStructure.ps1 -ArgumentList $($DomainData.BaseOU),$($Settings.FABRIC.DomainOUs.DomainOU) -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Create AD Groups"
-Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADGroups.ps1 -ArgumentList $($DomainData.BaseOU),$($Settings.FABRIC.DomainGroups.DomainGroup) -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Create AD Accounts"
-Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADAccount.ps1 -ArgumentList $($DomainData.BaseOU),$($Settings.FABRIC.DomainAccounts.DomainAccount) -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Add User to Groups"
-Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAAddAccountToGroups.ps1 -ArgumentList $($DomainData.BaseOU),$($Settings.FABRIC.DomainAccounts.DomainAccount) -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Adding default Rev DNS Zones"
-Write-Output "Action: $Action"
-Start-Sleep 60
-$RevDNSZones = ($Settings.Fabric.Networks.Network| Where-Object -Property RDNS -Like *in-addr.arpa).rdns
-foreach($RevDNSZone in $RevDNSZones){
-    Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADDSRevDNSZone.ps1 -ArgumentList $RevDNSZone -ErrorAction Stop -Verbose -Credential $domainCred
-}
 
 #Action
 $Action = "Remove DNS Forwarders"
@@ -241,12 +205,12 @@ Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
 #Action
 $Action = "Enable Remote Desktop"
 Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /AR 0} -ErrorAction Stop -Credential $domainCred
+Invoke-Command -ComputerName $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /AR 0} -ErrorAction Stop -Credential $domainCred
 
 #Action
 $Action = "Set Remote Destop Security"
 Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /CS 0} -ErrorAction Stop -Credential $domainCred
+Invoke-Command -ComputerName $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /CS 0} -ErrorAction Stop -Credential $domainCred
 
 #Action
 $Action = "Final update"

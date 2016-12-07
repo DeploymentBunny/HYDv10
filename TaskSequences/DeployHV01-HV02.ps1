@@ -84,3 +84,15 @@ $TotalTime = Measure-Command {
     }
 }
 $TotalTime.ToString()
+
+#Action
+$Action = "Final update"
+if($FinishAction -eq 'Shutdown'){
+    Stop-VM -Name $($ServerData.ComputerName)
+}
+
+#Action
+$Action = "Final update"
+Write-Output "Action: $Action"
+$Endtime = Get-Date
+Update-VIALog -Data "The script took $(($Endtime - $StartTime).Days):Days $(($Endtime - $StartTime).Hours):Hours $(($Endtime - $StartTime).Minutes):Minutes to complete."

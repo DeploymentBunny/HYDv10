@@ -296,4 +296,14 @@ Invoke-Command -VMName ST11 -ScriptBlock {
 Copy-VMFile -VM (Get-VM -Name ST11) -SourcePath 'C:\Setup\ISO\Windows Server 2016 Eval.ISO' -DestinationPath 'C:\Setup\ISO\Windows Server 2016 Eval.ISO' -FileSource Host -CreateFullPath -Force
 
 
-Remove-VIAVM $Servers -Verbose
+#Action
+$Action = "Final update"
+if($FinishAction -eq 'Shutdown'){
+    Stop-VM -Name $($ServerData.ComputerName)
+}
+
+#Action
+$Action = "Final update"
+Write-Output "Action: $Action"
+$Endtime = Get-Date
+Update-VIALog -Data "The script took $(($Endtime - $StartTime).Days):Days $(($Endtime - $StartTime).Hours):Hours $(($Endtime - $StartTime).Minutes):Minutes to complete."
