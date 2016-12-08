@@ -148,6 +148,35 @@ Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\hydv10\Scr
 
 #Begin Custom Actions
 
+#Install Applications (Pre Roles and Features)
+foreach($Role in $Roles){
+    #Action
+    $Action = "Install Applications (Pre Roles and Features)"
+    Write-Verbose "Action: $Action - $ROLE"
+
+    switch ($Role)
+    {
+        'DEPL' {
+        }
+        'RDGW'{
+        }
+        'RRAS'{
+        }
+        'MGMT'{
+        }
+        'WSUS'{
+        }
+        'SCVM'{
+        }
+        'SCOM'{
+        }
+        'SCDP'{
+        }
+        Default {}
+    }
+}
+
+#Add Roles And Features
 Foreach($role in $roles){
     #Action
     $Action = "Add Roles And Features"
@@ -160,13 +189,14 @@ Foreach($role in $roles){
     } -ArgumentList $ROLE -ErrorAction Stop -Credential $domainCred
 }
 
+#Configure Roles And Features
 foreach($Role in $Roles){
+    #Action
+    $Action = "Configure Roles And Features"
+    Write-Verbose "Action: $Action - $ROLE"
     switch ($Role)
     {
         'DEPL' {
-            #Action
-            $Action = "Configure Role"
-            Write-Verbose "Action: $Action - $ROLE"
             $DataDiskLabel = "DataDisk1"
             $RunAsAccount = "Administrator"
             $RunAsAccountPassword = "P@ssw0rd"
@@ -175,18 +205,18 @@ foreach($Role in $Roles){
             $Action = "Share Applicationroot"
             Write-Verbose "Action: $Action - $ROLE"
             Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-                $DriveLetter = (Get-Volume -FileSystemLabel Datadisk01).DriveLetter
+                Param(
+                $DataDiskLabel
+                )
+                $DriveLetter = (Get-Volume -FileSystemLabel $DataDiskLabel).DriveLetter
                 $folders = 'ApplicationRoot','MDTBuildLab','MDTProduction'
                 Foreach($folder in $folders){
                     New-Item -Path ($DriveLetter + ":\$folder") -ItemType Directory
                     New-SmbShare -Path ($DriveLetter + ":\$folder") -Name $folder -FullAccess Everyone
                 }
-            } -Credential $domainCred
+            } -ArgumentList $DataDiskLabel -Credential $domainCred
         }
         'RDGW'{
-            #Action
-            $Action = "Configure RDGW"
-            Write-Host "Action: $Action"
             $Group = "Domain Remote Desktop Users"
             $DomainNetBios = $DomainData.DomainNetBios
             $RemoteFQDN = "rdgw." + $DomainData.DNSDomainExternal
@@ -229,9 +259,6 @@ foreach($Role in $Roles){
             } -Credential $domainCred -ArgumentList $RDGWIP
         }
         'MGMT'{
-            #Action
-            $Action = "Configure Role"
-            Write-Verbose "Action: $Action - $ROLE"
             $DataDiskLabel = "DataDisk1"
             $RunAsAccount = "Administrator"
             $RunAsAccountPassword = "P@ssw0rd"
@@ -243,9 +270,6 @@ foreach($Role in $Roles){
             } -ArgumentList $Role,$DataDiskLabel,$RunAsAccount,$RunAsAccountPassword -ErrorAction Stop -Credential $domainCred
         }
         'WSUS'{
-            #Action
-            $Action = "Configure Role"
-            Write-Verbose "Action: $Action - $ROLE"
             $DataDiskLabel = "DataDisk1"
             $RunAsAccount = "Administrator"
             $RunAsAccountPassword = "P@ssw0rd"
@@ -257,9 +281,6 @@ foreach($Role in $Roles){
             } -ArgumentList $Role,$DataDiskLabel,$RunAsAccount,$RunAsAccountPassword -ErrorAction Stop -Credential $domainCred
         }
         'SCVM'{
-            #Action
-            $Action = "Configure Role"
-            Write-Verbose "Action: $Action - $ROLE"
             $DataDiskLabel = "DataDisk1"
             $RunAsAccount = "Administrator"
             $RunAsAccountPassword = "P@ssw0rd"
@@ -271,9 +292,6 @@ foreach($Role in $Roles){
             } -ArgumentList $Role,$DataDiskLabel,$RunAsAccount,$RunAsAccountPassword -ErrorAction Stop -Credential $domainCred
         }
         'SCOM'{
-            #Action
-            $Action = "Configure Role"
-            Write-Verbose "Action: $Action - $ROLE"
             $DataDiskLabel = "DataDisk1"
             $RunAsAccount = "Administrator"
             $RunAsAccountPassword = "P@ssw0rd"
@@ -285,9 +303,6 @@ foreach($Role in $Roles){
             } -ArgumentList $Role,$DataDiskLabel,$RunAsAccount,$RunAsAccountPassword -ErrorAction Stop -Credential $domainCred
         }
         'SCDP'{
-            #Action
-            $Action = "Configure Role"
-            Write-Verbose "Action: $Action - $ROLE"
             $DataDiskLabel = "DataDisk1"
             $RunAsAccount = "Administrator"
             $RunAsAccountPassword = "P@ssw0rd"
@@ -297,6 +312,33 @@ foreach($Role in $Roles){
                 )
                 C:\Setup\HYDv10\Scripts\Set-VIARoles.ps1 -Role $Role -DataDiskLabel $DataDiskLabel -RunAsAccount $RunAsAccount -RunAsAccountPassword $RunAsAccountPassword
             } -ArgumentList $Role,$DataDiskLabel,$RunAsAccount,$RunAsAccountPassword -ErrorAction Stop -Credential $domainCred
+        }
+        Default {}
+    }
+}
+
+#Install Applications (Post Roles and Features)
+foreach($Role in $Roles){
+    #Action
+    $Action = "Install Applications (Post Roles and Features)"
+    Write-Verbose "Action: $Action - $ROLE"
+    switch ($Role)
+    {
+        'DEPL' {
+        }
+        'RDGW'{
+        }
+        'RRAS'{
+        }
+        'MGMT'{
+        }
+        'WSUS'{
+        }
+        'SCVM'{
+        }
+        'SCOM'{
+        }
+        'SCDP'{
         }
         Default {}
     }
