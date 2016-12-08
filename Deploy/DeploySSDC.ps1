@@ -10,7 +10,7 @@ $VHDImage = "C:\Setup\VHD\WS2016-DCE_UEFI.vhdx"
 #C:\Setup\HYDv10\UpdateSettingsFile\Update-SettingsFile.ps1 -SettingsFile $SettingsFile
 
 #Verify Host
-#C:\Setup\HYDv10\VeriFyBuildSetup\Verify-DeployServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath
+C:\Setup\HYDv10\VeriFyBuildSetup\Verify-DeployServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath
 
 #Test the CustomSettings.xml for OSD data
 C:\Setup\HYDv10\CheckConfig\CheckConfig.ps1 -SettingsFile $SettingsFile -LogPath $Logpath
@@ -21,31 +21,53 @@ C:\Setup\HYDv10\TaskSequences\DeployADDS01.ps1 -SettingsFile $SettingsFile -VHDI
 #Deploy ADDS02
 C:\Setup\HYDv10\TaskSequences\DeployADDS02.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath
 
-#Deploy ADDS02
-C:\Setup\HYDv10\TaskSequences\DeployRRAS01.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath
+#Deploy RRAS01
+$Server = 'RRAS01'
+$Roles = 'RRAS'
+$FinishAction = 'NONE'
+C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction
 
-#Deploy ADDS02
-C:\Setup\HYDv10\TaskSequences\DeployRDGW01.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Verbose
+#Deploy RDGW01
+$Server = 'RDGW01'
+$Roles = 'RDGW'
+$FinishAction = 'NONE'
+C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction
 
-BREAK
+#Deploy MGMT01
+$Server = 'MGMT01'
+$Roles = 'MGMT'
+$FinishAction = 'Shutdown'
+C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction
 
-#Deploy ADDS02
-C:\Setup\HYDv10\TaskSequences\DeployDEPL01.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath
+#Deploy DEPL01
+$Server = 'DEPL01'
+$Roles = 'DEPL'
+$FinishAction = 'Shutdown'
+C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction
 
-#Deploy ADDS02
-C:\Setup\HYDv10\TaskSequences\DeployMGMT01.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath
+#Deploy WSUS01
+$Server = 'WSUS01'
+$Roles = 'WSUS'
+$FinishAction = 'Shutdown'
+C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction
 
-#Deploy ADDS02
-C:\Setup\HYDv10\TaskSequences\DeployWSUS01.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath
+#Deploy SCVM01
+$Server = 'SCVM01'
+$Roles = 'SCVM'
+$FinishAction = 'Shutdown'
+C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction
 
-#Deploy ADDS02
-C:\Setup\HYDv10\TaskSequences\DeploySCVM01.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath
+#Deploy SCOM01
+$Server = 'SCOM01'
+$Roles = 'SCOM'
+$FinishAction = 'Shutdown'
+C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction
 
-#Deploy ADDS02
-C:\Setup\HYDv10\TaskSequences\DeploySCOM01.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath
-
-#Deploy ADDS02
-C:\Setup\HYDv10\TaskSequences\DeploySCDP01.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath
+#Deploy SCDP01
+$Server = 'SCDP01'
+$Roles = 'SCDP'
+$FinishAction = 'Shutdown'
+C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction
 
 #Check log
 Get-Content -Path $Logpath

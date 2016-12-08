@@ -1,4 +1,5 @@
-﻿Param
+﻿[cmdletbinding(SupportsShouldProcess=$true)]
+Param
 (
     [parameter(position=0,mandatory=$false)]
     [ValidateNotNullOrEmpty()]
@@ -21,8 +22,14 @@
     [parameter(Position=3,mandatory=$False)]
     [ValidateNotNullOrEmpty()]
     [String]
-    $LogPath
+    $LogPath,
+
+    [parameter(Position=4,mandatory=$False)]
+    [ValidateNotNullOrEmpty()]
+    [String]
+    $Roles
 )
+
 #Set start time
 $StartTime = Get-Date
 
@@ -32,10 +39,10 @@ Import-Module C:\setup\Functions\VIADeployModule.psm1 -Force
 Import-Module C:\Setup\Functions\VIAUtilityModule.psm1 -Force
 
 #Set Values
-$ServerName = "RRAS01"
+$ServerName = "SCOM01"
 $DomainName = "Fabric"
 $log = "$env:TEMP\$ServerName" + ".log"
-$Role = "RRAS"
+$FinishAction = 'Shutdown'
 
 #Read data from XML
 Write-Verbose "Reading $SettingsFile"
@@ -108,71 +115,52 @@ foreach($obj in $ServerData.DataDisks.DataDisk){
      C:\Setup\HYDv10\Scripts\New-VIADataDisk.ps1 -VMName $($ServerData.ComputerName) -DiskLabel $obj.Name -DiskSize $obj.DiskSize
     }
 }
-
 #Action
 $Action = "Partion and Format DataDisk(s)"
 Write-Verbose "Action: $Action"
 Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\hydv10\Scripts\Initialize-VIADataDisk.ps1 -ErrorAction Stop -Credential $domainCred -ArgumentList NTFS
 
-#Add role ADDS
-#Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-#    Param(
-#        $Role
-#    )
-#    C:\Setup\HYDv10\Scripts\Invoke-VIAInstallRoles.ps1 -Role $Role
-#} -Credential $domainCred -ArgumentList $Role
+#Begin Custom Actions
 
-#Add extra NIC for RRAS
-if($role -eq "RRAS"){
-    Add-VMNetworkAdapter -VMName $($ServerData.ComputerName) -Name "NIC02" -DeviceNaming On
-    $VMNetworkAdapter = Get-VMNetworkAdapter -VMName $($ServerData.ComputerName) -Name "NIC02"
-    Set-VMNetworkAdapterVlan -VMName $($ServerData.ComputerName) -VMNetworkAdapterName $VMNetworkAdapter.Name -VlanId $($NetworksData | Where-Object -Property Name -EQ -Value 'Internet').vlan -Access -Passthru
-    Connect-VMNetworkAdapter -VMName $($ServerData.ComputerName) -VMNetworkAdapterName $VMNetworkAdapter.Name -SwitchName $VMSwitchName
-    Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-        $NIC = (Get-NetAdapterAdvancedProperty -Name * | Where-Object -FilterScript {$_.DisplayValue -eq “NIC02”}).Name
-        Rename-NetAdapter -Name $NIC -NewName 'NIC02'
-    } -Credential $domainCred
-    Start-Sleep -Seconds 30
-}
-
-#Configure extra NIC for RRAS
-if($role -eq "RRAS"){
-    $IPAddress = ($ServerData.Networkadapters.Networkadapter | Where-Object -Property id -EQ -Value 'NIC02').IPAddress
-    $Internet = $NetworksData | Where-Object -Property Name -EQ -Value 'Internet'
-
+Foreach($role in $roles){
+    #Action
+    $Action = "Add Roles And Features"
+    Write-Verbose "Action: $Action"
     Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
         Param(
-            $IPaddress,$Subnet,$Gateway
+        $Role
         )
-        $NIC = Get-NetAdapter -Name 'NIC02'
-        New-NetIPAddress -IPAddress $IPaddress -ifIndex $NIC.ifIndex -DefaultGateway $Gateway -PrefixLength $Subnet
-        $NIC
-
-    } -Credential $domainCred -ArgumentList $IPAddress,$Internet.SubNet,$Internet.Gateway
+        C:\Setup\HYDv10\Scripts\Invoke-VIAInstallRoles.ps1 -Role $ROLE
+    } -ArgumentList $ROLE -ErrorAction Stop -Credential $domainCred
 }
 
-#Enable NAT for RRAS
-if($role -eq "RRAS"){
-    $RDGWIP = ($Settings.FABRIC.Servers.Server | Where-Object -Property Name -EQ RDGW01).Networkadapters.Networkadapter.IPAddress
-    #Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARRASNetworking.ps1 -Credential $domainCred -ArgumentList $InternalInterfaceName,$ExternalInterfaceName,$RDGWIP -ErrorAction Stop
-    Invoke-Command -VMName $($ServerData.ComputerName)  -ScriptBlock {
-        Param(
-            $RDGWIP
-        )
-        New-NetNat -Name Internet -InternalIPInterfaceAddressPrefix 172.16.0.0/22
-        Add-NetNatStaticMapping -NatName Internet -Protocol TCP -ExternalPort 443 -InternalIPAddress $RDGWIP -ExternalIPAddress 0.0.0.0
-    } -Credential $domainCred -ArgumentList $RDGWIP
+foreach($Role in $Roles){
+    switch ($Role)
+    {
+        'DEPL' {
+            #Action
+            $Action = "Configure Role"
+            Write-Verbose "Action: $Action - $ROLE"
+            $DataDiskLabel = "DataDisk1"
+            $RunAsAccount = "Administrator"
+            $RunAsAccountPassword = "P@ssw0rd"
+            Invoke-Command -Session $Session -FilePath C:\Setup\Scripts\Set-FARoles.ps1 -ArgumentList $Role,$DataDiskLabel,$RunAsAccount,$RunAsAccountPassword -ErrorAction Stop
+        }
+        Default {}
+    }
 }
+
+#End Custom Actions
 
 #Action
 $Action = "Enable Remote Desktop"
 Write-Output "Action: $Action"
-Invoke-Command -ComputerName $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /AR 0} -ErrorAction Stop -Credential $domainCred
+Invoke-Command -VMname $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /AR 0} -ErrorAction Stop -Credential $domainCred
 
 #Action
 $Action = "Set Remote Destop Security"
 Write-Output "Action: $Action"
-Invoke-Command -ComputerName $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /CS 0} -ErrorAction Stop -Credential $domainCred
+Invoke-Command -VMname $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /CS 0} -ErrorAction Stop -Credential $domainCred
 
 #Restart
 Restart-VIAVM -VMname $($ServerData.ComputerName)
@@ -182,13 +170,14 @@ Wait-VIAVMHaveIP -VMname $($ServerData.ComputerName)
 Wait-VIAVMHavePSDirect -VMname $($ServerData.ComputerName) -Credentials $domainCred
 
 #Action
-$Action = "Final update"
-if($FinishAction -eq 'Shutdown'){
-    Stop-VM -Name $($ServerData.ComputerName)
-}
-
-#Action
-$Action = "Final update"
+$Action = "Done"
 Write-Output "Action: $Action"
 $Endtime = Get-Date
 Update-VIALog -Data "The script took $(($Endtime - $StartTime).Days):Days $(($Endtime - $StartTime).Hours):Hours $(($Endtime - $StartTime).Minutes):Minutes to complete."
+
+#Action
+if($FinishAction -eq 'Shutdown'){
+    $Action = "Shutdown"
+    Write-Output "Action: $Action"
+    Stop-VM -Name $($ServerData.ComputerName)
+}

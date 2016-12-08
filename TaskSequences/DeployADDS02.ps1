@@ -1,4 +1,5 @@
-﻿Param
+﻿[cmdletbinding(SupportsShouldProcess=$true)]
+Param
 (
     [parameter(position=0,mandatory=$false)]
     [ValidateNotNullOrEmpty()]
@@ -61,7 +62,7 @@ $domainCred = new-object -typename System.Management.Automation.PSCredential -ar
 $VIASetupCompletecmdCommand = "cmd.exe /c PowerShell.exe -Command New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Virtual Machine\Guest' -Name OSDeployment -Value Done -PropertyType String"
 $SetupRoot = "C:\Setup"
 
-If ((Test-VIAVMExists -VMname $($ServerData.ComputerName)) -eq $true){Write-Host "$($ServerData.ComputerName) already exist";Break}
+If ((Test-VIAVMExists -VMname $($ServerData.ComputerName)) -eq $true){Write-Host "$($ServerData.ComputerName) already exist";Exit}
 Write-Host "Creating $($ServerData.ComputerName)"
 $VM = New-VIAVM -VMName $($ServerData.ComputerName) -VMMem $VMMemory -VMvCPU 2 -VMLocation $VMLocation -VHDFile $VHDImage -DiskMode Diff -VMSwitchName $VMSwitchName -VMGeneration 2 -Verbose
 $VIAUnattendXML = New-VIAUnattendXML -Computername $($ServerData.ComputerName) -OSDAdapter0IPAddressList $NIC001.IPAddress -DomainOrWorkGroup Domain -ProtectYourPC 3 -Verbose -OSDAdapter0Gateways $NIC001RelatedData.Gateway -OSDAdapter0DNS1 $NIC001RelatedData.DNS[0] -OSDAdapter0DNS2 $NIC001RelatedData.DNS[1] -OSDAdapter0SubnetMaskPrefix $NIC001RelatedData.SubNet -OrgName $CustomerData.Name -Fullname $CustomerData.Name -TimeZoneName $CommonSettingData.TimeZoneName -DNSDomain $DomainData.DNSDomain -DomainAdmin $DomainData.DomainAdmin -DomainAdminPassword $DomainData.DomainAdminPassword -DomainAdminDomain $DomainData.DomainAdminDomain
@@ -79,6 +80,9 @@ Dismount-VIAVHDInFolder -VHDfile $VHDFile -MountFolder $MountFolder
 Remove-Item -Path $VIAUnattendXML.FullName
 Remove-Item -Path $VIASetupCompletecmd.FullName
 
+#Enable Device Naming
+Get-VMNetworkAdapter -VMName $($ServerData.ComputerName) | Set-VMNetworkAdapter -DeviceNaming On
+
 #Deploy
 Write-Host "Working on $($ServerData.ComputerName)"
 Start-VM $($ServerData.ComputerName)
@@ -87,6 +91,15 @@ Wait-VIAVMHaveICLoaded -VMname $($ServerData.ComputerName)
 Wait-VIAVMHaveIP -VMname $($ServerData.ComputerName)
 Wait-VIAVMDeployment -VMname $($ServerData.ComputerName)
 Wait-VIAVMHavePSDirect -VMname $($ServerData.ComputerName) -Credentials $localCred
+
+#Rename Default NetworkAdapter
+Rename-VMNetworkAdapter -VMName $($ServerData.ComputerName) -NewName "NIC01"
+Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+    Get-NetAdapter | Disable-NetAdapter -Confirm:$false
+    Get-NetAdapter | Enable-NetAdapter -Confirm:$false
+    $NIC = (Get-NetAdapterAdvancedProperty -Name * | Where-Object -FilterScript {$_.DisplayValue -eq “NIC01”}).Name
+    Rename-NetAdapter -Name $NIC -NewName 'NIC01'
+} -Credential $domainCred
 
 #Action
 $Action = "Add Datadisks"
@@ -213,13 +226,14 @@ Write-Output "Action: $Action"
 Invoke-Command -ComputerName $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /CS 0} -ErrorAction Stop -Credential $domainCred
 
 #Action
-$Action = "Final update"
-if($FinishAction -eq 'Shutdown'){
-    Stop-VM -Name $($ServerData.ComputerName)
-}
-
-#Action
-$Action = "Final update"
+$Action = "Done"
 Write-Output "Action: $Action"
 $Endtime = Get-Date
 Update-VIALog -Data "The script took $(($Endtime - $StartTime).Days):Days $(($Endtime - $StartTime).Hours):Hours $(($Endtime - $StartTime).Minutes):Minutes to complete."
+
+#Action
+if($FinishAction -eq 'Shutdown'){
+    $Action = "Shutdown"
+    Write-Output "Action: $Action"
+    Stop-VM -Name $($ServerData.ComputerName)
+}

@@ -1,4 +1,5 @@
-﻿Param
+﻿[cmdletbinding(SupportsShouldProcess=$true)]
+Param
 (
     [parameter(position=0,mandatory=$false)]
     [ValidateNotNullOrEmpty()]
@@ -21,8 +22,14 @@
     [parameter(Position=3,mandatory=$False)]
     [ValidateNotNullOrEmpty()]
     [String]
-    $LogPath
+    $LogPath,
+
+    [parameter(Position=4,mandatory=$False)]
+    [ValidateNotNullOrEmpty()]
+    [String]
+    $Roles
 )
+
 #Set start time
 $StartTime = Get-Date
 
@@ -32,9 +39,10 @@ Import-Module C:\setup\Functions\VIADeployModule.psm1 -Force
 Import-Module C:\Setup\Functions\VIAUtilityModule.psm1 -Force
 
 #Set Values
-$ServerName = "DEPL01"
+$ServerName = "SCDP01"
 $DomainName = "Fabric"
 $log = "$env:TEMP\$ServerName" + ".log"
+$FinishAction = 'Shutdown'
 
 #Read data from XML
 Write-Verbose "Reading $SettingsFile"
@@ -79,6 +87,9 @@ Dismount-VIAVHDInFolder -VHDfile $VHDFile -MountFolder $MountFolder
 Remove-Item -Path $VIAUnattendXML.FullName
 Remove-Item -Path $VIASetupCompletecmd.FullName
 
+#Enable Device Naming
+Get-VMNetworkAdapter -VMName $($ServerData.ComputerName) | Set-VMNetworkAdapter -DeviceNaming On
+
 #Deploy
 Write-Host "Working on $($ServerData.ComputerName)"
 Start-VM $($ServerData.ComputerName)
@@ -87,6 +98,15 @@ Wait-VIAVMHaveICLoaded -VMname $($ServerData.ComputerName)
 Wait-VIAVMHaveIP -VMname $($ServerData.ComputerName)
 Wait-VIAVMDeployment -VMname $($ServerData.ComputerName)
 Wait-VIAVMHavePSDirect -VMname $($ServerData.ComputerName) -Credentials $localCred
+
+#Rename Default NetworkAdapter
+Rename-VMNetworkAdapter -VMName $($ServerData.ComputerName) -NewName "NIC01"
+Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+    Get-NetAdapter | Disable-NetAdapter -Confirm:$false
+    Get-NetAdapter | Enable-NetAdapter -Confirm:$false
+    $NIC = (Get-NetAdapterAdvancedProperty -Name * | Where-Object -FilterScript {$_.DisplayValue -eq “NIC01”}).Name
+    Rename-NetAdapter -Name $NIC -NewName 'NIC01'
+} -Credential $domainCred
 
 #Action
 $Action = "Add Datadisks"
@@ -101,15 +121,47 @@ $Action = "Partion and Format DataDisk(s)"
 Write-Verbose "Action: $Action"
 Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\hydv10\Scripts\Initialize-VIADataDisk.ps1 -ErrorAction Stop -Credential $domainCred -ArgumentList NTFS
 
+#Begin Custom Actions
+
+Foreach($role in $roles){
+    #Action
+    $Action = "Add Roles And Features"
+    Write-Verbose "Action: $Action"
+    Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+        Param(
+        $Role
+        )
+        C:\Setup\HYDv10\Scripts\Invoke-VIAInstallRoles.ps1 -Role $ROLE
+    } -ArgumentList $ROLE -ErrorAction Stop -Credential $domainCred
+}
+
+foreach($Role in $Roles){
+    switch ($Role)
+    {
+        'DEPL' {
+            #Action
+            $Action = "Configure Role"
+            Write-Verbose "Action: $Action - $ROLE"
+            $DataDiskLabel = "DataDisk1"
+            $RunAsAccount = "Administrator"
+            $RunAsAccountPassword = "P@ssw0rd"
+            Invoke-Command -Session $Session -FilePath C:\Setup\Scripts\Set-FARoles.ps1 -ArgumentList $Role,$DataDiskLabel,$RunAsAccount,$RunAsAccountPassword -ErrorAction Stop
+        }
+        Default {}
+    }
+}
+
+#End Custom Actions
+
 #Action
 $Action = "Enable Remote Desktop"
 Write-Output "Action: $Action"
-Invoke-Command -ComputerName $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /AR 0} -ErrorAction Stop -Credential $domainCred
+Invoke-Command -VMname $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /AR 0} -ErrorAction Stop -Credential $domainCred
 
 #Action
 $Action = "Set Remote Destop Security"
 Write-Output "Action: $Action"
-Invoke-Command -ComputerName $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /CS 0} -ErrorAction Stop -Credential $domainCred
+Invoke-Command -VMname $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /CS 0} -ErrorAction Stop -Credential $domainCred
 
 #Restart
 Restart-VIAVM -VMname $($ServerData.ComputerName)
@@ -119,13 +171,14 @@ Wait-VIAVMHaveIP -VMname $($ServerData.ComputerName)
 Wait-VIAVMHavePSDirect -VMname $($ServerData.ComputerName) -Credentials $domainCred
 
 #Action
-$Action = "Final update"
-if($FinishAction -eq 'Shutdown'){
-    Stop-VM -Name $($ServerData.ComputerName)
-}
-
-#Action
-$Action = "Final update"
+$Action = "Done"
 Write-Output "Action: $Action"
 $Endtime = Get-Date
 Update-VIALog -Data "The script took $(($Endtime - $StartTime).Days):Days $(($Endtime - $StartTime).Hours):Hours $(($Endtime - $StartTime).Minutes):Minutes to complete."
+
+#Action
+if($FinishAction -eq 'Shutdown'){
+    $Action = "Shutdown"
+    Write-Output "Action: $Action"
+    Stop-VM -Name $($ServerData.ComputerName)
+}
