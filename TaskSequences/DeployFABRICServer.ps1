@@ -41,6 +41,18 @@ Param
 
 )
 
+Function Restart-VIAVMAndWait{
+    Param(
+    $VMname,
+    $Credentials
+    )
+    Restart-VIAVM -VMname $VMname
+    Wait-VIAVMIsRunning -VMname $VMname
+    Wait-VIAVMHaveICLoaded -VMname $VMname
+    Wait-VIAVMHaveIP -VMname $VMname
+    Wait-VIAVMHavePSDirect -VMname $VMname -Credentials $Credentials
+}
+
 ##############
 
 #Init
@@ -186,11 +198,7 @@ foreach($Role in $Roles){
 
             #Restart
             Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-            Restart-VIAVM -VMname $($ServerData.ComputerName)
-            Wait-VIAVMIsRunning -VMname $($ServerData.ComputerName)
-            Wait-VIAVMHaveICLoaded -VMname $($ServerData.ComputerName)
-            Wait-VIAVMHaveIP -VMname $($ServerData.ComputerName)
-            Wait-VIAVMHavePSDirect -VMname $($ServerData.ComputerName) -Credentials $domainCred
+            Restart-VIAVMAndWait -VMname $($ServerData.ComputerName) -Credentials $domainCred
         }
         Default {}
     }
@@ -208,6 +216,11 @@ Foreach($role in $roles){
         C:\Setup\HYDv10\Scripts\Invoke-VIAInstallRoles.ps1 -Role $ROLE
     } -ArgumentList $ROLE -ErrorAction Stop -Credential $domainCred
 }
+
+#Restart
+Update-VIALog -Data "Restart $($ServerData.ComputerName)"
+Restart-VIAVMAndWait -VMname $($ServerData.ComputerName) -Credentials $domainCred
+
 
 #Configure Roles And Features
 foreach($Role in $Roles){
@@ -293,6 +306,10 @@ foreach($Role in $Roles){
     }
 }
 
+#Restart
+Update-VIALog -Data "Restart $($ServerData.ComputerName)"
+Restart-VIAVMAndWait -VMname $($ServerData.ComputerName) -Credentials $domainCred
+
 #Install Applications (Post Roles and Features)
 foreach($Role in $Roles){
     #Action
@@ -347,11 +364,7 @@ foreach($Role in $Roles){
             $App = "Server"
             $Action = "Restart"
             Update-VIALog -Data "Action: $Action - $App"
-            Restart-VIAVM -VMname $($ServerData.ComputerName)
-            Wait-VIAVMIsRunning -VMname $($ServerData.ComputerName)
-            Wait-VIAVMHaveICLoaded -VMname $($ServerData.ComputerName)
-            Wait-VIAVMHaveIP -VMname $($ServerData.ComputerName)
-            Wait-VIAVMHavePSDirect -VMname $($ServerData.ComputerName) -Credentials $domainCred
+            Restart-VIAVMAndWait -VMname $($ServerData.ComputerName) -Credentials $domainCred
 
             #Action
             $App = "SCVMM 2016"
@@ -402,11 +415,7 @@ foreach($Role in $Roles){
             
             #Restart
             Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-            Restart-VIAVM -VMname $($ServerData.ComputerName)
-            Wait-VIAVMIsRunning -VMname $($ServerData.ComputerName)
-            Wait-VIAVMHaveICLoaded -VMname $($ServerData.ComputerName)
-            Wait-VIAVMHaveIP -VMname $($ServerData.ComputerName)
-            Wait-VIAVMHavePSDirect -VMname $($ServerData.ComputerName) -Credentials $domainCred
+            Restart-VIAVMAndWait -VMname $($ServerData.ComputerName) -Credentials $domainCred
         }
         'SCDP'{
             #Action
@@ -421,11 +430,7 @@ foreach($Role in $Roles){
 
             #Restart
             Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-            Restart-VIAVM -VMname $($ServerData.ComputerName)
-            Wait-VIAVMIsRunning -VMname $($ServerData.ComputerName)
-            Wait-VIAVMHaveICLoaded -VMname $($ServerData.ComputerName)
-            Wait-VIAVMHaveIP -VMname $($ServerData.ComputerName)
-            Wait-VIAVMHavePSDirect -VMname $($ServerData.ComputerName) -Credentials $domainCred
+            Restart-VIAVMAndWait -VMname $($ServerData.ComputerName) -Credentials $domainCred
         }
         Default {}
     }
