@@ -216,6 +216,19 @@ Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
 } -ErrorAction SilentlyContinue -Credential $domainCred
 
 #Action
+#$Action = "Configure DHCP..."
+#$DHCPSrvCred = 
+#Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+#    Param(
+#    $DHCPSrvCred
+#    )
+#    Set-DhcpServerv4DnsSetting -UpdateDnsRRForOlderClients $true 
+#    Set-DhcpServerv4DnsSetting -NameProtection $true
+#    $DHCPSrvCred = Get-Credential   #  GET "SVC_ADDS_DHCP"  Creds
+#    Set-DhcpServerDnsCredential -Credential  
+#} -ErrorAction SilentlyContinue -Credential $domainCred -ArgumentList $DHCPSrvCred
+
+#Action
 $Action = "Enable Remote Desktop"
 Write-Output "Action: $Action"
 Invoke-Command -ComputerName $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /AR 0} -ErrorAction Stop -Credential $domainCred

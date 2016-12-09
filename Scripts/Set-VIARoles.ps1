@@ -15,7 +15,6 @@ Param
 (
     [parameter(mandatory=$True,ValueFromPipelineByPropertyName=$true,Position=0)]
     [ValidateNotNullOrEmpty()]
-    [ValidateSet("FILE","RDGW","ADDS","DHCP","RRAS","RDGW","MGMT","DEPL","ADCA","WSUS","SCVM")]
     $Role,
 
     [parameter(mandatory=$false,ValueFromPipelineByPropertyName=$true,Position=1)]

@@ -24,13 +24,13 @@ C:\Setup\HYDv10\TaskSequences\DeployADDS02.ps1 -SettingsFile $SettingsFile -VHDI
 #Deploy RRAS01
 $Server = 'RRAS01'
 $Roles = 'RRAS'
-$FinishAction = 'NONE'
+$FinishAction = 'Shutdown'
 C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction
 
 #Deploy RDGW01
 $Server = 'RDGW01'
 $Roles = 'RDGW'
-$FinishAction = 'NONE'
+$FinishAction = 'Shutdown'
 C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction
 
 #Deploy MGMT01

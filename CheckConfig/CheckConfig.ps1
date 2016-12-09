@@ -40,7 +40,7 @@ Write-Verbose "Reading $SettingsFile"
 [xml]$Settings = Get-Content $SettingsFile
 
 $Domains = $Settings.FABRIC.Domains.Domain
-foreach($DomainName in $Domains.Name){
+$return = foreach($DomainName in $Domains.Name){
 
     $Servers = $Settings.FABRIC.Servers.Server
     foreach($ServerName in $Servers.Name){
@@ -66,13 +66,17 @@ foreach($DomainName in $Domains.Name){
             SubnetMask = $NIC001RelatedData.SubNet;
             Gateway = $NIC001RelatedData.Gateway;
             VMSwitch = $VMSwitchName;
-            VMMemory = $VMMemory;
+            VMMemory = ($VMMemory/1GB);
         }
-
-        $data
+        New-Object PSObject -Property $data
     }
 }
 
+$return
+
+foreach($obj in $return){
+    Update-VIALog -Data "Computername:$($obj.ComputerName),IPAddress:$($obj.IPAddress),Prefix:$($obj.SubnetMask),Gateway:$($obj.Gateway),VMSwitch:$($obj.VMSwitch),MemoryGB:$($obj.VMMemory)"
+}
 
 
 

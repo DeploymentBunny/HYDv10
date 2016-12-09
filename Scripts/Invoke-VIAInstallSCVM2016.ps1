@@ -249,7 +249,9 @@ switch ($SCVMRole)
     Full
     {
         #Create IniFile
-        $unattendFile = New-Item "VMServer.ini" -type File -Force
+        $unattendFilePath = "$env:TEMP\VMServer.ini"
+        Write-Host "Unattendfile is $unattendFilePath"
+        $unattendFile = New-Item $unattendFilePath -type File -Force
         set-Content $unattendFile "[OPTIONS]"
         if(!($SCVMMProductKey -eq "NONE"))
         {
@@ -260,19 +262,19 @@ switch ($SCVMRole)
         add-Content $unattendFile "BitsTcpPort=$SCVMMBitsTcpPort"
         add-Content $unattendFile "VmmServiceLocalAccount=$SCVMMVmmServiceLocalAccount"
         add-Content $unattendFile "TopContainerName=$SCVMMTopContainerName"
-        add-Content $unattendFile "VMMServiceDomain=$SCVMMDomain"
-        add-Content $unattendFile "VMMServiceUserName=$SCVMMDomain\$SCVMMSAccount"
-        add-Content $unattendFile "VMMServiceUserPassword=$SCVMMSAccountPW"
+        add-Content $unattendFile "VmmServiceDomain=$SCVMMDomain"
+        add-Content $unattendFile "VmmServiceUserName=$SCVMMSAccount"
+        add-Content $unattendFile "VmmServiceUserPassword=$SCVMMSAccountPW"
         add-Content $unattendFile "CreateNewLibraryShare=1"
         add-Content $unattendFile "LibraryShareName=MSSCVMMLibrary"
         add-Content $unattendFile "LibrarySharePath=$SCVMMLibraryDrive\ProgramData\Virtual Machine Manager Library Files"
-        add-Content $unattendFile "LibraryShareDescription=Virtual Machine Manager Library Files"
+        add-Content $unattendFile "LibraryShareDescription=VMM Library Share"
         add-Content $unattendFile "SqlMachineName=$env:COMPUTERNAME"
         add-Content $unattendFile "SqlInstanceName=MSSQLSERVER"
         Get-Content $unattendFile
     
         $Setup = $SCVMSetup
-        $sArgument = "/server /i /f $unattendFile /IACCEPTSCEULA"
+        $sArgument = "/server /i /f $unattendFile /VmmServiceDomain=$SCVMMDomain /VmmServiceUserName=$SCVMMSAccount /VmmServiceUserPassword=$SCVMMSAccountPW /IACCEPTSCEULA"
         Invoke-VIAExe -Executable $setup -Arguments $sArgument -Verbose
         #Get-Item -Path $unattendFile | Remove-Item -Force -Verbose
     }

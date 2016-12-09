@@ -8,41 +8,50 @@
 #>
 Param (
     [Parameter(Mandatory=$true,Position=0)]
-    $SCVMSetup,
+    $SCOMSetup,
 
     [Parameter(Mandatory=$true,Position=1)]
-    [ValidateSet("Full","Client","Agent")]
-    $SCVMRole = "Full",
+    [ValidateSet("Default","Complete","OMServer","OMWebConsole","OMReporting","OMConsole")]
+    $SCOMRole = "Default",
 
-    [Parameter(Mandatory=$true,Position=2)]
-    $SCVMMDomain,
+    [Parameter(Mandatory=$false,Position=2)]
+    $ManagementGroupName,
 
-    [Parameter(Mandatory=$true,Position=3)]
-    $SCVMMSAccount,
-
-    [Parameter(Mandatory=$true,Position=4)]
-    $SCVMMSAccountPW,
-
-    [Parameter(Mandatory=$true,Position=5)]
-    $SCVMMProductKey,
-
-    [Parameter(Mandatory=$true,Position=6)]
-    $SCVMMUserName,
+    [Parameter(Mandatory=$false,Position=3)]
+    $SqlServerInstance,
     
-    [Parameter(Mandatory=$true,Position=7)]
-    $SCVMMCompanyName,
+    [Parameter(Mandatory=$false,Position=4)]
+    $DWSqlServerInstance, 
+    
+    [Parameter(Mandatory=$false,Position=5)]
+    $DatareaderUser,
+    
+    [Parameter(Mandatory=$false,Position=6)]
+    $DatareaderPassword,
+    
+    [Parameter(Mandatory=$false,Position=7)]
+    $DataWriterUser,
+    
+    [Parameter(Mandatory=$false,Position=8)]
+    $DataWriterPassword,
+    
+    [Parameter(Mandatory=$false,Position=9)]
+    $DASAccountUser,
+    
+    [Parameter(Mandatory=$false,Position=10)]
+    $DASAccountPassword,
+    
+    [Parameter(Mandatory=$false,Position=11)]
+    $ActionAccountUser,
+    
+    [Parameter(Mandatory=$false,Position=12)]
+    $ActionAccountPassword,
 
-    [Parameter(Mandatory=$true,Position=8)]
-    $SCVMMBitsTcpPort,
+    [Parameter(Mandatory=$false,Position=13)]
+    $SRSInstance,
 
-    [Parameter(Mandatory=$true,Position=9)]
-    $SCVMMVmmServiceLocalAccount,
-
-    [Parameter(Mandatory=$true,Position=10)]
-    $SCVMMTopContainerName,
-
-    [Parameter(Mandatory=$true,Position=11)]
-    $SCVMMLibraryDrive
+    [Parameter(Mandatory=$false,Position=14)]
+    $WebSiteName = "Default Web Site"
 )
 
 Function Get-VIAOSVersion([ref]$OSv){
@@ -244,49 +253,71 @@ if($MDTIntegration -eq "YES"){
 
 #Custom Code Starts--------------------------------------
 
-switch ($SCVMRole)
+switch ($SCOMRole)
 {
-    Full
+    OMServer
     {
-        #Create IniFile
-        $unattendFile = New-Item "VMServer.ini" -type File -Force
-        set-Content $unattendFile "[OPTIONS]"
-        if(!($SCVMMProductKey -eq "NONE"))
-        {
-            add-Content $unattendFile "ProductKey=$SCVMMProductKey"
-        }
-        add-Content $unattendFile "UserName=$SCVMMUserName"
-        add-Content $unattendFile "CompanyName=$SCVMMCompanyName"
-        add-Content $unattendFile "BitsTcpPort=$SCVMMBitsTcpPort"
-        add-Content $unattendFile "VmmServiceLocalAccount=$SCVMMVmmServiceLocalAccount"
-        add-Content $unattendFile "TopContainerName=$SCVMMTopContainerName"
-        add-Content $unattendFile "VMMServiceDomain=$SCVMMDomain"
-        add-Content $unattendFile "VMMServiceUserName=$SCVMMDomain\$SCVMMSAccount"
-        add-Content $unattendFile "VMMServiceUserPassword=$SCVMMSAccountPW"
-        add-Content $unattendFile "CreateNewLibraryShare=1"
-        add-Content $unattendFile "LibraryShareName=MSSCVMMLibrary"
-        add-Content $unattendFile "LibrarySharePath=$SCVMMLibraryDrive\ProgramData\Virtual Machine Manager Library Files"
-        add-Content $unattendFile "LibraryShareDescription=Virtual Machine Manager Library Files"
-        add-Content $unattendFile "SqlMachineName=$env:COMPUTERNAME"
-        add-Content $unattendFile "SqlInstanceName=MSSQLSERVER"
-        Get-Content $unattendFile
-    
-        $Setup = $SCVMSetup
-        $sArgument = "/server /i /f $unattendFile /IACCEPTSCEULA"
-        Invoke-VIAExe -Executable $setup -Arguments $sArgument -Verbose
-        #Get-Item -Path $unattendFile | Remove-Item -Force -Verbose
+        $SCOMArguments = "/silent /install /components:OMServer /ManagementGroupName:$ManagementGroupName /SqlServerInstance:$SqlServerInstance /DatabaseName:OperationsManager /DWSqlServerInstance:$DWSqlServerInstance /DWDatabaseName:OperationsManagerDW /DatareaderUser:$DatareaderUser /DatareaderPassword:$DatareaderPassword /DataWriterUser:$DataWriterUser /DataWriterPassword:$DataWriterPassword /DASAccountUser:$DASAccountUser /DASAccountPassword:$DASAccountPassword /EnableErrorReporting:Never /SendCEIPReports:0 /UseMicrosoftUpdate:0 /AcceptEndUserLicenseAgreement:1 /ActionAccountUser:$ActionAccountUser /ActionAccountPassword:$ActionAccountPassword"
+        Write-Output "Executing.."
+        $Process = Start-Process -FilePath $SCOMSetup -ArgumentList $SCOMArguments -NoNewWindow -PassThru -Wait
+        $ExeExitCode = $Process.ExitCode
+        Write-Output "Process finished with return code: $ExeExitCode"
     }
-    Client
+    OMConsole
     {
+        $SCOMArguments = "/silent /install /components:OMConsole /EnableErrorReporting:Never /SendCEIPReports:0 /UseMicrosoftUpdate:0 /AcceptEndUserLicenseAgreement:1"
+        Write-Output "Executing.."
+        $Process = Start-Process -FilePath $SCOMSetup -ArgumentList $SCOMArguments -NoNewWindow -PassThru -Wait
+        $ExeExitCode = $Process.ExitCode
+        Write-Output "Process finished with return code: $ExeExitCode"
     }
-    Agent
+    OMReporting
     {
+        $SCOMArguments = "/silent /install /components:OMReporting /SRSInstance:$SRSInstance /DataReaderUser:$DataWriterUser /DataReaderPassword:$DataWriterPassword /SendODRReports:0 /UseMicrosoftUpdate:0"
+        Write-Output "Executing.."
+        $Process = Start-Process -FilePath $SCOMSetup -ArgumentList $SCOMArguments -NoNewWindow -PassThru -Wait
+        $ExeExitCode = $Process.ExitCode
+        Write-Output "Process finished with return code: $ExeExitCode"
+    }
+    OMWebConsole
+    {
+        #$WebSiteName = "Default Web Site"
+        $SCOMArguments = "/silent /install /components:OMWebConsole /ManagementServer:$env:COMPUTERNAME /WebSiteName:$WebSiteName /WebConsoleAuthorizationMode:Mixed /SendCEIPReports:0 /UseMicrosoftUpdate:0 /AcceptEndUserLicenseAgreement:1"
+        Write-Output "Executing.."
+        $Process = Start-Process -FilePath $SCOMSetup -ArgumentList $SCOMArguments -NoNewWindow -PassThru -Wait
+        $ExeExitCode = $Process.ExitCode
+        Write-Output "Process finished with return code: $ExeExitCode"
+    }
+    Complete
+    {
+        $SCOMArguments = "/silent /install /components:OMServer /ManagementGroupName:$ManagementGroupName /SqlServerInstance:$SqlServerInstance /DatabaseName:OperationsManager /DWSqlServerInstance:$DWSqlServerInstance /DWDatabaseName:OperationsManagerDW /DatareaderUser:$DatareaderUser /DatareaderPassword:$DatareaderPassword /DataWriterUser:$DataWriterUser /DataWriterPassword:$DataWriterPassword /DASAccountUser:$DASAccountUser /DASAccountPassword:$DASAccountPassword /EnableErrorReporting:Never /SendCEIPReports:0 /UseMicrosoftUpdate:0 /AcceptEndUserLicenseAgreement:1 /ActionAccountUser:$ActionAccountUser /ActionAccountPassword:$ActionAccountPassword"
+        Write-Output "Executing.."
+        $Process = Start-Process -FilePath $SCOMSetup -ArgumentList $SCOMArguments -NoNewWindow -PassThru -Wait
+        $ExeExitCode = $Process.ExitCode
+        Write-Output "Process finished with return code: $ExeExitCode"
+
+        $SCOMArguments = "/silent /install /components:OMReporting /SRSInstance:$SRSInstance /DataReaderUser:$DataWriterUser /DataReaderPassword:$DataWriterPassword /SendODRReports:0 /UseMicrosoftUpdate:0"
+        Write-Output "Executing.."
+        $Process = Start-Process -FilePath $SCOMSetup -ArgumentList $SCOMArguments -NoNewWindow -PassThru -Wait
+        $ExeExitCode = $Process.ExitCode
+        Write-Output "Process finished with return code: $ExeExitCode"
+
+        $SCOMArguments = "/silent /install /components:OMConsole /EnableErrorReporting:Never /SendCEIPReports:0 /UseMicrosoftUpdate:0 /AcceptEndUserLicenseAgreement:1"
+        Write-Output "Executing.."
+        $Process = Start-Process -FilePath $SCOMSetup -ArgumentList $SCOMArguments -NoNewWindow -PassThru -Wait
+        $ExeExitCode = $Process.ExitCode
+        Write-Output "Process finished with return code: $ExeExitCode"
+
+        $SCOMArguments = "/silent /install /components:OMWebConsole /ManagementServer:$env:COMPUTERNAME /WebSiteName:$WebSiteName /WebConsoleAuthorizationMode:Mixed /SendCEIPReports:0 /UseMicrosoftUpdate:0 /AcceptEndUserLicenseAgreement:1"
+        Write-Output "Executing.."
+        $Process = Start-Process -FilePath $SCOMSetup -ArgumentList $SCOMArguments -NoNewWindow -PassThru -Wait
+        $ExeExitCode = $Process.ExitCode
+        Write-Output "Process finished with return code: $ExeExitCode"
     }
     Default
     {
     }
 }
-
 
 #Custom Code Ends--------------------------------------
 
