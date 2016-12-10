@@ -133,8 +133,18 @@ Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Script
             
 
 
+
 #Action
 $App = "SCOM 2016"
+$Action = "Add Service Account to Local Administrators Group"
+Update-VIALog -Data "Action: $Action - $App"
+$LocalGroup = "Administrators"
+$DomainUser = ($Settings.FABRIC.DomainAccounts.DomainAccount | Where-Object AccountDescription -EQ 'Service Account for SCOM').Name
+Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Scripts\Add-VIADomainuserToLocalgroup.ps1 -ArgumentList $LocalGroup,$DomainUser -ErrorAction Stop  -Credential $domainCred
+
+
+#Action
+$App = "SCOM 2016 Server"
 $Action = "Install Application"
 Update-VIALog -Data "Action: $Action - $App"
 #Install OpsMgr Server
@@ -155,75 +165,91 @@ Invoke-Command -VMName $($ServerData.ComputerName) -Scriptblock{
     $ActionAccountUser,
     $ActionAccountPassword
     )
-    Write-Host "Using: $Source $SCVMRole $ManagementGroupName $SqlServerInstance $DWSqlServerInstance $DatareaderUser $DatareaderPassword $DataWriterUser $DataWriterPassword $DASAccountUser $DASAccountPassword $ActionAccountUser $ActionAccountPassword"
+    Write-Host "Using: $Source $SCOMRole $ManagementGroupName $SqlServerInstance $DWSqlServerInstance $DatareaderUser $DatareaderPassword $ActionAccountUser $ActionAccountPassword"
     C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSCOM2016.ps1 -SCOMSetup $Source -SCOMRole $SCOMRole -ManagementGroupName $ManagementGroupName -SqlServerInstance $SqlServerInstance -DWSqlServerInstance $DWSqlServerInstance -DatareaderUser $DatareaderUser -DatareaderPassword $DatareaderPassword -DataWriterUser $DatareaderUser -DataWriterPassword $DatareaderPassword -DASAccountUser $DatareaderUser -DASAccountPassword $DatareaderPassword -ActionAccountUser $ActionAccountUser -ActionAccountPassword $ActionAccountPassword
-} -ArgumentList $Source,$SCOMRole,$($DomainData.DomainNetBios),$($Service01.SQLINSTANCENAME),$($Service01.SQLINSTANCENAME),$($ServiceAccount.Name),$($ServiceAccount.PW),$($ActionAccount.Name),$($ActionAccount.PW) -ErrorAction Stop  -Credential $domainCred
+} -ArgumentList $Source,$SCOMRole,$($DomainData.DomainNetBios),$($Service01.SQLINSTANCENAME),$($Service01.SQLINSTANCENAME),$($($DomainData.DomainNetBios)+'\'+$($ServiceAccount.Name)),$($ServiceAccount.PW),$($($DomainData.DomainNetBios)+'\'+$($ActionAccount.Name)),$($ActionAccount.PW) -ErrorAction Stop  -Credential $domainCred
 
-
-
-
-
+    
 #Action
-$App = "SCOM 2016"
+$App = "SCOM 2016 Console"
 $Action = "Install Application"
 Update-VIALog -Data "Action: $Action - $App"
 #Install Console
+$Source = 'D:\SC 2016 OM\setup.exe'
+$SCOMRole = 'OMConsole'
 Invoke-Command -VMName $ServerData.ComputerName -Scriptblock{
-    \\fadepl01\ApplicationRoot\Script\Invoke-FAInstallSCOM.ps1 `
-    -SCOMSetup \\fadepl01\ApplicationRoot\Install-SCOM\Source\Setup.exe `
-    -SCOMRole OMConsole `
-    -Verbose
-}
+    Param(
+    $Source,
+    $SCOMRole
+    )
+    C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSCOM2016.ps1 -SCOMSetup $Source -SCOMRole $SCOMRole -Verbose
+}-ArgumentList $Source,$SCOMRole -Credential $domainCred
 
 #Action
-$App = "SCOM 2016"
+$App = "SCOM 2016 Reporting"
 $Action = "Install Application"
 Update-VIALog -Data "Action: $Action - $App"
 #Install Reporting
+$Source = 'D:\SC 2016 OM\setup.exe'
+$SCOMRole = 'OMReporting'
 Invoke-Command -VMName $ServerData.ComputerName -Scriptblock{
-    \\fadepl01\ApplicationRoot\Script\Invoke-FAInstallSCOM.ps1 `
-    -SCOMSetup \\fadepl01\ApplicationRoot\Install-SCOM\Source\Setup.exe `
-    -SCOMRole OMReporting `
-    -DataWriterUser $Domain\$DataWriterUser `
-    -DataWriterPassword $DataWriterPassword `
-    -SRSInstance $SqlServerInstance `
-    -Verbose
-}
+    Param(
+    $Source,
+    $SCOMRole,
+    $ServiceAccountName,
+    $ServiceAccountPW,
+    $SqlServerInstance
+    )
+    C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSCOM2016.ps1 -SCOMSetup $Source -SCOMRole $SCOMRole -DataWriterUser $ServiceAccountName -DataWriterPassword $ServiceAccountPW -SRSInstance $SqlServerInstance
+} -ArgumentList $Source,$SCOMRole,$($($DomainData.DomainNetBios)+'\'+$($ServiceAccount.Name)),$($ServiceAccount.PW),$($Service01.SQLINSTANCENAME) -Credential $domainCred 
 
 #Action
-$App = "SCOM 2016"
+$App = "SCOM 2016 WebConsole"
 $Action = "Install Application"
 Update-VIALog -Data "Action: $Action - $App"
 #Install WebConsole
+$Source = 'D:\SC 2016 OM\setup.exe'
+$SCOMRole = 'OMWebConsole'
 Invoke-Command -VMName $ServerData.ComputerName -Scriptblock{
-    \\fadepl01\ApplicationRoot\Script\Invoke-FAInstallSCOM.ps1 `
-    -SCOMSetup \\fadepl01\ApplicationRoot\Install-SCOM\Source\Setup.exe `
-    -SCOMRole OMWebConsole `
-    -WebSiteName "Default Web Site" `
-    -Verbose
-}
+    Param(
+    $Source,
+    $SCOMRole
+    )
+    C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSCOM2016.ps1 -SCOMSetup $Source -SCOMRole $SCOMRole -WebSiteName "Default Web Site"
+} -ArgumentList $Source,$SCOMRole -Credential $domainCred 
 
 #Action
-$App = "Set AutoMatic Agent Assigment"
-$Action = "Install Application"
+$App = "SCOM 2016"
+$Action = "Configure Automatic Agent Assigment"
 Update-VIALog -Data "Action: $Action - $App"
+$SCOMManagementGroupName = $DomainName
+$SCOMAdminSecurityGroup = "$DomainName\Domain System Center Operations Manager Admins"
+$SCOMRunAsAccount = "$DomainName\SVC_SCOM_AA"
+$Domain = $DomainName
 Invoke-Command -VMName $ServerData.ComputerName -Scriptblock{
-    \\fadepl01\ApplicationRoot\Script\Invoke-FAMomADAdmin.ps1 `
-    -ManagementGroupName "$Domain" `
-    -MOMAdminSecurityGroup "$Domain\Domain System Center Operations Manager Admins"`
-    -RunAsAccount "$Domain\SVC_SCOM_AA"`
-    -Domain "$Domain"
-}
+    Param(
+    $ManagementGroupName,
+    $MOMAdminSecurityGroup,
+    $RunAsAccount,
+    $Domain
+    )
+     & 'C:\Program Files\Microsoft System Center 2016\Operations Manager\Server\MomADAdmin.exe' $ManagementGroupName $MOMAdminSecurityGroup $RunAsAccount $Domain
+} -ArgumentList $SCOMManagementGroupName,$SCOMAdminSecurityGroup,$SCOMRunAsAccount,$Domain -Credential $domainCred
+
 
 #Action
 $App = "SCOM 2016"
 $Action = "Add Product Key and Activate SCOM"
-$Settings.Fabric.MachineDefaults.SC2012R2ProductKey
+$ProductKey = ($Settings.Fabric.ProductKeys.ProductKey | Where-Object -Property Name -EQ -Value ProduktKeySC2016).key
 Update-VIALog -Data "Action: $Action - $App"
 Invoke-Command -VMName $ServerData.ComputerName -Scriptblock{
-    Import-Module 'C:\Program Files\Microsoft System Center 2012 R2\Operations Manager\Powershell\OperationsManager' -Verbose
-    Set-SCOMLicense -ProductId $ProductId -Confirm:$false
+    Param(
+    $ProductId
+    )
+    Import-Module 'C:\Program Files\Microsoft System Center 2016\Operations Manager\Powershell\OperationsManager'
+    Set-SCOMLicense -ProductId $ProductId -Confirm:$false -Verbose
     Restart-Service "System Center Management Configuration" -Force
     Restart-Service "System Center Data Access Service" -Force
-} -ArgumentList
+} -ArgumentList $ProductKey -Credential $domainCred
+
 
