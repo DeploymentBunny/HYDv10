@@ -22,7 +22,7 @@ Param
     [parameter(Position=3,mandatory=$False)]
     [ValidateNotNullOrEmpty()]
     [String]
-    $LogPath,
+    $LogPath = $LogPath,
 
     [parameter(Position=4,mandatory=$False)]
     [ValidateNotNullOrEmpty()]
@@ -37,66 +37,12 @@ Param
     [parameter(Position=6,mandatory=$False)]
     [ValidateNotNullOrEmpty()]
     [String]
-    $FinishAction
+    $FinishAction,
 
+    [parameter(Position=7,mandatory=$False)]
+    [Switch]
+    $KeepMountedMedia
 )
-
-Function Restart-VIAVMAndWait{
-    Param(
-    $VMname,
-    $Credentials
-    )
-    Restart-VIAVM -VMname $VMname
-    Wait-VIAVMIsRunning -VMname $VMname
-    Wait-VIAVMHaveICLoaded -VMname $VMname
-    Wait-VIAVMHaveIP -VMname $VMname
-    Wait-VIAVMHavePSDirect -VMname $VMname -Credentials $Credentials
-}
-Function Pause-VIAAcript ($Message = "Press any key to continue . . . ") {
-    If ($psISE) {
-        # The "ReadKey" functionality is not supported in Windows PowerShell ISE.
-        $Shell = New-Object -ComObject "WScript.Shell"
-        $Button = $Shell.Popup("Click OK to continue.", 0, "Script Paused", 0)
-        Return
-    }
- 
-    Write-Host -NoNewline $Message
-    $Ignore =
-        16,  # Shift (left or right)
-        17,  # Ctrl (left or right)
-        18,  # Alt (left or right)
-        20,  # Caps lock
-        91,  # Windows key (left)
-        92,  # Windows key (right)
-        93,  # Menu key
-        144, # Num lock
-        145, # Scroll lock
-        166, # Back
-        167, # Forward
-        168, # Refresh
-        169, # Stop
-        170, # Search
-        171, # Favorites
-        172, # Start/Home
-        173, # Mute
-        174, # Volume Down
-        175, # Volume Up
-        176, # Next Track
-        177, # Previous Track
-        178, # Stop Media
-        179, # Play
-        180, # Mail
-        181, # Select Media
-        182, # Application 1
-        183  # Application 2
- 
-    While ($KeyInfo.VirtualKeyCode -Eq $Null -Or $Ignore -Contains $KeyInfo.VirtualKeyCode) {
-        $KeyInfo = $Host.UI.RawUI.ReadKey("NoEcho, IncludeKeyDown")
-    }
- 
-    Write-Host
-}
-
 
 ##############
 
@@ -243,7 +189,7 @@ foreach($Role in $Roles){
 
             #Restart
             Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-            Restart-VIAVMAndWait -VMname $($ServerData.ComputerName) -Credentials $domainCred
+            Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $domainCred
         }
         Default {}
     }
@@ -264,7 +210,7 @@ Foreach($role in $roles){
 
 #Restart
 Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-Restart-VIAVMAndWait -VMname $($ServerData.ComputerName) -Credentials $domainCred
+Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $domainCred
 
 #Configure Roles And Features
 foreach($Role in $Roles){
@@ -352,7 +298,7 @@ foreach($Role in $Roles){
 
 #Restart
 Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-Restart-VIAVMAndWait -VMname $($ServerData.ComputerName) -Credentials $domainCred
+Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $domainCred
 
 #Install Applications (Post Roles and Features)
 foreach($Role in $Roles){
@@ -408,7 +354,7 @@ foreach($Role in $Roles){
             $App = "Server"
             $Action = "Restart"
             Update-VIALog -Data "Action: $Action - $App"
-            Restart-VIAVMAndWait -VMname $($ServerData.ComputerName) -Credentials $domainCred
+            Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $domainCred
 
             #Action
             $App = "SCVMM 2016"
@@ -459,7 +405,7 @@ foreach($Role in $Roles){
             
             #Restart
             Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-            Restart-VIAVMAndWait -VMname $($ServerData.ComputerName) -Credentials $domainCred
+            Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $domainCred
             
             #Action
             $App = "SCOM 2016"
@@ -591,7 +537,7 @@ foreach($Role in $Roles){
 
             #Restart
             Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-            Restart-VIAVMAndWait -VMname $($ServerData.ComputerName) -Credentials $domainCred
+            Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $domainCred
         }
         Default {}
     }
@@ -614,17 +560,15 @@ Update-VIALog -Data "Action: $Action"
 Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /CS 0} -ErrorAction Stop -Credential $domainCred
 
 #Restart
-Restart-VIAVM -VMname $($ServerData.ComputerName)
-Wait-VIAVMIsRunning -VMname $($ServerData.ComputerName)
-Wait-VIAVMHaveICLoaded -VMname $($ServerData.ComputerName)
-Wait-VIAVMHaveIP -VMname $($ServerData.ComputerName)
-Wait-VIAVMHavePSDirect -VMname $($ServerData.ComputerName) -Credentials $domainCred
+Update-VIALog -Data "Restart $($ServerData.ComputerName)"
+Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $domainCred
 
 #Action
-$Action = "Dismount Media ISO"
-Write-Verbose "Action: $Action"
-#Set-VMDvdDrive -VMName $($ServerData.ComputerName) -Path $null
-
+if($KeepMountedMedia -ne $true){
+    $Action = "Dismount Media ISO"
+    Write-Verbose "Action: $Action"
+    Set-VMDvdDrive -VMName $($ServerData.ComputerName) -Path $null
+}
 #Action
 $Action = "Done"
 Update-VIALog -Data "Action: $Action"

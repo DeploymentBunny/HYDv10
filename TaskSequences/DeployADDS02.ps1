@@ -22,8 +22,32 @@ Param
     [parameter(Position=3,mandatory=$False)]
     [ValidateNotNullOrEmpty()]
     [String]
-    $LogPath
+    $LogPath = $LogPath,
+
+    [parameter(Position=4,mandatory=$False)]
+    [ValidateNotNullOrEmpty()]
+    [String]
+    $Roles,
+
+    [parameter(Position=5,mandatory=$False)]
+    [ValidateNotNullOrEmpty()]
+    [String]
+    $Server,
+
+    [parameter(Position=6,mandatory=$False)]
+    [ValidateNotNullOrEmpty()]
+    [String]
+    $FinishAction,
+
+    [parameter(Position=7,mandatory=$False)]
+    [Switch]
+    $KeepMountedMedia
 )
+
+##############
+
+#Init
+
 #Set start time
 $StartTime = Get-Date
 
