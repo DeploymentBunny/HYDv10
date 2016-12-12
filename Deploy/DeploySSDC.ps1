@@ -77,7 +77,7 @@ $Roles = 'SCDP'
 $FinishAction = 'Shutdown'
 C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction -KeepMountedMedia
 
-#Deploy SCDP01
+#Deploy TEST01
 $Server = 'TEST01'
 $Roles = 'NONE'
 $FinishAction = 'Shutdown'

@@ -178,7 +178,7 @@ switch ($SQLRole)
         add-Content $unattendFile "QUIET=""True"""
         add-Content $unattendFile "QUIETSIMPLE=""False"""
         add-Content $unattendFile "UpdateEnabled=""False"""
-        add-Content $unattendFile "FEATURES=SQLENGINE,TOOLS"
+        add-Content $unattendFile "FEATURES=SQLENGINE,RS,SSMS,ADV_SSMS"
         add-Content $unattendFile "UpdateSource=""MU"""
         add-Content $unattendFile "HELP=""False"""
         add-Content $unattendFile "INDICATEPROGRESS=""False"""
@@ -205,6 +205,10 @@ switch ($SQLRole)
         add-Content $unattendFile "NPENABLED=""1"""
         add-Content $unattendFile "BROWSERSVCSTARTUPTYPE=""Disabled"""
         add-Content $unattendFile "IACCEPTSQLSERVERLICENSETERMS=""True"""
+        add-Content $unattendFile "RSINSTALLMODE=""DefaultNativeMode"""
+        add-Content $unattendFile "RSSVCACCOUNT=""NT AUTHORITY\NETWORK SERVICE"""
+        add-Content $unattendFile "RSSVCSTARTUPTYPE=""Automatic"""
+        add-Content $unattendFile "FTSVCACCOUNT=""NT Service\MSSQLFDLauncher"""
     }
     Default{
         $unattendFile = New-Item "$env:temp\ConfigutionFile.ini" -type File -Force

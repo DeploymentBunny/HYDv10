@@ -433,6 +433,16 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools
     }
+    SCDP
+    {
+        Write-Output "Adding Windows Features for selected role: $Role"
+        $ServicesToInstall = @(
+        "Hyper-V",
+        "Hyper-V-Tools",
+        "Hyper-V-PowerShell"
+        )
+        Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
+    }
     SCOR{
         Write-Output "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(

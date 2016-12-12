@@ -56,6 +56,8 @@ Import-Module C:\setup\Functions\VIAHypervModule.psm1 -Force
 Import-Module C:\setup\Functions\VIADeployModule.psm1 -Force
 Import-Module C:\Setup\Functions\VIAUtilityModule.psm1 -Force
 
+$Server = 'SCDP01'
+
 #Set Values
 $ServerName = $Server
 $DomainName = "Fabric"
@@ -194,7 +196,26 @@ foreach($Role in $Roles){
             Update-VIALog -Data "Restart $($ServerData.ComputerName)"
             Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $domainCred
         }
-        Default {}
+        'SCDP'{
+            #SCDP needs to have 2 clean datadrives, so lets wipe number 2 and 3
+            
+            #Action
+            $Action = "Cleaning 2 Datadisks for SCDP storage"
+            Update-VIALog -Data "Action: $Action - $ROLE"
+            $DataDiskLabel = 'Datadisk02','Datadisk03'
+            
+            foreach($Item in $DataDiskLabel){
+                Write-Host "Working on $Item"
+                Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock{
+                    Param($Item)
+                    Import-Module C:\Setup\Functions\VIAUtilityModule.psm1
+                    Clear-VIAVolume -VolumeLabel $Item -Verbose
+                } -Credential $domainCred -ArgumentList $Item
+            }
+        }
+        Default {
+            Write-Host "Nothing to do for $role"
+        }
     }
 }
 
@@ -298,6 +319,19 @@ foreach($Role in $Roles){
                 New-NetNat -Name Internet -InternalIPInterfaceAddressPrefix $InternalIPInterfaceAddressPrefix
                 Add-NetNatStaticMapping -NatName Internet -Protocol $Protocol -ExternalPort $ExternalPort -InternalIPAddress $RDGWIntIP -ExternalIPAddress $ExternalIPAddress
             } -Credential $domainCred -ArgumentList $RDGWIntIP,$InternalIPInterfaceAddressPrefix,$ExternalIPAddress,$ExternalPort,$Protocol
+
+            
+            #Not Tested
+            #Change Netbinding on th External NIC
+            $ExternalNicName = "NIC02"
+            Invoke-Command -VMName $($ServerData.ComputerName)  -ScriptBlock {
+                Param(
+                $ExternalNicName
+                )
+                Get-NetAdapterBinding -Name $ExternalNicName | Where-Object -Property ComponentID -NE -Value "ms_tcpip" | Set-NetAdapterBinding -Enabled $false 
+            } -Credential $domainCred -ArgumentList $ExternalNicName
+
+
         }
         'WSUS'{
             $DataDiskLabel = "DataDisk01"
@@ -577,6 +611,11 @@ Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\
 $Action = "Set Remote Destop Security"
 Update-VIALog -Data "Action: $Action"
 Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /CS 0} -ErrorAction Stop -Credential $domainCred
+
+#Action
+$Action = "Disable the Mapsdownloader crap, since we hate red stuff in Server Manager"
+Update-VIALog -Data "Action: $Action"
+Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {Get-Service -Name MapsBroker | Set-Service -StartupType Disabled} -ErrorAction Stop -Credential $domainCred
 
 #Restart
 Update-VIALog -Data "Restart $($ServerData.ComputerName)"
