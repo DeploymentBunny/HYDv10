@@ -71,8 +71,8 @@ $ProductKeysData = $Settings.FABRIC.ProductKeys.ProductKey
 $NetworksData = $Settings.FABRIC.Networks.Network
 $DomainData = $Settings.FABRIC.Domains.Domain | Where-Object -Property Name -EQ -Value $DomainName
 $ServerData = $Settings.FABRIC.Servers.Server | Where-Object -Property Name -EQ -Value $ServerName
-$NIC001 = $ServerData.Networkadapters.Networkadapter | Where-Object -Property id -EQ -Value NIC01
-$NIC001RelatedData = $NetworksData | Where-Object -Property ID -EQ -Value $NIC001.ConnectedToNetwork
+$NIC01 = $ServerData.Networkadapters.Networkadapter | Where-Object -Property Name -EQ -Value NIC01
+$NIC01RelatedData = $NetworksData | Where-Object -Property ID -EQ -Value $NIC01.ConnectedToNetwork
 
 $MountFolder = "C:\MountVHD"
 $AdminPassword = $CommonSettingData.LocalPassword
@@ -99,7 +99,7 @@ Update-VIALog -Data "Check if $($ServerData.ComputerName) is already created"
 If ((Test-VIAVMExists -VMname $($ServerData.ComputerName)) -eq $true){Write-Host "$($ServerData.ComputerName) already exist";Exit}
 Update-VIALog -Data "Creating $($ServerData.ComputerName)"
 $VM = New-VIAVM -VMName $($ServerData.ComputerName) -VMMem $VMMemory -VMvCPU 2 -VMLocation $VMLocation -VHDFile $VHDImage -DiskMode Diff -VMSwitchName $VMSwitchName -VMGeneration 2 -Verbose
-$VIAUnattendXML = New-VIAUnattendXML -Computername $($ServerData.ComputerName) -OSDAdapter0IPAddressList $NIC001.IPAddress -DomainOrWorkGroup Domain -ProtectYourPC 3 -Verbose -OSDAdapter0Gateways $NIC001RelatedData.Gateway -OSDAdapter0DNS1 $NIC001RelatedData.DNS[0] -OSDAdapter0DNS2 $NIC001RelatedData.DNS[1] -OSDAdapter0SubnetMaskPrefix $NIC001RelatedData.SubNet -OrgName $CustomerData.Name -Fullname $CustomerData.Name -TimeZoneName $CommonSettingData.TimeZoneName -DNSDomain $DomainData.DNSDomain -DomainAdmin $DomainData.DomainAdmin -DomainAdminPassword $DomainData.DomainAdminPassword -DomainAdminDomain $DomainData.DomainAdminDomain
+$VIAUnattendXML = New-VIAUnattendXML -Computername $($ServerData.ComputerName) -OSDAdapter0IPAddressList $NIC01.IPAddress -DomainOrWorkGroup Domain -ProtectYourPC 3 -Verbose -OSDAdapter0Gateways $NIC01RelatedData.Gateway -OSDAdapter0DNS1 $NIC01RelatedData.DNS[0] -OSDAdapter0DNS2 $NIC01RelatedData.DNS[1] -OSDAdapter0SubnetMaskPrefix $NIC01RelatedData.SubNet -OrgName $CustomerData.Name -Fullname $CustomerData.Name -TimeZoneName $CommonSettingData.TimeZoneName -DNSDomain $DomainData.DNSDomain -DomainAdmin $DomainData.DomainAdmin -DomainAdminPassword $DomainData.DomainAdminPassword -DomainAdminDomain $DomainData.DomainAdminDomain -MachienObjectOU $ServerData.MachineObjectOU
 $VIASetupCompletecmd = New-VIASetupCompleteCMD -Command $VIASetupCompletecmdCommand -Verbose
 $VHDFile = (Get-VMHardDiskDrive -VMName $($ServerData.ComputerName)).Path
 Mount-VIAVHDInFolder -VHDfile $VHDFile -VHDClass UEFI -MountFolder $MountFolder 
@@ -128,14 +128,16 @@ Wait-VIAVMDeployment -VMname $($ServerData.ComputerName)
 Wait-VIAVMHavePSDirect -VMname $($ServerData.ComputerName) -Credentials $localCred
 
 #Rename Default NetworkAdapter
-Update-VIALog -Data "Rename Default NetworkAdapter"
-Rename-VMNetworkAdapter -VMName $($ServerData.ComputerName) -NewName "NIC01"
+Rename-VMNetworkAdapter -VMName $($ServerData.ComputerName) -NewName $NIC01.Name 
 Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+    Param(
+        $NicName
+    )
     Get-NetAdapter | Disable-NetAdapter -Confirm:$false
     Get-NetAdapter | Enable-NetAdapter -Confirm:$false
     $NIC = (Get-NetAdapterAdvancedProperty -Name * | Where-Object -FilterScript {$_.DisplayValue -eq “NIC01”}).Name
-    Rename-NetAdapter -Name $NIC -NewName 'NIC01'
-} -Credential $domainCred
+    Rename-NetAdapter -Name $NIC -NewName $NicName
+} -Credential $domainCred -ArgumentList $($NIC01.Name)
 
 #Action
 Update-VIALog -Data "Add Datadisks"
@@ -153,7 +155,8 @@ Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\hydv10\Scr
 #Action
 $Action = "Mount Media ISO"
 Update-VIALog -Data "Action: $Action"
-Set-VMDvdDrive -VMName $($ServerData.ComputerName) -Path D:\HYDV10ISO\HYDV10.iso
+Set-VMDvdDrive -VMName $($ServerData.ComputerName) -Path $MediaISO
+
 
 #Deploy VM end
 
@@ -220,7 +223,7 @@ foreach($Role in $Roles){
     switch ($Role)
     {
         'DEPL' {
-            $DataDiskLabel = "DataDisk1"
+            $DataDiskLabel = "DataDisk01"
             $RunAsAccount = "Administrator"
             $RunAsAccountPassword = "P@ssw0rd"
             Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARoles.ps1 -ArgumentList $Role,$DataDiskLabel,$RunAsAccount,$RunAsAccountPassword -ErrorAction Stop -Credential $domainCred
@@ -237,6 +240,11 @@ foreach($Role in $Roles){
                     New-Item -Path ($DriveLetter + ":\$folder") -ItemType Directory
                     New-SmbShare -Path ($DriveLetter + ":\$folder") -Name $folder -FullAccess Everyone
                 }
+
+                $folders = 'Scripts','Temp','Applications'
+                Foreach($folder in $folders){
+                    New-Item -Path ($DriveLetter + ":\ApplicationRoot\" + $folder) -ItemType Directory
+                }
             } -ArgumentList $DataDiskLabel -Credential $domainCred
         }
         'RDGW'{
@@ -247,42 +255,52 @@ foreach($Role in $Roles){
         }
         'RRAS'{
             #Add external Network Adapter
-            Add-VMNetworkAdapter -VMName $($ServerData.ComputerName) -Name "NIC02" -DeviceNaming On
-            $VMNetworkAdapter = Get-VMNetworkAdapter -VMName $($ServerData.ComputerName) -Name "NIC02"
-            Set-VMNetworkAdapterVlan -VMName $($ServerData.ComputerName) -VMNetworkAdapterName $VMNetworkAdapter.Name -VlanId $($NetworksData | Where-Object -Property Name -EQ -Value 'Internet').vlan -Access -Passthru
+            $ExternalNicName = 'NIC02'
+            $ExternalNetname = 'Internet'
+            $RDGWIntIP = (($Settings.FABRIC.Servers.Server | Where-Object Name -EQ RDGW01).NetworkAdapters.NetworkAdapter | Where-Object Name -EQ NIC01).IPAddress
+            $RDGWExtIP = (($Settings.FABRIC.Servers.Server | Where-Object Name -EQ RRAS01).NetworkAdapters.NetworkAdapter | Where-Object Name -EQ NIC02).IPAddress
+            
+            $InternalIPInterfaceAddressPrefix = '172.16.0.0/22'
+            $ExternalIPAddress = '0.0.0.0'
+            $ExternalPort = '443'
+            $Protocol = 'TCP'
+            $Internet = $NetworksData | Where-Object -Property Name -EQ -Value $ExternalNetname
+
+            Add-VMNetworkAdapter -VMName $($ServerData.ComputerName) -Name $ExternalNicName -DeviceNaming On
+            $VMNetworkAdapter = Get-VMNetworkAdapter -VMName $($ServerData.ComputerName) -Name $ExternalNicName
+            Set-VMNetworkAdapterVlan -VMName $($ServerData.ComputerName) -VMNetworkAdapterName $VMNetworkAdapter.Name -VlanId $($NetworksData | Where-Object -Property Name -EQ -Value $ExternalNetname).vlan -Access -Passthru
             Connect-VMNetworkAdapter -VMName $($ServerData.ComputerName) -VMNetworkAdapterName $VMNetworkAdapter.Name -SwitchName $VMSwitchName
             Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-                $NIC = (Get-NetAdapterAdvancedProperty -Name * | Where-Object -FilterScript {$_.DisplayValue -eq “NIC02”}).Name
-                Rename-NetAdapter -Name $NIC -NewName 'NIC02'
-            } -Credential $domainCred
+                Param(
+                $ExternalNicName
+                )
+                $NIC = (Get-NetAdapterAdvancedProperty -Name * | Where-Object -FilterScript {$_.DisplayValue -eq $ExternalNicName}).Name
+                Rename-NetAdapter -Name $NIC -NewName $ExternalNicName
+            } -Credential $domainCred -ArgumentList $ExternalNicName
             Start-Sleep -Seconds 30
             
             #Configure the external IP
-            $IPAddress = ($ServerData.Networkadapters.Networkadapter | Where-Object -Property id -EQ -Value 'NIC02').IPAddress
-            $Internet = $NetworksData | Where-Object -Property Name -EQ -Value 'Internet'
-
             Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
                 Param(
-                    $IPaddress,$Subnet,$Gateway
+                    $RDGWExtIP,$Subnet,$Gateway,$ExternalNicName
                 )
-                $NIC = Get-NetAdapter -Name 'NIC02'
-                New-NetIPAddress -IPAddress $IPaddress -ifIndex $NIC.ifIndex -DefaultGateway $Gateway -PrefixLength $Subnet
+                $NIC = Get-NetAdapter -Name $ExternalNicName
+                New-NetIPAddress -IPAddress $RDGWExtIP -ifIndex $NIC.ifIndex -DefaultGateway $Gateway -PrefixLength $Subnet
                 $NIC
 
-            } -Credential $domainCred -ArgumentList $IPAddress,$Internet.SubNet,$Internet.Gateway
+            } -Credential $domainCred -ArgumentList $RDGWExtIP,$Internet.SubNet,$Internet.Gateway,$ExternalNicName
 
             #Configure NAT rules
-            $RDGWIP = ($Settings.FABRIC.Servers.Server | Where-Object -Property Name -EQ RDGW01).Networkadapters.Networkadapter.IPAddress
             Invoke-Command -VMName $($ServerData.ComputerName)  -ScriptBlock {
                 Param(
-                $RDGWIP
-            )
-            New-NetNat -Name Internet -InternalIPInterfaceAddressPrefix 172.16.0.0/22
-            Add-NetNatStaticMapping -NatName Internet -Protocol TCP -ExternalPort 443 -InternalIPAddress $RDGWIP -ExternalIPAddress 0.0.0.0
-            } -Credential $domainCred -ArgumentList $RDGWIP
+                $RDGWIntIP,$InternalIPInterfaceAddressPrefix,$ExternalIPAddress,$ExternalPort,$Protocol
+                )
+                New-NetNat -Name Internet -InternalIPInterfaceAddressPrefix $InternalIPInterfaceAddressPrefix
+                Add-NetNatStaticMapping -NatName Internet -Protocol $Protocol -ExternalPort $ExternalPort -InternalIPAddress $RDGWIntIP -ExternalIPAddress $ExternalIPAddress
+            } -Credential $domainCred -ArgumentList $RDGWIntIP,$InternalIPInterfaceAddressPrefix,$ExternalIPAddress,$ExternalPort,$Protocol
         }
         'WSUS'{
-            $DataDiskLabel = "DataDisk1"
+            $DataDiskLabel = "DataDisk01"
             $RunAsAccount = "Administrator"
             $RunAsAccountPassword = "P@ssw0rd"
             Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
@@ -347,7 +365,7 @@ foreach($Role in $Roles){
             $Action = "Add Service Account to Local Administrators Group"
             Update-VIALog -Data "Action: $Action - $App"
             $LocalGroup = "Administrators"
-            $DomainUser = ($Settings.FABRIC.DomainAccounts.DomainAccount | Where-Object AccountDescription -EQ 'Service Account for SCVMM').Name
+            $DomainUser = ($DomainData.DomainAccounts.DomainAccount | Where-Object AccountDescription -EQ 'Service Account for SCVMM').Name
             Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Scripts\Add-VIADomainuserToLocalgroup.ps1 -ArgumentList $LocalGroup,$DomainUser -ErrorAction Stop  -Credential $domainCred
 
             #Restart
@@ -360,7 +378,7 @@ foreach($Role in $Roles){
             $App = "SCVMM 2016"
             $Action = "Install Application"
             Update-VIALog -Data "Action: $Action - $App"
-            $ServiceAccount = $Settings.FABRIC.DomainAccounts.DomainAccount | Where-Object AccountDescription -EQ 'Service Account for SCVMM'
+            $ServiceAccount = $DomainData.DomainAccounts.DomainAccount| Where-Object AccountDescription -EQ 'Service Account for SCVMM'
             $Service01 = $Settings.FABRIC.Services.Service | Where-Object Name -EQ SCVMM2016
             $Source = 'D:\SC 2016 VMM\setup.exe'
             $SCVMRole = 'Full'
@@ -370,7 +388,8 @@ foreach($Role in $Roles){
             $SCVMMProductKey = 'BXH69-M62YX-QQD6R-3GPWX-8WMFY'
             $SCVMMUserName = $CustomerData.Name
             $SCVMMCompanyName = $CustomerData.Name
-            $SCVMMBitsTcpPort = $Service01.SCVMMBitsTcpPort
+            $Service01.Config.SCVMMBitsTcpPort
+            $SCVMMBitsTcpPort = $Service01.Config.SCVMMBitsTcpPort
             $SCVMMVmmServiceLocalAccount = '0'
             $SCVMMTopContainerName = "cn=dkm,"+$DomainData.DomainDS
             $SCVMMLibraryDrive = 'E:'
@@ -412,7 +431,7 @@ foreach($Role in $Roles){
             $Action = "Add Service Account to Local Administrators Group"
             Update-VIALog -Data "Action: $Action - $App"
             $LocalGroup = "Administrators"
-            $DomainUser = ($Settings.FABRIC.DomainAccounts.DomainAccount | Where-Object AccountDescription -EQ 'Service Account for SCOM').Name
+            $DomainUser = ($DomainData.DomainAccounts.DomainAccount| Where-Object AccountDescription -EQ 'Service Account for SCOM').Name
             Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Scripts\Add-VIADomainuserToLocalgroup.ps1 -ArgumentList $LocalGroup,$DomainUser -ErrorAction Stop  -Credential $domainCred
 
             #Action
@@ -420,8 +439,8 @@ foreach($Role in $Roles){
             $Action = "Install Application"
             Update-VIALog -Data "Action: $Action - $App"
             #Install OpsMgr Server
-            $ServiceAccount = $Settings.FABRIC.DomainAccounts.DomainAccount | Where-Object AccountDescription -EQ 'Service Account for SCOM'
-            $ActionAccount = $Settings.FABRIC.DomainAccounts.DomainAccount | Where-Object AccountDescription -EQ 'Action Account for SCOM'
+            $ServiceAccount = $DomainData.DomainAccounts.DomainAccount| Where-Object AccountDescription -EQ 'Service Account for SCOM'
+            $ActionAccount = $DomainData.DomainAccounts.DomainAccount| Where-Object AccountDescription -EQ 'Action Account for SCOM'
             $Service01 = $Settings.FABRIC.Services.Service | Where-Object Name -EQ SCOM2016
             $Source = 'D:\SC 2016 OM\setup.exe'
             $SCOMRole = 'OMServer'
@@ -439,7 +458,7 @@ foreach($Role in $Roles){
                 )
                 Write-Host "Using: $Source $SCOMRole $ManagementGroupName $SqlServerInstance $DWSqlServerInstance $DatareaderUser $DatareaderPassword $ActionAccountUser $ActionAccountPassword"
                 C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSCOM2016.ps1 -SCOMSetup $Source -SCOMRole $SCOMRole -ManagementGroupName $ManagementGroupName -SqlServerInstance $SqlServerInstance -DWSqlServerInstance $DWSqlServerInstance -DatareaderUser $DatareaderUser -DatareaderPassword $DatareaderPassword -DataWriterUser $DatareaderUser -DataWriterPassword $DatareaderPassword -DASAccountUser $DatareaderUser -DASAccountPassword $DatareaderPassword -ActionAccountUser $ActionAccountUser -ActionAccountPassword $ActionAccountPassword
-            } -ArgumentList $Source,$SCOMRole,$($DomainData.DomainNetBios),$($Service01.SQLINSTANCENAME),$($Service01.SQLINSTANCENAME),$($($DomainData.DomainNetBios)+'\'+$($ServiceAccount.Name)),$($ServiceAccount.PW),$($($DomainData.DomainNetBios)+'\'+$($ActionAccount.Name)),$($ActionAccount.PW) -ErrorAction Stop  -Credential $domainCred
+            } -ArgumentList $Source,$SCOMRole,$($DomainData.DomainNetBios),$($Service01.Config.SQLINSTANCENAME),$($Service01.Config.SQLINSTANCENAME),$($($DomainData.DomainNetBios)+'\'+$($ServiceAccount.Name)),$($ServiceAccount.PW),$($($DomainData.DomainNetBios)+'\'+$($ActionAccount.Name)),$($ActionAccount.PW) -ErrorAction Stop  -Credential $domainCred
 
     
             #Action
@@ -473,7 +492,7 @@ foreach($Role in $Roles){
                 $SqlServerInstance
                 )
                 C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSCOM2016.ps1 -SCOMSetup $Source -SCOMRole $SCOMRole -DataWriterUser $ServiceAccountName -DataWriterPassword $ServiceAccountPW -SRSInstance $SqlServerInstance
-            } -ArgumentList $Source,$SCOMRole,$($($DomainData.DomainNetBios)+'\'+$($ServiceAccount.Name)),$($ServiceAccount.PW),$($Service01.SQLINSTANCENAME) -Credential $domainCred 
+            } -ArgumentList $Source,$SCOMRole,$($($DomainData.DomainNetBios)+'\'+$($ServiceAccount.Name)),$($ServiceAccount.PW),$($Service01.Config.SQLINSTANCENAME) -Credential $domainCred 
 
             #Action
             $App = "SCOM 2016 WebConsole"

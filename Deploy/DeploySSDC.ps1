@@ -1,14 +1,15 @@
 ﻿#Deploy the entire Solution
 
 #Read data from XML
-$SettingsFile = "C:\Setup\FABuilds\FASettings.xml"
+$Global:SettingsFile = "C:\Setup\FABuilds\FASettings.xml"
 [xml]$Settings = Get-Content $SettingsFile -ErrorAction Stop
 
 #Set Vars
 $Global:Solution = "HYDv10"
 $Global:Logpath = "$env:TEMP\HYDv10" + ".log"
-$VMlocation = "D:\VMs"
-$VHDImage = "C:\Setup\VHD\WS2016-DCE_UEFI.vhdx"
+$Global:VMlocation = "D:\VMs"
+$Global:VHDImage = "C:\Setup\VHD\WS2016-DCE_UEFI.vhdx"
+$Global:MediaISO = 'C:\Setup\ISO\HYDV10.iso'
 
 #Import-Modules
 Import-Module C:\Setup\Functions\VIAUtilityModule.psm1 -Force

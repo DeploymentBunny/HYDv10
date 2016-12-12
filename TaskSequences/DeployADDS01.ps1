@@ -70,8 +70,8 @@ $ProductKeysData = $Settings.FABRIC.ProductKeys.ProductKey
 $NetworksData = $Settings.FABRIC.Networks.Network
 $DomainData = $Settings.FABRIC.Domains.Domain | Where-Object -Property Name -EQ -Value $DomainName
 $ServerData = $Settings.FABRIC.Servers.Server | Where-Object -Property Name -EQ -Value $ServerName
-$NIC001 = $ServerData.Networkadapters.Networkadapter | Where-Object -Property id -EQ -Value NIC01
-$NIC001RelatedData = $NetworksData | Where-Object -Property ID -EQ -Value $NIC001.ConnectedToNetwork
+$NIC01 = $ServerData.Networkadapters.Networkadapter | Where-Object -Property Name -EQ -Value NIC01
+$NIC01RelatedData = $NetworksData | Where-Object -Property ID -EQ -Value $NIC01.ConnectedToNetwork
 
 $MountFolder = "C:\MountVHD"
 $AdminPassword = $CommonSettingData.LocalPassword
@@ -89,7 +89,7 @@ $SetupRoot = "C:\Setup"
 If ((Test-VIAVMExists -VMname $($ServerData.ComputerName)) -eq $true){Write-Host "$($ServerData.ComputerName) already exist";Exit}
 Write-Host "Creating $($ServerData.ComputerName)"
 $VM = New-VIAVM -VMName $($ServerData.ComputerName) -VMMem $VMMemory -VMvCPU 2 -VMLocation $VMLocation -VHDFile $VHDImage -DiskMode Diff -VMSwitchName $VMSwitchName -VMGeneration 2 -Verbose
-$VIAUnattendXML = New-VIAUnattendXML -Computername $($ServerData.ComputerName) -OSDAdapter0IPAddressList $NIC001.IPAddress -DomainOrWorkGroup Workgroup -ProtectYourPC 3 -Verbose -OSDAdapter0Gateways $NIC001RelatedData.Gateway -OSDAdapter0DNS1 $NIC001RelatedData.DNS[0] -OSDAdapter0DNS2 $NIC001RelatedData.DNS[1] -OSDAdapter0SubnetMaskPrefix $NIC001RelatedData.SubNet -OrgName $CustomerData.Name -Fullname $CustomerData.Name -TimeZoneName $CommonSettingData.TimeZoneName
+$VIAUnattendXML = New-VIAUnattendXML -Computername $($ServerData.ComputerName) -OSDAdapter0IPAddressList $NIC01.IPAddress -DomainOrWorkGroup Workgroup -ProtectYourPC 3 -Verbose -OSDAdapter0Gateways $NIC01RelatedData.Gateway -OSDAdapter0DNS1 $NIC01RelatedData.DNS[0] -OSDAdapter0DNS2 $NIC01RelatedData.DNS[1] -OSDAdapter0SubnetMaskPrefix $NIC01RelatedData.SubNet -OrgName $CustomerData.Name -Fullname $CustomerData.Name -TimeZoneName $CommonSettingData.TimeZoneName
 $VIASetupCompletecmd = New-VIASetupCompleteCMD -Command $VIASetupCompletecmdCommand -Verbose
 $VHDFile = (Get-VMHardDiskDrive -VMName $($ServerData.ComputerName)).Path
 Mount-VIAVHDInFolder -VHDfile $VHDFile -VHDClass UEFI -MountFolder $MountFolder 
@@ -117,13 +117,16 @@ Wait-VIAVMDeployment -VMname $($ServerData.ComputerName)
 Wait-VIAVMHavePSDirect -VMname $($ServerData.ComputerName) -Credentials $localCred
 
 #Rename Default NetworkAdapter
-Rename-VMNetworkAdapter -VMName $($ServerData.ComputerName) -NewName "NIC01"
+Rename-VMNetworkAdapter -VMName $($ServerData.ComputerName) -NewName $NIC01.Name 
 Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+    Param(
+        $NicName
+    )
     Get-NetAdapter | Disable-NetAdapter -Confirm:$false
     Get-NetAdapter | Enable-NetAdapter -Confirm:$false
     $NIC = (Get-NetAdapterAdvancedProperty -Name * | Where-Object -FilterScript {$_.DisplayValue -eq “NIC01”}).Name
-    Rename-NetAdapter -Name $NIC -NewName 'NIC01'
-} -Credential $domainCred
+    Rename-NetAdapter -Name $NIC -NewName $NicName
+} -Credential $domainCred -ArgumentList $($NIC01.Name)
 
 #Action
 $Action = "Add Datadisks"
@@ -203,7 +206,7 @@ Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scr
 #Action
 $Action = "Configure Client DNS"
 Write-Output "Action: $Action"
-$ClientDNSServerAddr = "$($Serverdata.Networkadapters.Networkadapter.DNSServer[0]),$($Serverdata.Networkadapters.Networkadapter.DNSServer[1])"
+$ClientDNSServerAddr = "$($NIC01.DNS[0]),$($NIC01.DNS[1])"
 Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
     Param(
     $ClientDNSServerAddr
@@ -232,7 +235,7 @@ Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scr
 $Action = "Configure DHCP Scopes"
 $Role = "DHCP"
 Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIADHCP.ps1 -ArgumentList $($NIC001RelatedData.NetIP), $($NIC001RelatedData.SubNet), $($NIC001RelatedData.DHCPStart), $($NIC001RelatedData.DHCPEnd), $($DomainData.DNSDomain), $($NIC001RelatedData.DNS[0]), $($NIC001RelatedData.DNS[1]), $($NIC001RelatedData.Gateway) -ErrorAction Stop -Credential $domainCred
+Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIADHCP.ps1 -ArgumentList $($NIC01RelatedData.NetIP), $($NIC01RelatedData.SubNet), $($NIC01RelatedData.DHCPStart), $($NIC01RelatedData.DHCPEnd), $($DomainData.DNSDomain), $($NIC01RelatedData.DNS[0]), $($NIC01RelatedData.DNS[1]), $($NIC01RelatedData.Gateway) -ErrorAction Stop -Credential $domainCred
 
 #Action
 $Action = "Create base OU"
@@ -242,22 +245,26 @@ Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scr
 #Action
 $Action = "Create Sub OUs"
 Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADStructure.ps1 -ArgumentList $($DomainData.BaseOU),$($Settings.FABRIC.DomainOUs.DomainOU) -ErrorAction Stop -Credential $domainCred
+$DomainData.DomainOUs.DomainOU
+Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADStructure.ps1 -ArgumentList $($DomainData.BaseOU),$($DomainData.DomainOUs.DomainOU) -ErrorAction Stop -Credential $domainCred
 
 #Action
 $Action = "Create AD Groups"
 Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADGroups.ps1 -ArgumentList $($DomainData.BaseOU),$($Settings.FABRIC.DomainGroups.DomainGroup) -ErrorAction Stop -Credential $domainCred
+$DomainData.DomainGroups.DomainGroup
+Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADGroups.ps1 -ArgumentList $($DomainData.BaseOU),$($DomainData.DomainGroups.DomainGroup) -ErrorAction Stop -Credential $domainCred
 
 #Action
 $Action = "Create AD Accounts"
 Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADAccount.ps1 -ArgumentList $($DomainData.BaseOU),$($Settings.FABRIC.DomainAccounts.DomainAccount) -ErrorAction Stop -Credential $domainCred
+$DomainData.DomainAccounts.DomainAccount
+Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADAccount.ps1 -ArgumentList $($DomainData.BaseOU),$($DomainData.DomainAccounts.DomainAccount) -ErrorAction Stop -Credential $domainCred
 
 #Action
 $Action = "Add User to Groups"
 Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAAddAccountToGroups.ps1 -ArgumentList $($DomainData.BaseOU),$($Settings.FABRIC.DomainAccounts.DomainAccount) -ErrorAction Stop -Credential $domainCred
+$DomainData.DomainAccounts.DomainAccount
+Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAAddAccountToGroups.ps1 -ArgumentList $($DomainData.BaseOU),$($DomainData.DomainAccounts.DomainAccount) -ErrorAction Stop -Credential $domainCred
 
 #Action
 $Action = "Adding default Rev DNS Zones"
@@ -275,18 +282,19 @@ Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
 } -ErrorAction SilentlyContinue -Credential $domainCred
 
 #Action
-#$Action = "Configure DHCP..."
-#$DHCPSrvCred = 
-#Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-#    Param(
-#    $DHCPSrvCred
-#    )
-#    Set-DhcpServerv4DnsSetting -UpdateDnsRRForOlderClients $true 
-#    Set-DhcpServerv4DnsSetting -NameProtection $true
-#    $DHCPSrvCred = Get-Credential   #  GET "SVC_ADDS_DHCP"  Creds
-#    Set-DhcpServerDnsCredential -Credential  
-#} -ErrorAction SilentlyContinue -Credential $domainCred -ArgumentList $DHCPSrvCred
-
+$Action = "Configure DHCP..."
+$DHCPServiceAccountDomain = $DomainData.DomainNetBios
+$DHCPServiceAccountName = ($DomainData.DomainAccounts.DomainAccount | Where-Object Name -EQ 'SVC_ADDS_DHCP').name
+$DHCPServiceAccountPW = ($DomainData.DomainAccounts.DomainAccount | Where-Object Name -EQ 'SVC_ADDS_DHCP').PW
+Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+    Param(
+        $DHCPServiceAccountDomain,$DHCPServiceAccountName,$DHCPServiceAccountPW
+    )
+    Set-DhcpServerv4DnsSetting -UpdateDnsRRForOlderClients $true 
+    Set-DhcpServerv4DnsSetting -NameProtection $true
+    $DHCPSrvCred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList "$($DHCPServiceAccountDomain)\$($DHCPServiceAccountName)", (ConvertTo-SecureString $DHCPServiceAccountPW -AsPlainText -Force)
+    Set-DhcpServerDnsCredential -Credential $DHCPSrvCred
+} -ErrorAction SilentlyContinue -Credential $domainCred -ArgumentList $DHCPServiceAccountDomain,$DHCPServiceAccountName,$DHCPServiceAccountPW
 
 #Action
 $Action = "Enable Remote Desktop"
