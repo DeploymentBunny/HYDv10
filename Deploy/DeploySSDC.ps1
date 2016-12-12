@@ -2,7 +2,7 @@
 
 #Read data from XML
 $Global:SettingsFile = "C:\Setup\FABuilds\FASettings.xml"
-[xml]$Settings = Get-Content $SettingsFile -ErrorAction Stop
+[xml]$Global:Settings = Get-Content $SettingsFile -ErrorAction Stop
 
 #Set Vars
 $Global:Solution = "HYDv10"
@@ -24,66 +24,70 @@ C:\Setup\HYDv10\VeriFyBuildSetup\Verify-DeployServer.ps1 -SettingsFile $Settings
 C:\Setup\HYDv10\CheckConfig\CheckConfig.ps1 -SettingsFile $SettingsFile -LogPath $Logpath
 
 #Deploy ADDS01
+$Global:Server = 'ADDS01'
+$Global:Roles = 'ADDS','DHCP'
+$FinishAction = 'Shutdown'
 C:\Setup\HYDv10\TaskSequences\DeployADDS01.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath
 
 #Deploy ADDS02
+$Global:Server = 'ADDS02'
+$Global:Roles = 'ADDS','DHCP'
+$FinishAction = 'Shutdown'
 C:\Setup\HYDv10\TaskSequences\DeployADDS02.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath
 
 #Deploy RRAS01
-$Server = 'RRAS01'
-$Roles = 'RRAS'
+$Global:Server = 'RRAS01'
+$Global:Roles = 'RRAS'
 $FinishAction = 'Shutdown'
 C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction -KeepMountedMedia
 
 #Deploy RDGW01
-$Server = 'RDGW01'
-$Roles = 'RDGW'
+$Global:Server = 'RDGW01'
+$Global:Roles = 'RDGW'
 $FinishAction = 'Shutdown'
 C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction -KeepMountedMedia
 
 #Deploy MGMT01
-$Server = 'MGMT01'
-$Roles = 'MGMT'
+$Global:Server = 'MGMT01'
+$Global:Roles = 'MGMT'
 $FinishAction = 'Shutdown'
 C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction -KeepMountedMedia
 
 #Deploy DEPL01
-$Server = 'DEPL01'
-$Roles = 'DEPL'
+$Global:Server = 'DEPL01'
+$Global:Roles = 'DEPL'
 $FinishAction = 'Shutdown'
 C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction -KeepMountedMedia
 
 #Deploy WSUS01
-$Server = 'WSUS01'
-$Roles = 'WSUS'
+$Global:Server = 'WSUS01'
+$Global:Roles = 'WSUS'
 $FinishAction = 'Shutdown'
 C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction -KeepMountedMedia
 
 #Deploy SCVM01
-$Server = 'SCVM01'
-$Roles = 'SCVM'
+$Global:Server = 'SCVM01'
+$Global:Roles = 'SCVM'
 $FinishAction = 'Shutdown'
 C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction -KeepMountedMedia
 
 #Deploy SCOM01
-$Server = 'SCOM01'
-$Roles = 'SCOM'
+$Global:Server = 'SCOM01'
+$Global:Roles = 'SCOM'
 $FinishAction = 'Shutdown'
 C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction -KeepMountedMedia
 
 #Deploy SCDP01
-$Server = 'SCDP01'
-$Roles = 'SCDP'
+$Global:Server = 'SCDP01'
+$Global:Roles = 'SCDP'
 $FinishAction = 'Shutdown'
 C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction -KeepMountedMedia
 
 #Deploy TEST01
-$Server = 'TEST01'
-$Roles = 'NONE'
+$Global:Server = 'TEST01'
+$Global:Roles = 'NONE'
 $FinishAction = 'Shutdown'
-
 C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction  -KeepMountedMedia
-
 
 #Check log
 Get-Content -Path $Logpath

@@ -51,31 +51,39 @@ Param
 #Set start time
 $StartTime = Get-Date
 
+#Step Step
+$Step = 0
+
 #Import Modules
 Import-Module C:\setup\Functions\VIAHypervModule.psm1 -Force
 Import-Module C:\setup\Functions\VIADeployModule.psm1 -Force
 Import-Module C:\Setup\Functions\VIAUtilityModule.psm1 -Force
 
-#Action
-$Action = "Notify start"
-Update-VIALog -Data "Action: $Action"
-Start-VIASoundNotify
-
 #Set Values
 $ServerName = $Server
 $DomainName = "Fabric"
-$log = "$env:TEMP\$ServerName" + ".log"
-Update-VIALog -Data "Deploying $ServerName in domain $Domain"
+
+#Action
+$Step = 1 + $step
+$Action = "Notify start"
+$Data = "Server:$ServerName" + "," + "Step:$Step" + "," + "Action:$Action"
+Update-VIALog -Data $Data
+Start-VIASoundNotify
 
 #Read data from XML
-Update-VIALog -Data "Reading $SettingsFile"
-[xml]$Settings = Get-Content $SettingsFile
+$Step = 1 + $step
+$Action = "Reading $SettingsFile"
+$Data = "Server:$ServerName" + "," + "Step:$Step" + "," + "Action:$Action"
+Update-VIALog -Data $Data
+[xml]$Settings = Get-Content $SettingsFile -ErrorAction Stop
 $CustomerData = $Settings.FABRIC.Customers.Customer
 $CommonSettingData = $Settings.FABRIC.CommonSettings.CommonSetting
 $ProductKeysData = $Settings.FABRIC.ProductKeys.ProductKey
 $NetworksData = $Settings.FABRIC.Networks.Network
+$ServicesData = $Settings.FABRIC.Services.Service
 $DomainData = $Settings.FABRIC.Domains.Domain | Where-Object -Property Name -EQ -Value $DomainName
 $ServerData = $Settings.FABRIC.Servers.Server | Where-Object -Property Name -EQ -Value $ServerName
+
 $NIC01 = $ServerData.Networkadapters.Networkadapter | Where-Object -Property Name -EQ -Value NIC01
 $NIC01RelatedData = $NetworksData | Where-Object -Property ID -EQ -Value $NIC01.ConnectedToNetwork
 
@@ -594,6 +602,23 @@ foreach($Role in $Roles){
             #Restart
             Update-VIALog -Data "Restart $($ServerData.ComputerName)"
             Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $domainCred
+
+            #Action
+            $App = "SC DPM 2016"
+            $Action = "Install Application"
+            Update-VIALog -Data "Action: $Action - $App"
+            $Source = 'D:\SC 2016 DPM\Setup.exe'
+            $SQLINSTANCENAME = ($ServicesData | Where-Object Name -EQ SCDP2016).config.SQLINSTANCENAME
+            $Role = 'Full'
+            $Domain = $DomainData.Name
+            $ProductKey = ($ProductKeysData | Where-Object Name -EQ ProduktKeySC2016).key
+            $UserName = $CustomerData.Name
+            $CompanyName = $CustomerData.Name
+            $SqlAccountPassword = "P@ssw0rd"
+            Invoke-Command -VMName $ServerData.ComputerName -ScriptBlock {
+                Param($Source,$Role,$Domain,$ProductKey,$UserName,$CompanyName,$SQLINSTANCENAME,$SqlAccountPassword)
+                C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSCDP2016.ps1 -Source $Source -Role $Role -Domain $Domain -ProductKey $ProductKey -UserName $UserName -CompanyName $CompanyName -SQLINSTANCENAME $SQLINSTANCENAME -SqlAccountPassword $SqlAccountPassword
+            } -ArgumentList $Source,$Role,$Domain,$ProductKey,$UserName,$CompanyName,$SQLINSTANCENAME,$SqlAccountPassword -ErrorAction Stop  -Credential $domainCred
         }
         Default {}
     }
