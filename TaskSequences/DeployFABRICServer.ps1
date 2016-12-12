@@ -641,3 +641,4 @@ if($FinishAction -eq 'Shutdown'){
 }
 
 #Final steps end
+Start-VIASoundNotify

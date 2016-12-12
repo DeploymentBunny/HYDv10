@@ -437,7 +437,6 @@ switch ($Role)
     {
         Write-Output "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
-        "Hyper-V",
         "Hyper-V-Tools",
         "Hyper-V-PowerShell"
         )
