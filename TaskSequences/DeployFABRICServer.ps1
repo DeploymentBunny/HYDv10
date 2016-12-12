@@ -56,7 +56,10 @@ Import-Module C:\setup\Functions\VIAHypervModule.psm1 -Force
 Import-Module C:\setup\Functions\VIADeployModule.psm1 -Force
 Import-Module C:\Setup\Functions\VIAUtilityModule.psm1 -Force
 
-$Server = 'SCDP01'
+#Action
+$Action = "Notify start"
+Update-VIALog -Data "Action: $Action"
+Start-VIASoundNotify
 
 #Set Values
 $ServerName = $Server

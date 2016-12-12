@@ -441,6 +441,10 @@ switch ($Role)
         "Hyper-V-PowerShell"
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
+        
+        $Executable = "dism.exe" 
+        $Arguments = " /Online /Enable-feature /All /FeatureName:Microsoft-Hyper-V /FeatureName:Microsoft-Hyper-V-Management-PowerShell /quiet /norestart"
+        Invoke-VIAExe -Executable $Executable -Arguments $Arguments
     }
     SCOR{
         Write-Output "Adding Windows Features for selected role: $Role"
