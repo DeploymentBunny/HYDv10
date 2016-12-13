@@ -47,8 +47,8 @@ Param
 ##############
 
 #Init
-$Server = "SCVM01"
-$ROle = "SCVM"
+$Server = "RRAS01"
+$ROle = "RRAS"
 $Global:LogPath= "$env:TEMP\log.txt"
 
 #Set start time
@@ -103,69 +103,37 @@ $domainCred = new-object -typename System.Management.Automation.PSCredential -ar
 $Action = "Sample 1"
 Update-VIALog -Data "Action: $Action"
 
-($ServicesData | Where-Object Name -EQ SCVMM2016).config
-$SQLINSTANCENAME = ($ServicesData | Where-Object Name -EQ SCVMM2016).config.SQLINSTANCENAME
-$SQLINSTANCEDIR = ($ServicesData | Where-Object Name -EQ SCVMM2016).config.SQLINSTANCEDIR
+$ExternalNIC = ($ServerData.Networkadapters.Networkadapter | where ConnectedToNetwork -eq 80c41589-c5fc-4785-a673-e8b08996cfc2).NAME
+$ExternalIP = ($ServerData.Networkadapters.Networkadapter | where ConnectedToNetwork -eq 80c41589-c5fc-4785-a673-e8b08996cfc2).IPAddress
 
 Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-    Param($SQLINSTANCENAME,$SQLINSTANCEDIR)
-        Write-Host "First Param is $SQLINSTANCENAME"
-        Write-Host "Second Param is $SQLINSTANCEDIR"
-} -Credential $domainCred -ArgumentList $SQLINSTANCENAME,$SQLINSTANCEDIR
+    Param($ExternalNIC, $ExternalIP)
 
-#Sample 2
+    # Disable all Public and Private Firewall rules. 
+    Get-NetFirewallRule | where Profile -match "Domain" | Set-NetFirewallRule -Profile "Domain"
+    Get-NetFirewallRule | where Profile -like "Any" | Set-NetFirewallRule -Profile "Domain"
+    Get-NetFirewallRule | where Profile -like "Private" | Set-NetFirewallRule -Enabled False
+    Get-NetFirewallRule | where Profile -like "Public" | Set-NetFirewallRule -Enabled False
 
-#Action
-$Action = "Sample 2"
-Update-VIALog -Data "Action: $Action"
+    # Disable all Bindings on NIC02 (Get Name from XML)
+    Get-NetAdapterBinding -Name "$ExternalNIC" | where ComponentID -ne "ms_tcpip" | Set-NetAdapterBinding -Enabled $false
 
-($ServicesData | Where-Object Name -EQ SCVMM2016).config
-$SQLINSTANCENAME = ($ServicesData | Where-Object Name -EQ SCVMM2016).config.SQLINSTANCENAME
-$SQLINSTANCEDIR = ($ServicesData | Where-Object Name -EQ SCVMM2016).config.SQLINSTANCEDIR
+    # Disable Dynamic DNS Registration for Exnternal interface - NIC02 (Get name from XML) 
+    Set-DnsClient -InterfaceAlias $ExternalNIC -RegisterThisConnectionsAddress $false
 
-Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-    Param($SQLINSTANCENAME,$SQLINSTANCEDIR)
-        Write-Host "First Param is $SQLINSTANCENAME"
-        Write-Host "Second Param is $SQLINSTANCEDIR"
-        Import-Module C:\Setup\Functions\VIAUtilityModule.psm1
-        Get-VIAOSVersion
-} -Credential $domainCred -ArgumentList $SQLINSTANCENAME,$SQLINSTANCEDIR
+    # Disable NETBIOS over TCP/IP on Internet NIC
+    # (0)  Enable Netbios via DHCP
+    # (1)   Enable Netbios
+    # (2)   Disable Netbios
+    (gwmi win32_networkadapterconfiguration | where IPAddress -EQ $ExternalIP).settcpipnetbios(2)
+
+} -Credential $domainCred -ArgumentList $ExternalNIC, $ExternalIP
 
 
-#Sample 3
 
 #Action
-$Action = "Sample 3"
-Update-VIALog -Data "Action: $Action"
-$Role = "NONE"
-Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-    Param($role)
-        Import-Module C:\Setup\Functions\VIAUtilityModule.psm1
-        C:\Setup\HYDv10\Scripts\Invoke-VIAInstallRoles.ps1 -Role $role
-} -Credential $domainCred -ArgumentList $Role
-
-
-#Sample 4
-
-#Action
-$Action = "Sample 4"
-Update-VIALog -Data "Action: $Action"
-$Param1 = "Administrators"
-$Param2 = "Administrator"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Add-VIADomainuserToLocalgroup.ps1 -ErrorAction Stop -Credential $domainCred -ArgumentList $Param1,$Param2
-
-#Sample 5
-
-#Action
-$Action = "Sample 5"
-Update-VIALog -Data "Action: $Action"
-
-$FileItem = "C:\HydData.txt"
-Get-VM -Name $($ServerData.ComputerName) | Enable-VMIntegrationService -Name "Guest Service Interface"
-Copy-VMFile -VM (Get-VM -Name $($ServerData.ComputerName)) -SourcePath $FileItem -DestinationPath $FileItem -FileSource Host -CreateFullPath -Force
-Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-    Param($role,$FileItem)
-        Write-Host "Role is $Role"
-        Get-Content -Path $FileItem
-} -Credential $domainCred -ArgumentList $Role,$FileItem
+$Action = "Done"
+Write-Output "Action: $Action"
+$Endtime = Get-Date
+Update-VIALog -Data "The script took $(($Endtime - $StartTime).Days):Days $(($Endtime - $StartTime).Hours):Hours $(($Endtime - $StartTime).Minutes):Minutes to complete."
 

@@ -47,9 +47,15 @@ Param
 ##############
 
 #Init
+$Server = "ADDS01"
+$ROle = "ADDS"
+$Global:LogPath= "$env:TEMP\log.txt"
 
 #Set start time
 $StartTime = Get-Date
+
+#Step Step
+$Step = 0
 
 #Import Modules
 Import-Module C:\setup\Functions\VIAHypervModule.psm1 -Force
@@ -57,254 +63,301 @@ Import-Module C:\setup\Functions\VIADeployModule.psm1 -Force
 Import-Module C:\Setup\Functions\VIAUtilityModule.psm1 -Force
 
 #Set Values
-$ServerName = "ADDS01"
+$ServerName = $Server
 $DomainName = "Fabric"
-$log = "$env:TEMP\$ServerName" + ".log"
+
+#Action
+$Step = 1 + $step
+$Action = "Notify start"
+$Data = "Server:$ServerName" + "," + "Step:$Step" + "," + "Action:$Action"
+Update-VIALog -Data $Data
+Start-VIASoundNotify
 
 #Read data from XML
-Write-Verbose "Reading $SettingsFile"
-[xml]$Settings = Get-Content $SettingsFile
+$Step = 1 + $step
+$Action = "Reading $SettingsFile"
+$Data = "Server:$ServerName" + "," + "Step:$Step" + "," + "Action:$Action"
+Update-VIALog -Data $Data
+[xml]$Settings = Get-Content $SettingsFile -ErrorAction Stop
 $CustomerData = $Settings.FABRIC.Customers.Customer
 $CommonSettingData = $Settings.FABRIC.CommonSettings.CommonSetting
 $ProductKeysData = $Settings.FABRIC.ProductKeys.ProductKey
 $NetworksData = $Settings.FABRIC.Networks.Network
+$ServicesData = $Settings.FABRIC.Services.Service
 $DomainData = $Settings.FABRIC.Domains.Domain | Where-Object -Property Name -EQ -Value $DomainName
 $ServerData = $Settings.FABRIC.Servers.Server | Where-Object -Property Name -EQ -Value $ServerName
+
 $NIC01 = $ServerData.Networkadapters.Networkadapter | Where-Object -Property Name -EQ -Value NIC01
 $NIC01RelatedData = $NetworksData | Where-Object -Property ID -EQ -Value $NIC01.ConnectedToNetwork
 
-$MountFolder = "C:\MountVHD"
 $AdminPassword = $CommonSettingData.LocalPassword
 $DomainInstaller = $DomainData.DomainAdmin
 $DomainName = $DomainData.DomainAdminDomain
 $DNSDomain = $DomainData.DNSDomain
 $DomainAdminPassword = $DomainData.DomainAdminPassword
-$VMMemory = [int]$ServerData.Memory * 1024 * 1024
-$VMSwitchName = $CommonSettingData.VMSwitchName
-$localCred = new-object -typename System.Management.Automation.PSCredential -argumentlist "Administrator", (ConvertTo-SecureString $adminPassword -AsPlainText -Force)
 $domainCred = new-object -typename System.Management.Automation.PSCredential -argumentlist "$($domainName)\Administrator", (ConvertTo-SecureString $domainAdminPassword -AsPlainText -Force)
-$VIASetupCompletecmdCommand = "cmd.exe /c PowerShell.exe -Command New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Virtual Machine\Guest' -Name OSDeployment -Value Done -PropertyType String"
-$SetupRoot = "C:\Setup"
 
-If ((Test-VIAVMExists -VMname $($ServerData.ComputerName)) -eq $true){Write-Host "$($ServerData.ComputerName) already exist";Exit}
-Write-Host "Creating $($ServerData.ComputerName)"
-$VM = New-VIAVM -VMName $($ServerData.ComputerName) -VMMem $VMMemory -VMvCPU 2 -VMLocation $VMLocation -VHDFile $VHDImage -DiskMode Diff -VMSwitchName $VMSwitchName -VMGeneration 2 -Verbose
-$VIAUnattendXML = New-VIAUnattendXML -Computername $($ServerData.ComputerName) -OSDAdapter0IPAddressList $NIC01.IPAddress -DomainOrWorkGroup Workgroup -ProtectYourPC 3 -Verbose -OSDAdapter0Gateways $NIC01RelatedData.Gateway -OSDAdapter0DNS1 $NIC01RelatedData.DNS[0] -OSDAdapter0DNS2 $NIC01RelatedData.DNS[1] -OSDAdapter0SubnetMaskPrefix $NIC01RelatedData.SubNet -OrgName $CustomerData.Name -Fullname $CustomerData.Name -TimeZoneName $CommonSettingData.TimeZoneName
-$VIASetupCompletecmd = New-VIASetupCompleteCMD -Command $VIASetupCompletecmdCommand -Verbose
-$VHDFile = (Get-VMHardDiskDrive -VMName $($ServerData.ComputerName)).Path
-Mount-VIAVHDInFolder -VHDfile $VHDFile -VHDClass UEFI -MountFolder $MountFolder 
-New-Item -Path "$MountFolder\Windows\Panther" -ItemType Directory -Force | Out-Null
-New-Item -Path "$MountFolder\Windows\Setup" -ItemType Directory -Force | Out-Null
-New-Item -Path "$MountFolder\Windows\Setup\Scripts" -ItemType Directory -Force | Out-Null
-Copy-Item -Path $VIAUnattendXML.FullName -Destination "$MountFolder\Windows\Panther\$($VIAUnattendXML.Name)" -Force
-Copy-Item -Path $VIASetupCompletecmd.FullName -Destination "$MountFolder\Windows\Setup\Scripts\$($VIASetupCompletecmd.Name)" -Force
-Copy-Item -Path $SetupRoot\functions -Destination $MountFolder\Setup\Functions -Container -Recurse
-Copy-Item -Path $SetupRoot\HYDV10 -Destination $MountFolder\Setup\HYDV10 -Container -Recurse
-Dismount-VIAVHDInFolder -VHDfile $VHDFile -MountFolder $MountFolder
-Remove-Item -Path $VIAUnattendXML.FullName
-Remove-Item -Path $VIASetupCompletecmd.FullName
-
-#Enable Device Naming
-Get-VMNetworkAdapter -VMName $($ServerData.ComputerName) | Set-VMNetworkAdapter -DeviceNaming On
-
-#Deploy
-Write-Host "Working on $($ServerData.ComputerName)"
-Start-VM $($ServerData.ComputerName)
-Wait-VIAVMIsRunning -VMname $($ServerData.ComputerName)
-Wait-VIAVMHaveICLoaded -VMname $($ServerData.ComputerName)
-Wait-VIAVMHaveIP -VMname $($ServerData.ComputerName)
-Wait-VIAVMDeployment -VMname $($ServerData.ComputerName)
-Wait-VIAVMHavePSDirect -VMname $($ServerData.ComputerName) -Credentials $localCred
-
-#Rename Default NetworkAdapter
-Rename-VMNetworkAdapter -VMName $($ServerData.ComputerName) -NewName $NIC01.Name 
-Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-    Param(
-        $NicName
-    )
-    Get-NetAdapter | Disable-NetAdapter -Confirm:$false
-    Get-NetAdapter | Enable-NetAdapter -Confirm:$false
-    $NIC = (Get-NetAdapterAdvancedProperty -Name * | Where-Object -FilterScript {$_.DisplayValue -eq “NIC01”}).Name
-    Rename-NetAdapter -Name $NIC -NewName $NicName
-} -Credential $domainCred -ArgumentList $($NIC01.Name)
 
 #Action
-$Action = "Add Datadisks"
-foreach($obj in $ServerData.DataDisks.DataDisk){
-    If($obj.DiskSize -ne 'NA'){
-     C:\Setup\HYDv10\Scripts\New-VIADataDisk.ps1 -VMName $($ServerData.ComputerName) -DiskLabel $obj.Name -DiskSize $obj.DiskSize
+$Action = "Redirect New ComputerObject to OU"
+Update-VIALog -Data "Action: $Action"
+Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+    Start-Process -FilePath "$ENV:SystemRoot\system32\redircmp.exe" -argumentlist (Get-ADOrganizationalUnit -Filter { Name -like 'Unassigned Servers' }).DistinguishedName
+} -Credential $domainCred 
+
+
+#Action
+$Action = "Add KDS Root Key for Group Managed Service Accounts"
+Update-VIALog -Data "Action: $Action"
+Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+    $KDSKey = Get-KdsRootKey
+    if ($KDSKey -eq $null) { Add-KdsRootKey -EffectiveTime (Get-Date).AddHours(-10) } 
+} -Credential $domainCred 
+
+#Action
+$Action = "Copy ADM/ADML Files to SYSVOL to Central Store"
+Update-VIALog -Data "Action: $Action"
+Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+    Copy-Item -Path $ENV:SystemRoot\PolicyDefinitions\* $ENV:SystemRoot\SYSVOL\domain\Policies\PolicyDefinitions -Recurse -Force
+} -Credential $domainCred 
+
+
+#Action
+$Action = "Setup DNS Scavenging "
+Update-VIALog -Data "Action: $Action"
+Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+    Set-DnsServerScavenging -ComputerName $ENV:COMPUTERNAME -ScavengingState $true
+    Set-DnsServerScavenging -ApplyOnAllZones -ScavengingState $true 
+} -Credential $domainCred 
+
+
+#Action
+$Action = "DHCP Server Conflict Detection Attempts"
+Update-VIALog -Data "Action: $Action"
+Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+    Set-DhcpServerSetting -ConflictDetectionAttempts 1
+} -Credential $domainCred 
+
+
+#Action
+$Action = "Securing DNSUpdateProxy Group"
+#  DHCP: The DNSupdateproxy group must be secured if Name Protection is enabled on any IPv4 scope
+#  https://technet.microsoft.com/en-us/library/ee941099%28v=ws.10%29.aspx 
+Update-VIALog -Data "Action: $Action"
+Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+    Start-Process -FilePath "$ENV:SystemRoot\system32\dnscmd.exe" -argumentlist "/config /OpenAclOnProxyUpdates 0" 
+} -Credential $domainCred 
+
+
+#Action
+$Action = "Copy Script Files to SYSVOL"
+Update-VIALog -Data "Action: $Action"
+Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+    Copy-Item -Path C:\Setup\HYDV10.Custom\Install-ADDS\Source\Sysvol\* $ENV:SystemRoot\SYSVOL\domain\scripts -Recurse -Force -Verbose
+
+    $testnet = Test-NetConnection -CommonTCPPort HTTP -ComputerName live.sysinternals.com -InformationLevel Detailed
+    if ($testnet.TcpTestSucceeded -eq $True) { 
+    $Action = "Downloading latest version of BGInfo from Sysinternals"
+    Update-VIALog -Data "Action: $Action"
+    Invoke-WebRequest -Uri https://live.sysinternals.com/Bginfo.exe -OutFile $ENV:SystemRoot\SYSVOL\domain\scripts\BgInfo\bginfo.exe
     }
+
+} -Credential $domainCred 
+
+
+
+#Action
+$Action = "Import WMI Filters"
+Update-VIALog -Data "Action: $Action"
+Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+
+    Invoke-Expression "C:\Setup\HYDV10.Custom\Install-GPOs\Script\Import-FAWMIFilters.ps1"
+
+} -Credential $domainCred 
+
+
+
+#Action
+$Action = "Import Group Policy Objects"
+Update-VIALog -Data "Action: $Action"
+Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+
+Invoke-Expression "C:\Setup\HYDV10.Custom\Install-GPOs\Script\Import-FAGroupPolicies.ps1" 
+
+} -Credential $domainCred 
+
+
+#Action
+$Action = "Set Default Password Policy"
+Update-VIALog -Data "Action: $Action"
+Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+    Set-ADDefaultDomainPasswordPolicy -Identity $ENV:USERDNSDOMAIN -ComplexityEnabled $true -MinPasswordLength 15 -MinPasswordAge 0 -MaxPasswordAge 360 -LockoutDuration 00:30:00 -LockoutObservationWindow 00:30:00 -LockoutThreshold 10
+    Get-ADDefaultDomainPasswordPolicy
+} -Credential $domainCred 
+
+
+
+#Action
+$Action = "Check for GeoLocation"
+Update-VIALog -Data "Action: $Action"
+
+function get-myexternalip() {   
+    $urls = "http://whatismyip.akamai.com",  
+            "http://b10m.swal.org/cgi-bin/whatsmyip.cgi?just-ip",  
+            "http://icanhazip.com",  
+            "http://www.whatismyip.org/"; 
+ 
+           $RxIP = "(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"; 
+           $ip = "Unknown"; 
+           Foreach ($address in $urls) { 
+               try { 
+                    $temp = wget $address; 
+                    $www_content = $temp.Content; 
+                    if ( $www_content -match $RxIP ) { 
+                        $ip = ([regex]($rxip)).match($www_content).Value 
+                        break 
+                    } 
+               } catch { continue } 
+           } 
+    return $ip 
 }
 
-#Action
-$Action = "Partion and Format DataDisk(s)"
-Write-Verbose "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\hydv10\Scripts\Initialize-VIADataDisk.ps1 -ErrorAction Stop -Credential $domainCred -ArgumentList NTFS
 
-#Add role ADDS
-$Role = "ADDS"
-Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-    Param(
-        $Role
-    )
-    C:\Setup\HYDv10\Scripts\Invoke-VIAInstallRoles.ps1 -Role $Role
-} -Credential $localCred -ArgumentList $Role
-
-#Add role ADDS
-$DomainForestLevel = 'ws2016'
-Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-    Param(
-        $Password,
-        $FQDN,
-        $NetBiosDomainName,
-        $DomainForestLevel
-    )
-    C:\Setup\HYDv10\Scripts\Set-VIARole-ADDS-FDC.ps1 -Password $Password -FQDN $FQDN -NetBiosDomainName $NetBiosDomainName -DomainForestLevel $DomainForestLevel
-} -Credential $localCred -ArgumentList $DomainData.DomainAdminPassword,$DomainData.DNSDomain,$DomainData.DomainNetBios,$DomainForestLevel
-
-#Restart
-Restart-VIAVM -VMname $($ServerData.ComputerName)
-Wait-VIAVMIsRunning -VMname $($ServerData.ComputerName)
-Wait-VIAVMHaveICLoaded -VMname $($ServerData.ComputerName)
-Wait-VIAVMHaveIP -VMname $($ServerData.ComputerName)
-Wait-VIAVMHavePSDirect -VMname $($ServerData.ComputerName) -Credentials $domainCred
-
-#Check that ADDS is up and running
-do{
-$result = Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-        Param(
-        $ADDSServerName
-        )
-        Test-Path -Path \\$ADDSServerName\NETLOGON
-    } -Credential $domainCred -ArgumentList $($ServerData.ComputerName)
-    Write-Host "Waiting for Domain Controller to be operational..."
-    Start-Sleep -Seconds 15
-}until($result -eq $true)
-Write-Host "Waiting for Domain Controller is now operational..."
-
-#Action
-$Action = "SET sc.exe config NlaSvc start=delayed-auto"
-Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-    sc.exe config NlaSvc start=delayed-auto
-    Restart-Service -Name NlaSvc -Force
-} -Credential $domainCred
-
-#Action
-$Action = "Change AD Site name"
-Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADDSSiteName.ps1 -ArgumentList $DomainData.SiteName -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Configure Subnets"
-Write-Output "Action: $Action"
-$ADSubnets = foreach($network in $NetworksData){
-    "$($network.NetIP)/$($network.SubNet)"
-}
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADSiteSubnet.ps1 -ArgumentList $DomainData.SiteName,$ADSubnets -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Configure Client DNS"
-Write-Output "Action: $Action"
-$ClientDNSServerAddr = "$($NIC01.DNS[0]),$($NIC01.DNS[1])"
-Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-    Param(
-    $ClientDNSServerAddr
-    )
-    C:\Setup\HYDv10\Scripts\Set-VIAADClientDNSSettings.ps1 -ClientDNSServerAddr $ClientDNSServerAddr
-} -ArgumentList $ClientDNSServerAddr -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Install DHCP"
-$Role = "DHCP"
-Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-    Param(
-        $Role
-    )
-    C:\Setup\HYDv10\Scripts\Invoke-VIAInstallRoles.ps1 -Role $Role
-} -Credential $domainCred -ArgumentList $Role
-
-#Action
-$Action = "Configure DHCP"
-$Role = "DHCP"
-Write-Output "Action: $Action - $Role"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARoles.ps1 -ArgumentList $Role -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Configure DHCP Scopes"
-$Role = "DHCP"
-Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIADHCP.ps1 -ArgumentList $($NIC01RelatedData.NetIP), $($NIC01RelatedData.SubNet), $($NIC01RelatedData.DHCPStart), $($NIC01RelatedData.DHCPEnd), $($DomainData.DNSDomain), $($NIC01RelatedData.DNS[0]), $($NIC01RelatedData.DNS[1]), $($NIC01RelatedData.Gateway) -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Create base OU"
-Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADBaseOU.ps1 -ArgumentList $DomainData.BaseOU -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Create Sub OUs"
-Write-Output "Action: $Action"
-$DomainData.DomainOUs.DomainOU
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADStructure.ps1 -ArgumentList $($DomainData.BaseOU),$($DomainData.DomainOUs.DomainOU) -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Create AD Groups"
-Write-Output "Action: $Action"
-$DomainData.DomainGroups.DomainGroup
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADGroups.ps1 -ArgumentList $($DomainData.BaseOU),$($DomainData.DomainGroups.DomainGroup) -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Create AD Accounts"
-Write-Output "Action: $Action"
-$DomainData.DomainAccounts.DomainAccount
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADAccount.ps1 -ArgumentList $($DomainData.BaseOU),$($DomainData.DomainAccounts.DomainAccount) -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Add User to Groups"
-Write-Output "Action: $Action"
-$DomainData.DomainAccounts.DomainAccount
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAAddAccountToGroups.ps1 -ArgumentList $($DomainData.BaseOU),$($DomainData.DomainAccounts.DomainAccount) -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Adding default Rev DNS Zones"
-Write-Output "Action: $Action"
-Start-Sleep 60
-$RevDNSZones = ($Settings.Fabric.Networks.Network| Where-Object -Property RDNS -Like *in-addr.arpa).rdns
-foreach($RevDNSZone in $RevDNSZones){
-    Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADDSRevDNSZone.ps1 -ArgumentList $RevDNSZone -ErrorAction Stop -Verbose -Credential $domainCred
+$CheckNetwork = Test-NetConnection -CommonTCPPort HTTP freegeoip.net
+if ($CheckNetwork.TcpTestSucceeded -eq $True) { 
+    $ExternalIP = (($Settings.FABRIC.Servers.Server | where Name -EQ "RRAS01").NetworkAdapters.Networkadapter | where ConnectedToNetwork -EQ "80c41589-c5fc-4785-a673-e8b08996cfc2").IPAddress
+    [XML]$GeoLocation = Invoke-RestMethod -Method Get -Uri http://freegeoip.net/xml/$ExternalIP 
+    $NTPGeolocation = $GeoLocation.Response.CountryCode.ToLower()
 }
 
+
 #Action
-$Action = "Remove DNS Forwarders"
+$Action = "Build NTP Pool Address"
+Update-VIALog -Data "Action: $Action"
+$NTPPool = "pool.ntp.org"
+if ($NTPGeolocation -ne $Null) { $NTPPool = "$NTPGeolocation"+".pool.ntp.org,0x09 "+"$NTPPool"+",0x0a" } 
+
+
+#Action
+$Action = "Update NTP Settings for PDC GPO"
+Update-VIALog -Data "Action: $Action"
 Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-    Get-DnsServerForwarder | Remove-DnsServerForwarder -Force
-} -ErrorAction SilentlyContinue -Credential $domainCred
+    Param($NTPPool)
+     get-gpo -all | where DisplayName -like "*PDC*" | set-GPRegistryValue -Key "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32time\Parameters" -ValueName NTPServer -Value "$NTPPool" -Type String
+} -Credential $domainCred -ArgumentList $NTPPool 
+
+
 
 #Action
-$Action = "Configure DHCP..."
-$DHCPServiceAccountDomain = $DomainData.DomainNetBios
-$DHCPServiceAccountName = ($DomainData.DomainAccounts.DomainAccount | Where-Object Name -EQ 'SVC_ADDS_DHCP').name
-$DHCPServiceAccountPW = ($DomainData.DomainAccounts.DomainAccount | Where-Object Name -EQ 'SVC_ADDS_DHCP').PW
+$Action = "Update Various GPO Settings"
+Update-VIALog -Data "Action: $Action"
 Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-    Param(
-        $DHCPServiceAccountDomain,$DHCPServiceAccountName,$DHCPServiceAccountPW
-    )
-    Set-DhcpServerv4DnsSetting -UpdateDnsRRForOlderClients $true 
-    Set-DhcpServerv4DnsSetting -NameProtection $true
-    $DHCPSrvCred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList "$($DHCPServiceAccountDomain)\$($DHCPServiceAccountName)", (ConvertTo-SecureString $DHCPServiceAccountPW -AsPlainText -Force)
-    Set-DhcpServerDnsCredential -Credential $DHCPSrvCred
-} -ErrorAction SilentlyContinue -Credential $domainCred -ArgumentList $DHCPServiceAccountDomain,$DHCPServiceAccountName,$DHCPServiceAccountPW
 
-#Action
-$Action = "Enable Remote Desktop"
-Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /AR 0} -ErrorAction Stop -Credential $domainCred
 
-#Action
-$Action = "Set Remote Destop Security"
-Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /CS 0} -ErrorAction Stop -Credential $domainCred
+    get-gpo -all | where DisplayName -like "*PDC*" | set-GPRegistryValue -Key "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32time\Parameters" -ValueName NTPServer -Value "us.pool.ntp.org" -Type String
+
+    # Replace Domain and Username 
+    $GPO = get-gpo -all | where DisplayName -like "*PDC*"
+    $temp = get-content ("C:\Windows\SYSVOL\domain\Policies\"+"{"+$($GPO.id)+"}\Machine\Preferences\ScheduledTasks\ScheduledTasks.xml")
+    $temp = $temp.Replace("cloud.truesec.com","$env:USERDNSDOMAIN") 
+    $AdminUser = $env:USERDOMAIN+"\"+"Administrator"
+    $temp = $temp.Replace("CLOUD\admmala","$AdminUser")
+    $temp = $temp.Replace("CLOUD\","$env:USERDOMAIN\")
+    $temp |Set-Content ("C:\Windows\SYSVOL\domain\Policies\"+"{"+$($GPO.id)+"}\Machine\Preferences\ScheduledTasks\ScheduledTasks.xml") -Force
+
+
+    # Replace Domain and Username 
+    $GPO = get-gpo -all | where DisplayName -like "*Fabric ScaleOutFileServers Settings - FSUTIL*"
+    $temp = get-content ("C:\Windows\SYSVOL\domain\Policies\"+"{"+$($GPO.id)+"}\Machine\Preferences\ScheduledTasks\ScheduledTasks.xml")
+    $temp = $temp.Replace("cloud.truesec.com","$env:USERDNSDOMAIN") 
+    $AdminUser = $env:USERDOMAIN+"\"+"Administrator"
+    $temp = $temp.Replace("CLOUD\admmala","$AdminUser")
+    $temp = $temp.Replace("CLOUD\","$env:USERDOMAIN\")
+    $temp |Set-Content ("C:\Windows\SYSVOL\domain\Policies\"+"{"+$($GPO.id)+"}\Machine\Preferences\ScheduledTasks\ScheduledTasks.xml") -Force
+
+
+    # Replace Domain and Username 
+    $GPO = get-gpo -all | where DisplayName -like "*Fabric WebApplication Proxy - Default*"
+    $temp = get-content ("C:\Windows\SYSVOL\domain\Policies\"+"{"+$($GPO.id)+"}\Machine\Preferences\ScheduledTasks\ScheduledTasks.xml")
+    $temp = $temp.Replace("cloud.truesec.com","$env:USERDNSDOMAIN") 
+    $AdminUser = $env:USERDOMAIN+"\"+"Administrator"
+    $temp = $temp.Replace("CLOUD\admmala","$AdminUser")
+    $temp = $temp.Replace("CLOUD\","$env:USERDOMAIN\")
+    $temp |Set-Content ("C:\Windows\SYSVOL\domain\Policies\"+"{"+$($GPO.id)+"}\Machine\Preferences\ScheduledTasks\ScheduledTasks.xml") -Force
+
+
+    # Replace Domain and Username 
+    $GPO = get-gpo -all | where DisplayName -like "*Fabric WSUS Servers Settings - Default*"
+    $temp = get-content ("C:\Windows\SYSVOL\domain\Policies\"+"{"+$($GPO.id)+"}\Machine\Preferences\ScheduledTasks\ScheduledTasks.xml")
+    $temp = $temp.Replace("cloud.truesec.com","$env:USERDNSDOMAIN") 
+    $AdminUser = $env:USERDOMAIN+"\"+"Administrator"
+    $temp = $temp.Replace("CLOUD\admmala","$AdminUser")
+    $temp = $temp.Replace("CLOUD\","$env:USERDOMAIN\")
+    $temp |Set-Content ("C:\Windows\SYSVOL\domain\Policies\"+"{"+$($GPO.id)+"}\Machine\Preferences\ScheduledTasks\ScheduledTasks.xml") -Force
+
+
+    # Replace Path in GPO's 
+    $GPO = get-gpo -all | where DisplayName -like "*Fabric Computer Settings - Default*"
+    $temp = get-content ("C:\Windows\SYSVOL\domain\Policies\"+"{"+$($GPO.id)+"}\Machine\Preferences\Files\Files.xml")
+    $temp.Replace("cloud.truesec.com","$env:USERDNSDOMAIN") | Set-Content ("C:\Windows\SYSVOL\domain\Policies\"+"{"+$($GPO.id)+"}\Machine\Preferences\Files\Files.xml") -Force
+
+
+    # Replace Domain and Username
+    $GPO = get-gpo -all | where DisplayName -like "*Fabric Application - Installation*"
+    $temp = get-content ("C:\Windows\SYSVOL\domain\Policies\"+"{"+$($GPO.id)+"}\Machine\Preferences\ScheduledTasks\ScheduledTasks.xml")
+    $temp = $temp.Replace("cloud.truesec.com","$env:USERDNSDOMAIN") 
+    $AdminUser = $env:USERDOMAIN+"\"+"Administrator"
+    $temp = $temp.Replace("CLOUD\admmala","$AdminUser")
+    $temp |Set-Content ("C:\Windows\SYSVOL\domain\Policies\"+"{"+$($GPO.id)+"}\Machine\Preferences\ScheduledTasks\ScheduledTasks.xml") -Force
+
+
+    # Replace Domain and Username 
+    $GPO = get-gpo -all | where DisplayName -like "Fabric Domain Controllers Settings - Default"
+    $temp = get-content ("C:\Windows\SYSVOL\domain\Policies\"+"{"+$($GPO.id)+"}\Machine\Preferences\ScheduledTasks\ScheduledTasks.xml")
+    $temp = $temp.Replace("cloud.truesec.com","$env:USERDNSDOMAIN") 
+    $AdminUser = $env:USERDOMAIN+"\"+"Administrator"
+    $temp = $temp.Replace("CLOUD\admmala","$AdminUser")
+    $temp = $temp.Replace("CLOUD\","$env:USERDOMAIN\")
+    $temp |Set-Content ("C:\Windows\SYSVOL\domain\Policies\"+"{"+$($GPO.id)+"}\Machine\Preferences\ScheduledTasks\ScheduledTasks.xml") -Force
+
+
+    # Change WSUS Computer Groups
+    $GPOs = get-gpo -all | where DisplayName -like "*wsus*" 
+    foreach ($GPO in $GPOs) {
+
+        $WSUSSetting = Get-GPO -Name $GPO.DisplayName | Get-GPRegistryValue -Key "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -ValueName TargetGroup -ErrorAction SilentlyContinue
+        if ($WSUSSetting.count -gt 0) { 
+    
+        Set-GPRegistryValue -Name $GPO.DisplayName -Key $WSUSSetting.FullKeyPath -ValueName $WSUSSetting.ValueName -Type String -Value ($WSUSSetting.Value).replace("Cloud","Fabric")
+    
+         }
+    }
+
+    # TBA : Fix Firewall rules 
+    $GPOs = get-gpo -all | where DisplayName -like "*firewall*" 
+    foreach ($GPO in $GPOs | select -first 1) {
+        $Settings = Get-GPO -Name $GPO.DisplayName | Get-GPRegistryValue -Key "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\FirewallRules" -ErrorAction SilentlyContinue
+        if ($WSUSSetting.count -gt 0) { 
+    
+    # TBA 
+    # Change CLSCDP01 -> <real name>
+    # Change IP to $SCOM01 (read from XML) 
+    #
+    # Repeat for SCOM and MGMT
+    #
+    # Replace 172.16.200 with real IP Range 
+    #
+    #    $Settings | foreach { Set-GPRegistryValue -Name $GPO.DisplayName -Key $_.FullKeyPath -ValueName $_.ValueName -Type String -Value ($_.Value).replace("172.16.200","172.16.0") }
+    #    $Settings | foreach { Set-GPRegistryValue -Name $GPO.DisplayName -Key $_.FullKeyPath -ValueName $_.ValueName -Type String -Value ($_.Value).replace("172.16.200","172.16.0") }
+    #    $Settings | foreach { Set-GPRegistryValue -Name $GPO.DisplayName -Key $_.FullKeyPath -ValueName $_.ValueName -Type String -Value ($_.Value).replace("172.16.200","172.16.0") }
+    #    $Settings | foreach { Set-GPRegistryValue -Name $GPO.DisplayName -Key $_.FullKeyPath -ValueName $_.ValueName -Type String -Value ($_.Value).replace("172.16.200","172.16.0") }
+         }
+    }
+
+} -Credential $domainCred 
+
+
+
 
 #Action
 $Action = "Done"
@@ -312,9 +365,6 @@ Write-Output "Action: $Action"
 $Endtime = Get-Date
 Update-VIALog -Data "The script took $(($Endtime - $StartTime).Days):Days $(($Endtime - $StartTime).Hours):Hours $(($Endtime - $StartTime).Minutes):Minutes to complete."
 
-#Action
-if($FinishAction -eq 'Shutdown'){
-    $Action = "Shutdown"
-    Write-Output "Action: $Action"
-    Stop-VM -Name $($ServerData.ComputerName)
-}
+
+
+
