@@ -286,6 +286,74 @@ foreach($Role in $Roles){
             Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARDGW01Config.ps1 -ArgumentList $Group,$DomainNetBios,$RemoteFQDN -Verbose -Credential $domainCred
         }
         'RRAS'{
+            #Remove Net Route
+            #TBA
+
+            #Disable Remote Access
+            Get-Service -Name RemoteAccess | Set-Service -StartupType Disabled
+
+            #Add external Network Adapter
+            $ExternalNicName = 'NIC02'
+            $ExternalNetname = 'Internet'
+            $RDGWIntIP = (($Settings.FABRIC.Servers.Server | Where-Object Name -EQ RDGW01).NetworkAdapters.NetworkAdapter | Where-Object Name -EQ NIC01).IPAddress
+            $RDGWExtIP = (($Settings.FABRIC.Servers.Server | Where-Object Name -EQ RRAS01).NetworkAdapters.NetworkAdapter | Where-Object Name -EQ NIC02).IPAddress
+            
+            $InternalIPInterfaceAddressPrefix = '172.16.0.0/22'
+            $ExternalIPAddress = '0.0.0.0'
+            $ExternalPort = '443'
+            $Protocol = 'TCP'
+            $Internet = $NetworksData | Where-Object -Property Name -EQ -Value $ExternalNetname
+
+            Add-VMNetworkAdapter -VMName $($ServerData.ComputerName) -Name $ExternalNicName -DeviceNaming On
+            $VMNetworkAdapter = Get-VMNetworkAdapter -VMName $($ServerData.ComputerName) -Name $ExternalNicName
+            Set-VMNetworkAdapterVlan -VMName $($ServerData.ComputerName) -VMNetworkAdapterName $VMNetworkAdapter.Name -VlanId $($NetworksData | Where-Object -Property Name -EQ -Value $ExternalNetname).vlan -Access -Passthru
+            Connect-VMNetworkAdapter -VMName $($ServerData.ComputerName) -VMNetworkAdapterName $VMNetworkAdapter.Name -SwitchName $VMSwitchName
+            Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+                Param(
+                $ExternalNicName
+                )
+                $NIC = (Get-NetAdapterAdvancedProperty -Name * | Where-Object -FilterScript {$_.DisplayValue -eq $ExternalNicName}).Name
+                Rename-NetAdapter -Name $NIC -NewName $ExternalNicName
+            } -Credential $domainCred -ArgumentList $ExternalNicName
+            Start-Sleep -Seconds 30
+            
+            #Configure the external IP
+            Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+                Param(
+                    $RDGWExtIP,$Subnet,$Gateway,$ExternalNicName
+                )
+                $NIC = Get-NetAdapter -Name $ExternalNicName
+                New-NetIPAddress -IPAddress $RDGWExtIP -ifIndex $NIC.ifIndex -DefaultGateway $Gateway -PrefixLength $Subnet
+                $NIC
+
+            } -Credential $domainCred -ArgumentList $RDGWExtIP,$Internet.SubNet,$Internet.Gateway,$ExternalNicName
+
+            #Configure NAT rules
+            Invoke-Command -VMName $($ServerData.ComputerName)  -ScriptBlock {
+                Param(
+                $RDGWIntIP,$InternalIPInterfaceAddressPrefix,$ExternalIPAddress,$ExternalPort,$Protocol
+                )
+                New-NetNat -Name Internet -InternalIPInterfaceAddressPrefix $InternalIPInterfaceAddressPrefix
+                Add-NetNatStaticMapping -NatName Internet -Protocol $Protocol -ExternalPort $ExternalPort -InternalIPAddress $RDGWIntIP -ExternalIPAddress $ExternalIPAddress
+            } -Credential $domainCred -ArgumentList $RDGWIntIP,$InternalIPInterfaceAddressPrefix,$ExternalIPAddress,$ExternalPort,$Protocol
+
+            
+            #Not Tested
+            #Change Netbinding on th External NIC
+            $ExternalNicName = "NIC02"
+            Invoke-Command -VMName $($ServerData.ComputerName)  -ScriptBlock {
+                Param(
+                $ExternalNicName
+                )
+                Get-NetAdapterBinding -Name $ExternalNicName | Where-Object -Property ComponentID -NE -Value "ms_tcpip" | Set-NetAdapterBinding -Enabled $false 
+            } -Credential $domainCred -ArgumentList $ExternalNicName
+
+
+        }
+        'SNAT'{
+            #Remove Net Route
+            
+
             #Add external Network Adapter
             $ExternalNicName = 'NIC02'
             $ExternalNetname = 'Internet'

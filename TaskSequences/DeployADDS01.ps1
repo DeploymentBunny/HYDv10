@@ -152,15 +152,17 @@ Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
 
 #Add role ADDS
 $DomainForestLevel = 'ws2016'
+$DatabaseRoot = 'E:\'
 Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
     Param(
         $Password,
         $FQDN,
         $NetBiosDomainName,
-        $DomainForestLevel
+        $DomainForestLevel,
+        $DatabaseRoot
     )
-    C:\Setup\HYDv10\Scripts\Set-VIARole-ADDS-FDC.ps1 -Password $Password -FQDN $FQDN -NetBiosDomainName $NetBiosDomainName -DomainForestLevel $DomainForestLevel
-} -Credential $localCred -ArgumentList $DomainData.DomainAdminPassword,$DomainData.DNSDomain,$DomainData.DomainNetBios,$DomainForestLevel
+    C:\Setup\HYDv10\Scripts\Set-VIARole-ADDS-FDC.ps1 -Password $Password -FQDN $FQDN -NetBiosDomainName $NetBiosDomainName -DomainForestLevel $DomainForestLevel -DatabaseRoot $DatabaseRoot
+} -Credential $localCred -ArgumentList $DomainData.DomainAdminPassword,$DomainData.DNSDomain,$DomainData.DomainNetBios,$DomainForestLevel,$DatabaseRoot
 
 #Restart
 Restart-VIAVM -VMname $($ServerData.ComputerName)
@@ -178,7 +180,7 @@ $result = Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
         Test-Path -Path \\$ADDSServerName\NETLOGON
     } -Credential $domainCred -ArgumentList $($ServerData.ComputerName)
     Write-Host "Waiting for Domain Controller to be operational..."
-    Start-Sleep -Seconds 15
+    Start-Sleep -Seconds 30
 }until($result -eq $true)
 Write-Host "Waiting for Domain Controller is now operational..."
 
@@ -189,6 +191,27 @@ Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
     sc.exe config NlaSvc start=delayed-auto
     Restart-Service -Name NlaSvc -Force
 } -Credential $domainCred
+
+#TBA
+#Action
+$Action = "Enable Active Directory Optional Features"
+Write-Output "Action: $Action"
+#Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADDSSiteName.ps1 -ArgumentList $DomainData.SiteName -ErrorAction Stop -Credential $domainCred
+<#
+ # Enable-ADOptionalFeature –Identity ‘CN=Recycle Bin Feature,CN=Optional Features,CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=contoso,DC=com’ –Scope ForestOrConfigurationSet –Target ‘contoso.com’
+#>
+
+#TBA
+#Action
+$Action = "Enable Automatic DFS Recovery"
+Write-Output "Action: $Action"
+#Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADDSSiteName.ps1 -ArgumentList $DomainData.SiteName -ErrorAction Stop -Credential $domainCred
+
+#TBA
+#Action
+$Action = "Disable host time sync (WMI Source), Time source needs to be configured later"
+Write-Output "Action: $Action"
+#Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADDSSiteName.ps1 -ArgumentList $DomainData.SiteName -ErrorAction Stop -Credential $domainCred
 
 #Action
 $Action = "Change AD Site name"
@@ -204,6 +227,22 @@ $ADSubnets = foreach($network in $NetworksData){
 Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADSiteSubnet.ps1 -ArgumentList $DomainData.SiteName,$ADSubnets -ErrorAction Stop -Credential $domainCred
 
 #Action
+$Action = "Adding default Rev DNS Zones"
+Write-Output "Action: $Action"
+Start-Sleep 60
+$RevDNSZones = ($Settings.Fabric.Networks.Network| Where-Object -Property RDNS -Like *in-addr.arpa).rdns
+foreach($RevDNSZone in $RevDNSZones){
+    Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADDSRevDNSZone.ps1 -ArgumentList $RevDNSZone -ErrorAction Stop -Verbose -Credential $domainCred
+}
+
+#Action
+$Action = "Remove DNS Forwarders"
+Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+    Get-DnsServerForwarder | Remove-DnsServerForwarder -Force
+} -ErrorAction SilentlyContinue -Credential $domainCred
+
+
+#Action
 $Action = "Configure Client DNS"
 Write-Output "Action: $Action"
 $ClientDNSServerAddr = "$($NIC01.DNS[0]),$($NIC01.DNS[1])"
@@ -213,29 +252,6 @@ Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
     )
     C:\Setup\HYDv10\Scripts\Set-VIAADClientDNSSettings.ps1 -ClientDNSServerAddr $ClientDNSServerAddr
 } -ArgumentList $ClientDNSServerAddr -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Install DHCP"
-$Role = "DHCP"
-Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-    Param(
-        $Role
-    )
-    C:\Setup\HYDv10\Scripts\Invoke-VIAInstallRoles.ps1 -Role $Role
-} -Credential $domainCred -ArgumentList $Role
-
-#Action
-$Action = "Configure DHCP"
-$Role = "DHCP"
-Write-Output "Action: $Action - $Role"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARoles.ps1 -ArgumentList $Role -ErrorAction Stop -Credential $domainCred
-
-#Action
-$Action = "Configure DHCP Scopes"
-$Role = "DHCP"
-Write-Output "Action: $Action"
-Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIADHCP.ps1 -ArgumentList $($NIC01RelatedData.NetIP), $($NIC01RelatedData.SubNet), $($NIC01RelatedData.DHCPStart), $($NIC01RelatedData.DHCPEnd), $($DomainData.DNSDomain), $($NIC01RelatedData.DNS[0]), $($NIC01RelatedData.DNS[1]), $($NIC01RelatedData.Gateway) -ErrorAction Stop -Credential $domainCred
 
 #Action
 $Action = "Create base OU"
@@ -267,19 +283,27 @@ $DomainData.DomainAccounts.DomainAccount
 Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAAddAccountToGroups.ps1 -ArgumentList $($DomainData.BaseOU),$($DomainData.DomainAccounts.DomainAccount) -ErrorAction Stop -Credential $domainCred
 
 #Action
-$Action = "Adding default Rev DNS Zones"
+$Action = "Install DHCP"
+$Role = "DHCP"
 Write-Output "Action: $Action"
-Start-Sleep 60
-$RevDNSZones = ($Settings.Fabric.Networks.Network| Where-Object -Property RDNS -Like *in-addr.arpa).rdns
-foreach($RevDNSZone in $RevDNSZones){
-    Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADDSRevDNSZone.ps1 -ArgumentList $RevDNSZone -ErrorAction Stop -Verbose -Credential $domainCred
-}
+Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+    Param(
+        $Role
+    )
+    C:\Setup\HYDv10\Scripts\Invoke-VIAInstallRoles.ps1 -Role $Role
+} -Credential $domainCred -ArgumentList $Role
 
 #Action
-$Action = "Remove DNS Forwarders"
-Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-    Get-DnsServerForwarder | Remove-DnsServerForwarder -Force
-} -ErrorAction SilentlyContinue -Credential $domainCred
+$Action = "Configure DHCP"
+$Role = "DHCP"
+Write-Output "Action: $Action - $Role"
+Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARoles.ps1 -ArgumentList $Role -ErrorAction Stop -Credential $domainCred
+
+#Action
+$Action = "Configure DHCP Scopes"
+$Role = "DHCP"
+Write-Output "Action: $Action"
+Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIADHCP.ps1 -ArgumentList $($NIC01RelatedData.NetIP), $($NIC01RelatedData.SubNet), $($NIC01RelatedData.DHCPStart), $($NIC01RelatedData.DHCPEnd), $($DomainData.DNSDomain), $($NIC01RelatedData.DNS[0]), $($NIC01RelatedData.DNS[1]), $($NIC01RelatedData.Gateway) -ErrorAction Stop -Credential $domainCred
 
 #Action
 $Action = "Configure DHCP..."

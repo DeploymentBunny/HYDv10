@@ -26,7 +26,7 @@ C:\Setup\HYDv10\CheckConfig\CheckConfig.ps1 -SettingsFile $SettingsFile -LogPath
 #Deploy ADDS01
 $Global:Server = 'ADDS01'
 $Global:Roles = 'ADDS','DHCP'
-$FinishAction = 'Shutdown'
+$FinishAction = 'NONE'
 C:\Setup\HYDv10\TaskSequences\DeployADDS01.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath
 
 #Deploy ADDS02
@@ -38,6 +38,12 @@ C:\Setup\HYDv10\TaskSequences\DeployADDS02.ps1 -SettingsFile $SettingsFile -VHDI
 #Deploy RRAS01
 $Global:Server = 'RRAS01'
 $Global:Roles = 'RRAS'
+$FinishAction = 'Shutdown'
+C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction -KeepMountedMedia
+
+#Deploy SNAT01
+$Global:Server = 'SNAT01'
+$Global:Roles = 'SNAT'
 $FinishAction = 'Shutdown'
 C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -Roles $Roles -Server $Server -FinishAction $FinishAction -KeepMountedMedia
 

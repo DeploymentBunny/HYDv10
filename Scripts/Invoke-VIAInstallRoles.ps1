@@ -324,8 +324,12 @@ switch ($Role)
     }
     ADDS
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
-        Add-WindowsFeature -Name AD-Domain-Services -IncludeAllSubFeature -IncludeManagementTools
+        $ServicesToInstall = @(
+        "AD-Domain-Services",
+        "Windows-Server-Backup",
+        "RSAT-DFS-Mgmt-Con"
+        )
+        Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
     }
     DHCP
     {
