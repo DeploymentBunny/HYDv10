@@ -33,10 +33,7 @@ Param
 )
 
 $Diskpath = (Get-VMHardDiskDrive -VMName $VMName | Select-Object -First 1).path | Split-Path -Parent
-$Diskpath
 $NewDisk = ($Diskpath + "\" + $DiskLabel+'.vhdx')
-$NewDisk
 if((Test-Path -Path $NewDisk) -eq $True){Write-Warning "Disk $NewDisk already exists...";Break}
-
 $DataDiskToAdd = New-VHD -Path $NewDisk -Dynamic -SizeBytes ([int]$DiskSize * 1024 * 1024 * 1024) -ErrorAction Stop
 Add-VMHardDiskDrive -Path $DataDiskToAdd.Path -VMName $VMName -ErrorAction Stop

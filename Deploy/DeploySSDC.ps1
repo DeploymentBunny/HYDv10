@@ -14,6 +14,10 @@ $Global:MediaISO = 'C:\Setup\ISO\HYDV10.iso'
 #Import-Modules
 Import-Module C:\Setup\Functions\VIAUtilityModule.psm1 -Force
 
+#Enable verbose for testing
+$Global:VerbosePreference = "Continue"
+#$Global:VerbosePreference = "SilentlyContinue"
+
 #Update the settings file
 C:\Setup\HYDv10\UpdateSettingsFile\Update-SettingsFile.ps1 -SettingsFile $SettingsFile
 
@@ -25,15 +29,13 @@ C:\Setup\HYDv10\CheckConfig\CheckConfig.ps1 -SettingsFile $SettingsFile -LogPath
 
 #Deploy ADDS01
 $Global:Server = 'ADDS01'
-$Global:Roles = 'ADDS','DHCP'
 $FinishAction = 'NONE'
-C:\Setup\HYDv10\TaskSequences\DeployADDS01.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath
+C:\Setup\HYDv10\TaskSequences\DeployADDS01.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -DomainName 'FABRIC' -Server ADDS01
 
 #Deploy ADDS02
 $Global:Server = 'ADDS02'
-$Global:Roles = 'ADDS','DHCP'
 $FinishAction = 'Shutdown'
-C:\Setup\HYDv10\TaskSequences\DeployADDS02.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath
+C:\Setup\HYDv10\TaskSequences\DeployADDS01.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -DomainName 'FABRIC' -Server ADDS02
 
 #Deploy RRAS01
 $Global:Server = 'RRAS01'

@@ -60,14 +60,14 @@ Function Get-VIAOSVersion([ref]$OSv){
 Function Import-VIASMSTSENV{
     try{
         $tsenv = New-Object -COMObject Microsoft.SMS.TSEnvironment
-        Write-Output "$ScriptName - tsenv is $tsenv "
+        Write-Verbose "$ScriptName - tsenv is $tsenv "
         $MDTIntegration = $true
         
-        #$tsenv.GetVariables() | % { Write-Output "$ScriptName - $_ = $($tsenv.Value($_))" }
+        #$tsenv.GetVariables() | % { Write-Verbose "$ScriptName - $_ = $($tsenv.Value($_))" }
     }
     catch{
-        Write-Output "$ScriptName - Unable to load Microsoft.SMS.TSEnvironment"
-        Write-Output "$ScriptName - Running in standalonemode"
+        Write-Verbose "$ScriptName - Unable to load Microsoft.SMS.TSEnvironment"
+        Write-Verbose "$ScriptName - Running in standalonemode"
         $MDTIntegration = $false
     }
     Finally{
@@ -81,12 +81,6 @@ Function Import-VIASMSTSENV{
         }
     }
     Return $MDTIntegration
-}
-Function Start-VIALogging{
-    Start-Transcript -path $LogFile -Force
-}
-Function Stop-VIALogging{
-    Stop-Transcript
 }
 Function Invoke-VIAExe{
     [CmdletBinding(SupportsShouldProcess=$true)]
@@ -193,22 +187,19 @@ $ARCHITECTURE = $env:PROCESSOR_ARCHITECTURE
 #Try to Import SMSTSEnv
 . Import-VIASMSTSENV
 
-#Start Transcript Logging
-. Start-VIALogging
-
 #Detect current OS Version
 . Get-VIAOSVersion -osv ([ref]$osv) 
 
 #Output base info
-Write-Output ""
-Write-Output "$ScriptName - ScriptDir: $ScriptDir"
-Write-Output "$ScriptName - SourceRoot: $SOURCEROOT"
-Write-Output "$ScriptName - ScriptName: $ScriptName"
-Write-Output "$ScriptName - OS Name: $osv"
-Write-Output "$ScriptName - OS Architecture: $ARCHITECTURE"
-Write-Output "$ScriptName - Current Culture: $LANG"
-Write-Output "$ScriptName - Integration with MDT(LTI/ZTI): $MDTIntegration"
-Write-Output "$ScriptName - Log: $LogFile"
+Write-Verbose ""
+Write-Verbose "$ScriptName - ScriptDir: $ScriptDir"
+Write-Verbose "$ScriptName - SourceRoot: $SOURCEROOT"
+Write-Verbose "$ScriptName - ScriptName: $ScriptName"
+Write-Verbose "$ScriptName - OS Name: $osv"
+Write-Verbose "$ScriptName - OS Architecture: $ARCHITECTURE"
+Write-Verbose "$ScriptName - Current Culture: $LANG"
+Write-Verbose "$ScriptName - Integration with MDT(LTI/ZTI): $MDTIntegration"
+Write-Verbose "$ScriptName - Log: $LogFile"
 
 #Generate more info
 if($MDTIntegration -eq "YES"){
@@ -217,11 +208,11 @@ if($MDTIntegration -eq "YES"){
     $TSMakeAlias = $tsenv.Value("MakeAlias")
     $TSModelAlias = $tsenv.Value("ModelAlias")
     $TSOSDComputerName = $tsenv.Value("OSDComputerName")
-    Write-Output "$ScriptName - Make:: $TSMake"
-    Write-Output "$ScriptName - Model: $TSModel"
-    Write-Output "$ScriptName - MakeAlias: $TSMakeAlias"
-    Write-Output "$ScriptName - ModelAlias: $TSModelAlias"
-    Write-Output "$ScriptName - OSDComputername: $TSOSDComputerName"
+    Write-Verbose "$ScriptName - Make:: $TSMake"
+    Write-Verbose "$ScriptName - Model: $TSModel"
+    Write-Verbose "$ScriptName - MakeAlias: $TSMakeAlias"
+    Write-Verbose "$ScriptName - ModelAlias: $TSModelAlias"
+    Write-Verbose "$ScriptName - OSDComputername: $TSOSDComputerName"
 }
 
 #Custom Code Starts--------------------------------------
@@ -231,7 +222,7 @@ switch ($Role)
 {
     LABHOST
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "FS-FileServer",
         "Data-Center-Bridging",
@@ -243,7 +234,7 @@ switch ($Role)
     }
     S2D
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "FS-FileServer",
         "Data-Center-Bridging",
@@ -253,7 +244,7 @@ switch ($Role)
     }
     Storage
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "FS-FileServer",
         "FS-Data-Deduplication",
@@ -266,7 +257,7 @@ switch ($Role)
     }
     Storageclu
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "FS-FileServer",
         "FS-Data-Deduplication",
@@ -280,7 +271,7 @@ switch ($Role)
     }
     Compute
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Hyper-V"
         )
@@ -288,7 +279,7 @@ switch ($Role)
     }
     ComputeClu
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Hyper-V",
         "Failover-Clustering"
@@ -297,7 +288,7 @@ switch ($Role)
     }
     HyperConv
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Hyper-V",
         "FS-FileServer",
@@ -308,7 +299,7 @@ switch ($Role)
     }
     FILE
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "FS-FileServer",
         "FS-Data-Deduplication"
@@ -319,7 +310,7 @@ switch ($Role)
     }
     RDGW
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         Install-WindowsFeature -Name "RDS-GateWay" -IncludeManagementTools -IncludeAllSubFeature -ErrorAction Stop
     }
     ADDS
@@ -333,25 +324,25 @@ switch ($Role)
     }
     DHCP
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         Add-WindowsFeature -Name DHCP -IncludeManagementTools
         Start-Sleep 2
 
     }
     RRAS
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         Install-WindowsFeature Routing -IncludeManagementTools
         Install-RemoteAccess -VpnType Vpn
     }
     RDGW
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         Install-WindowsFeature -Name RDS-GateWay -IncludeManagementTools -IncludeAllSubFeature
     }
     MGMT
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "RDS-RD-Server",
         "Web-Metabase",
@@ -393,18 +384,18 @@ switch ($Role)
     }
     DEPL
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         Add-WindowsFeature -Name WDS -IncludeAllSubFeature -IncludeManagementTools
         Add-WindowsFeature -Name FS-FileServer,FS-Data-Deduplication
     }
     ADCA
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         Add-WindowsFeature -Name ADCS-Cert-Authority -IncludeManagementTools
     }
     WSUS
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "UpdateServices-Services",
         "UpdateServices-DB"
@@ -413,7 +404,7 @@ switch ($Role)
     }
     WSUSIDB
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "UpdateServices-Services",
         "UpdateServices-DB"
@@ -422,7 +413,7 @@ switch ($Role)
     }
     SCVM
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Hyper-V-Tools",
         "Hyper-V-PowerShell",
@@ -439,7 +430,7 @@ switch ($Role)
     }
     SCDP
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Hyper-V-Tools",
         "Hyper-V-PowerShell"
@@ -451,7 +442,7 @@ switch ($Role)
         Invoke-VIAExe -Executable $Executable -Arguments $Arguments
     }
     SCOR{
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Web-Common-Http",
         "Web-Static-Content",
@@ -465,7 +456,7 @@ switch ($Role)
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools
     }
     'SCOM'{
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Web-Default-Doc",          
         "Web-Dir-Browsing",         
@@ -500,7 +491,7 @@ switch ($Role)
     }
     BitLockerAdmin
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "RSAT-Feature-Tools-BitLocker",
         "RSAT-Feature-Tools-BitLocker-RemoteAdminTool",
@@ -510,7 +501,7 @@ switch ($Role)
     }
     WEB
     {
-        Write-Output "Adding Windows Features for selected role: $Role"
+        Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Web-Windows-Auth",
         "Web-ISAPI-Ext",
@@ -553,5 +544,3 @@ switch ($Role)
 }
 
 #Custom Code Ends--------------------------------------
-
-. Stop-VIALogging

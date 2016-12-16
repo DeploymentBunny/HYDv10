@@ -12,6 +12,8 @@ Author - Mikael Nystrom
     Blog   : http://deploymentbunny.com
 #>
 
+[cmdletbinding(SupportsShouldProcess=$True)]
+
 Param(
     [parameter(mandatory=$True)]
     [ValidateNotNullOrEmpty()]
@@ -34,10 +36,8 @@ Param(
     $DatabaseRoot = "C:\Windows"
 )
 
-
 #Windows Server 2012 R2 = ws2012r2
 #Windows Server 2016 = WinThreshold
-
 
 switch ($DomainForestLevel)
 {
@@ -46,11 +46,7 @@ switch ($DomainForestLevel)
     Default {Break}
 }
 
-Write-Host $Password
-Write-Host $FQDN
-Write-Host $NetBiosDomainName
-Write-Host $DomainForestLevel
-Write-Host $DatabaseRoot
+Write-Verbose "Using: $Password,$FQDN,$NetBiosDomainName,$DomainForestLevel,$DatabaseRoot"
 
 # Setting variables
 $SecurePassword = ConvertTo-SecureString -String $Password -AsPlainText -Force
