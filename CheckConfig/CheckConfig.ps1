@@ -42,7 +42,7 @@ Write-Verbose "Reading $SettingsFile"
 $Domains = $Settings.FABRIC.Domains.Domain
 $return = foreach($DomainName in $Domains.Name){
 
-    $Servers = $Settings.FABRIC.Servers.Server
+    $Servers = $Settings.FABRIC.Servers.Server | Where-Object -Property Active -EQ -Value $True
     foreach($ServerName in $Servers.Name){
         $CustomerData = $Settings.FABRIC.Customers.Customer
         $CommonSettingData = $Settings.FABRIC.CommonSettings.CommonSetting
@@ -50,7 +50,7 @@ $return = foreach($DomainName in $Domains.Name){
         $NetworksData = $Settings.FABRIC.Networks.Network
         $DomainData = $Settings.FABRIC.Domains.Domain | Where-Object -Property Name -EQ -Value $DomainName
         $ServerData = $Settings.FABRIC.Servers.Server | Where-Object -Property Name -EQ -Value $ServerName
-        $NIC001 = $ServerData.Networkadapters.Networkadapter | Where-Object -Property id -EQ -Value NIC01
+        $NIC001 = $ServerData.Networkadapters.Networkadapter | Where-Object -Property Name -EQ -Value NIC01
         $NIC001RelatedData = $NetworksData | Where-Object -Property ID -EQ -Value $NIC001.ConnectedToNetwork
         $AdminPassword = $CommonSettingData.LocalPassword
         $DomainInstaller = $DomainData.DomainAdmin
@@ -72,10 +72,8 @@ $return = foreach($DomainName in $Domains.Name){
     }
 }
 
-$return
-
 foreach($obj in $return){
-    Update-VIALog -Data "Computername:$($obj.ComputerName),IPAddress:$($obj.IPAddress),Prefix:$($obj.SubnetMask),Gateway:$($obj.Gateway),VMSwitch:$($obj.VMSwitch),MemoryGB:$($obj.VMMemory)"
+    Update-VIALog -Data "$($obj.ComputerName),$($obj.IPAddress)/$($obj.SubnetMask),$($obj.Gateway)"
 }
 
 
