@@ -21,9 +21,8 @@ Param(
 
 #Create RevZone
 foreach($RevDNSZone in $RevDNSZones){
-    Write-Host "Adding $RevDNSZone"
-    Add-DnsServerPrimaryZone $RevDNSZone -ReplicationScope Forest
+    Write-Verbose "Adding $RevDNSZone"
+    Get-DnsServerZone
+    Add-DnsServerPrimaryZone -Name $RevDNSZone -ReplicationScope Forest
+    Get-DnsServerZone
 }
-
-#Add-DnsServerPrimaryZone "168.192.in-addr.arpa" -ReplicationScope Forest
-#Add-DnsServerPrimaryZone "10.in-addr.arpa" -ReplicationScope Forest
