@@ -477,7 +477,7 @@
   <Servers>
     <Server id="1a103d8f-457b-440b-9721-e4b3e2ace69d" Name="ADDS01">
       <Active>True</Active>
-      <ComputerName>VIADC01</ComputerName>
+      <ComputerName>RNDDC01</ComputerName>
       <Deploy>True</Deploy>
       <DeployOrder>1</DeployOrder>
       <Finishaction>Reboot</Finishaction>
@@ -590,9 +590,9 @@
         </DataDisk>
       </DataDisks>
     </Server>
-    <Server id="6bc0bc37-e057-48ac-b23a-4f300e04490e" Name="MDT01">
+    <Server id="6bc0bc37-e057-48ac-b23a-4f300e04490e" Name="DEPL01">
       <Active>True</Active>
-      <ComputerName>VIAMDT01</ComputerName>
+      <ComputerName>RNDDEPL01</ComputerName>
       <Deploy>True</Deploy>
       <DeployOrder>4</DeployOrder>
       <Finishaction>Shutdown</Finishaction>
@@ -703,122 +703,9 @@
         </DataDisk>
       </DataDisks>
     </Server>
-    <Server id="7934b95a-20d0-4eb1-8b78-ec89348bd9d1" Name="MDT02">
-      <Active>True</Active>
-      <ComputerName>VIAMDT02</ComputerName>
-      <Deploy>True</Deploy>
-      <DeployOrder>4</DeployOrder>
-      <Finishaction>Shutdown</Finishaction>
-      <WaitForDeployment>True</WaitForDeployment>
-      <DependsOnServerID>1a103d8f-457b-440b-9721-e4b3e2ace69d</DependsOnServerID>
-      <Virtual>True</Virtual>
-      <Memory>3072</Memory>
-      <CPUCount>2</CPUCount>
-      <DiffOrCreate>Diff</DiffOrCreate>
-      <Type>UEFI</Type>
-      <Version>WS2016</Version>
-      <Edition>Standard</Edition>
-      <UI>StandardUI</UI>
-      <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Generic Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=ViaMonstra,DC=corp,DC=viamonstra,DC=com</MachineObjectOU>
-      <OOBName>NA</OOBName>
-      <OOBIPAddress>NA</OOBIPAddress>
-      <OOBSubnetMask>NA</OOBSubnetMask>
-      <OOBDefaultGateway>NA</OOBDefaultGateway>
-      <OOBVLANID>NA</OOBVLANID>
-      <Roles>
-        <Role Name="Role01">
-          <Active>False</Active>
-          <RoleUUID>NA</RoleUUID>
-        </Role>
-        <Role Name="Role02">
-          <Active>False</Active>
-          <RoleUUID>NA</RoleUUID>
-        </Role>
-      </Roles>
-      <OptionalSettings>
-        <OptionalSetting Name="OptionalSetting01">
-          <Active>False</Active>
-          <Data>NA</Data>
-        </OptionalSetting>
-        <OptionalSetting Name="OptionalSetting02">
-          <Active>False</Active>
-          <Data>NA</Data>
-        </OptionalSetting>
-      </OptionalSettings>
-      <Networkadapters>
-        <Networkadapter Name="NIC01">
-          <Active>True</Active>
-          <MACAddress>NA</MACAddress>
-          <IPAddress>DHCP</IPAddress>
-          <PrefixLength>NA</PrefixLength>
-          <DefaultGateway>NA</DefaultGateway>
-          <DNS>NA</DNS>
-          <DNS>NA</DNS>
-          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
-        </Networkadapter>
-        <Networkadapter Name="NIC02">
-          <Active>False</Active>
-          <MACAddress>NA</MACAddress>
-          <IPAddress>NA</IPAddress>
-          <PrefixLength>NA</PrefixLength>
-          <DefaultGateway>NA</DefaultGateway>
-          <DNS>NA</DNS>
-          <DNS>NA</DNS>
-          <ConnectedToNetwork>NA</ConnectedToNetwork>
-        </Networkadapter>
-      </Networkadapters>
-      <NetworkTeams>
-        <Networkteam Name="NICTeam01">
-          <Active>False</Active>
-          <Member>NA</Member>
-          <Member>NA</Member>
-          <Member>NA</Member>
-          <Member>NA</Member>
-          <Member>NA</Member>
-          <Member>NA</Member>
-          <Member>NA</Member>
-          <Member>NA</Member>
-        </Networkteam>
-        <Networkteam Name="NICTeam02">
-          <Active>False</Active>
-          <Member>NA</Member>
-          <Member>NA</Member>
-          <Member>NA</Member>
-          <Member>NA</Member>
-          <Member>NA</Member>
-          <Member>NA</Member>
-          <Member>NA</Member>
-          <Member>NA</Member>
-        </Networkteam>
-      </NetworkTeams>
-      <DataDisks>
-        <DataDisk Name="DataDisk01">
-          <Active>True</Active>
-          <DiskNumber>1</DiskNumber>
-          <DiskSize>300</DiskSize>
-          <FileSystem>NTFS</FileSystem>
-          <PartitionType>GPT</PartitionType>
-        </DataDisk>
-        <DataDisk Name="DataDisk02">
-          <Active>False</Active>
-          <DiskNumber>NA</DiskNumber>
-          <DiskSize>NA</DiskSize>
-          <FileSystem>NA</FileSystem>
-          <PartitionType>GPT</PartitionType>
-        </DataDisk>
-        <DataDisk Name="DataDisk03">
-          <Active>False</Active>
-          <DiskNumber>NA</DiskNumber>
-          <DiskSize>NA</DiskSize>
-          <FileSystem>NA</FileSystem>
-          <PartitionType>GPT</PartitionType>
-        </DataDisk>
-      </DataDisks>
-    </Server>
     <Server id="c30e5ff0-026e-4554-b066-f00b18c2ab14" Name="WSUS01">
       <Active>True</Active>
-      <ComputerName>VIAWSUS01</ComputerName>
+      <ComputerName>RNDWSUS01</ComputerName>
       <Deploy>False</Deploy>
       <DeployOrder>2</DeployOrder>
       <Finishaction>Reboot</Finishaction>
@@ -930,7 +817,7 @@
     </Server>
     <Server id="00751dc1-d146-4c61-aa1f-6b292549c351" Name="RDGW01">
       <Active>False</Active>
-      <ComputerName>VIARDGW01</ComputerName>
+      <ComputerName>RNDRDGW01</ComputerName>
       <Deploy>False</Deploy>
       <DeployOrder>2</DeployOrder>
       <Finishaction>Reboot</Finishaction>
@@ -1042,7 +929,7 @@
     </Server>
     <Server id="72cecbfa-4959-498e-baca-8f0a2cfd256f" Name="SNAT01">
       <Active>False</Active>
-      <ComputerName>VIASNAT01</ComputerName>
+      <ComputerName>RNDSNAT01</ComputerName>
       <Deploy>False</Deploy>
       <DeployOrder>2</DeployOrder>
       <Finishaction>Reboot</Finishaction>

@@ -1,7 +1,7 @@
 ﻿#Deploy the entire Solution
 
 #Read data from XML
-$Global:SettingsFile = "C:\Setup\HYDv10\Config\ViaMonstra_MDT_LAB.xml"
+$Global:SettingsFile = "C:\Setup\HYDv10\Config\ViaMonstra_RND.xml"
 [xml]$Global:Settings = Get-Content $SettingsFile -ErrorAction Stop
 
 #Set Vars
@@ -23,13 +23,24 @@ $Global:VerbosePreference = "Continue"
 
 #Update the settings file
 #Only used in production
-#C:\Setup\HYDv10\UpdateSettingsFile\Update-SettingsFile.ps1 -SettingsFile $SettingsFile
+C:\Setup\HYDv10\UpdateSettingsFile\Update-SettingsFile.ps1 -SettingsFile $SettingsFile
 
 #Verify Host
 C:\Setup\HYDv10\VeriFyBuildSetup\Verify-DeployServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath
 
 #Test the CustomSettings.xml for OSD data
 C:\Setup\HYDv10\CheckConfig\CheckConfig.ps1 -SettingsFile $SettingsFile -LogPath $Logpath
+
+
+#Deploy the VM's, in correct order
+$ServerToDeploy = $Settings.FABRIC.Servers.Server | Where-Object Active -EQ $true | Where-Object Deploy -EQ $true | Where-Object Virtual -EQ $true | Sort-Object -Property DeployOrder
+$ServerToDeploy | Select-Object Name,DeployOrder
+foreach($obj in $ServerToDeploy){
+    $Global:Server = $obj.Name
+    #$FinishAction = 'NONE'
+    C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -DomainName $DomainName -Server $Server
+}
+
 
 #Deploy VIADC01
 $Global:Server = 'ADDS01'
@@ -48,15 +59,9 @@ $Global:Roles = 'SNAT'
 $FinishAction = 'NONE'
 C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -DomainName $DomainName -Server $Server -Roles $Roles -FinishAction $FinishAction
 
-#Deploy VIAMDT01
-$Global:Server = 'MDT01'
+#Deploy VIADEPL01
+$Global:Server = 'DEPL01'
 $Global:Roles = 'DEPL'
-$FinishAction = 'NONE'
-C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -DomainName $DomainName -Server $Server -Roles $Roles -FinishAction $FinishAction
-
-#Deploy VIAMDT02
-$Global:Server = 'MDT02'
-$Global:Roles = 'NONE'
 $FinishAction = 'NONE'
 C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -DomainName $DomainName -Server $Server -Roles $Roles -FinishAction $FinishAction
 
@@ -65,18 +70,6 @@ $Global:Server = 'WSUS01'
 $Global:Roles = 'WSUS'
 $FinishAction = 'NONE'
 C:\Setup\HYDv10\TaskSequences\DeployFABRICServer.ps1 -SettingsFile $SettingsFile -VHDImage $VHDImage -VMlocation $VMlocation -LogPath $Logpath -DomainName $DomainName -Server $Server -Roles $Roles -FinishAction $FinishAction
-
-#Build blank Ref Image VM
-New-VIAVM -VMName VIAREF01 -VMMem 2048MB -VMvCPU 2 -VMLocation D:\VMs -DiskMode Empty -VMSwitchName UplinkswitchLAB -VMGeneration 1 -EmptyDiskSize 80GB
-
-#Build blank VM for OSD
-New-VIAVM -VMName VIAPC001 -VMMem 2048MB -VMvCPU 2 -VMLocation D:\VMs -DiskMode Empty -VMSwitchName UplinkswitchLAB -VMGeneration 1 -EmptyDiskSize 80GB #Refresh
-New-VIAVM -VMName VIAPC002 -VMMem 2048MB -VMvCPU 2 -VMLocation D:\VMs -DiskMode Empty -VMSwitchName UplinkswitchLAB -VMGeneration 1 -EmptyDiskSize 80GB #Inplace
-New-VIAVM -VMName VIAPC003 -VMMem 2048MB -VMvCPU 2 -VMLocation D:\VMs -DiskMode Empty -VMSwitchName UplinkswitchLAB -VMGeneration 1 -EmptyDiskSize 80GB #Replace (OLD)
-
-New-VIAVM -VMName VIAPC004 -VMMem 2048MB -VMvCPU 2 -VMLocation D:\VMs -DiskMode Empty -VMSwitchName UplinkswitchLAB -VMGeneration 2 -EmptyDiskSize 80GB #BareMetal
-New-VIAVM -VMName VIAPC005 -VMMem 2048MB -VMvCPU 2 -VMLocation D:\VMs -DiskMode Empty -VMSwitchName UplinkswitchLAB -VMGeneration 2 -EmptyDiskSize 80GB #Replace (NEW)
-
 
 #Check log
 Get-Content -Path $Logpath
