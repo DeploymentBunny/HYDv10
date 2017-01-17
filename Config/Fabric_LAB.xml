@@ -1,0 +1,4602 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FABRIC id="fe11f36a-4f8c-413b-bd47-1a23849a1b6b" Name="FABRIC">
+  <Customers>
+    <Customer id="4e4b24cf-1f1b-4e1e-a526-ae89bdc0522b" Name="ViaMonstra">
+      <Active>True</Active>
+      <Contact>administrator@viamonstra.com</Contact>
+      <OptionalData>NA</OptionalData>
+    </Customer>
+  </Customers>
+  <CommonSettings>
+    <CommonSetting id="bd2d0f66-edd2-4f8b-a0f5-2ed7e6d07fad" Name="CommonSetting">
+      <Active>True</Active>
+      <MajorVersion>10</MajorVersion>
+      <MinorVersion>1</MinorVersion>
+      <Solution>Hydration</Solution>
+      <CodeName>Genesis</CodeName>
+      <LocalPassword>P@ssw0rd</LocalPassword>
+      <OrgName>ViaMonstra</OrgName>
+      <FullName>ViaMonstra</FullName>
+      <TimeZoneName>Pacific Standard Time</TimeZoneName>
+      <InputLocale>en-US</InputLocale>
+      <SystemLocale>en-US</SystemLocale>
+      <UILanguage>en-US</UILanguage>
+      <UserLocale>en-US</UserLocale>
+      <VMSwitchName>UpLinkSwitch</VMSwitchName>
+      <VMSwitchNameInternet>UplinkSwitch</VMSwitchNameInternet>
+      <WorkgroupName>WORKGROUP</WorkgroupName>
+      <VHDSize>90000</VHDSize>
+      <OptionalData>NA</OptionalData>
+      <PasswordUpdated>True</PasswordUpdated>
+    </CommonSetting>
+  </CommonSettings>
+  <ProductKeys>
+    <ProductKey Id="fdb26de8-bbf8-4c25-b826-740e06672286" Name="ProduktKeySC2016">
+      <Active>True</Active>
+      <Key></Key>
+    </ProductKey>
+    <ProductKey Id="e1ea43a3-db10-49a3-a5e4-1ea3f310476d" Name="ProduktKeySC2012R2">
+      <Active>False</Active>
+      <Key>NA</Key>
+    </ProductKey>
+    <ProductKey Id="83d8c825-11b2-4220-9d1a-9eb59db5ccd1" Name="ProduktKeySC2012">
+      <Active>False</Active>
+      <Key>NA</Key>
+    </ProductKey>
+    <ProductKey Id="a21135e5-f4f2-4084-94f8-1ada0d1adc2f" Name="ProduktKeyWS2016">
+      <Active>False</Active>
+      <Key>NA</Key>
+    </ProductKey>
+    <ProductKey Id="c8b9f507-2063-4cb0-a93f-aef05fa19e38" Name="ProduktKeyWS2012R2">
+      <Active>False</Active>
+      <Key>NA</Key>
+    </ProductKey>
+    <ProductKey Id="6085c50b-33bb-4add-94ca-c8a50ae8fe43" Name="ProduktKeyWS2012">
+      <Active>False</Active>
+      <Key>NA</Key>
+    </ProductKey>
+    <ProductKey Id="cfd00d4c-3c41-4744-bf16-b08664f0dee0" Name="ProduktKeyWS2008R2">
+      <Active>False</Active>
+      <Key>NA</Key>
+    </ProductKey>
+    <ProductKey Id="c0cdbc89-2abb-4ffe-96a5-3fdc3fbd05e4" Name="ProduktKeyW10">
+      <Active>False</Active>
+      <Key>NA</Key>
+    </ProductKey>
+    <ProductKey Id="496c8400-f420-4f1c-998e-8ffe17635a7f" Name="ProduktKeyW81">
+      <Active>False</Active>
+      <Key>NA</Key>
+    </ProductKey>
+    <ProductKey Id="0945599e-d62b-48bd-8d1e-71e81dc7cde9" Name="ProduktKeyW8">
+      <Active>False</Active>
+      <Key>NA</Key>
+    </ProductKey>
+    <ProductKey Id="e9eb8f22-76ca-49da-a74f-058d8d2f1c9b" Name="ProduktKeyW7">
+      <Active>False</Active>
+      <Key>NA</Key>
+    </ProductKey>
+  </ProductKeys>
+  <Networks>
+    <Network Id="9280db2e-6b5b-4770-9dd2-9e1f0292ea89" Name="FABRIC-MGMT">
+      <Active>True</Active>
+      <NetIP>192.168.1.0</NetIP>
+      <Gateway>192.168.1.1</Gateway>
+      <DNS>192.168.1.200</DNS>
+      <DNS>192.168.1.201</DNS>
+      <SubNet>24</SubNet>
+      <VMMStart>192.168.1.50</VMMStart>
+      <VMMEnd>192.168.1.100</VMMEnd>
+      <VMMReserv>NA</VMMReserv>
+      <DHCPStart>192.168.1.101</DHCPStart>
+      <DHCPEnd>192.168.1.150</DHCPEnd>
+      <DHCPReserv>NA</DHCPReserv>
+      <VLAN>0</VLAN>
+      <RDNS>1.168.192.in-addr.arpa</RDNS>
+      <OptionalData>NA</OptionalData>
+    </Network>
+    <Network Id="67a81f5f-6c71-4811-9288-42b2392e3035" Name="FABRIC-LiveMig">
+      <Active>True</Active>
+      <NetIP>192.168.2.0</NetIP>
+      <Gateway>NA</Gateway>
+      <DNS>NA</DNS>
+      <DNS>NA</DNS>
+      <SubNet>24</SubNet>
+      <VMMStart>192.168.2.50</VMMStart>
+      <VMMEnd>192.168.2.100</VMMEnd>
+      <VMMReserv>NA</VMMReserv>
+      <DHCPStart>NA</DHCPStart>
+      <DHCPEnd>NA</DHCPEnd>
+      <DHCPReserv>NA</DHCPReserv>
+      <VLAN>0</VLAN>
+      <RDNS>2.168.192.in-addr.arpa</RDNS>
+      <OptionalData>NA</OptionalData>
+    </Network>
+    <Network Id="b255d80c-0ea2-4fce-9591-3475618a3965" Name="FABRIC-Heartbeat">
+      <Active>True</Active>
+      <NetIP>192.168.3.0</NetIP>
+      <Gateway>NA</Gateway>
+      <DNS>NA</DNS>
+      <DNS>NA</DNS>
+      <SubNet>24</SubNet>
+      <VMMStart>192.168.3.50</VMMStart>
+      <VMMEnd>192.168.3.100</VMMEnd>
+      <VMMReserv>NA</VMMReserv>
+      <DHCPStart>NA</DHCPStart>
+      <DHCPEnd>NA</DHCPEnd>
+      <DHCPReserv>NA</DHCPReserv>
+      <VLAN>0</VLAN>
+      <RDNS>3.168.192.in-addr.arpa</RDNS>
+      <OptionalData>NA</OptionalData>
+    </Network>
+    <Network Id="c6e399f9-5f6e-40bf-81ad-752aa6012582" Name="FABRIC-PA">
+      <Active>True</Active>
+      <NetIP>192.168.4.0</NetIP>
+      <Gateway>NA</Gateway>
+      <DNS>NA</DNS>
+      <DNS>NA</DNS>
+      <SubNet>24</SubNet>
+      <VMMStart>192.168.4.50</VMMStart>
+      <VMMEnd>192.168.4.100</VMMEnd>
+      <VMMReserv>NA</VMMReserv>
+      <DHCPStart>NA</DHCPStart>
+      <DHCPEnd>NA</DHCPEnd>
+      <DHCPReserv>NA</DHCPReserv>
+      <VLAN>0</VLAN>
+      <RDNS>4.168.192.in-addr.arpa</RDNS>
+      <OptionalData>NA</OptionalData>
+    </Network>
+    <Network Id="00a38fb0-96cf-4828-acad-4188b46559e7" Name="FABRIC-SMB1">
+      <Active>True</Active>
+      <NetIP>192.168.5.0</NetIP>
+      <Gateway>NA</Gateway>
+      <DNS>NA</DNS>
+      <DNS>NA</DNS>
+      <SubNet>24</SubNet>
+      <VMMStart>192.168.5.50</VMMStart>
+      <VMMEnd>192.168.5.100</VMMEnd>
+      <VMMReserv>NA</VMMReserv>
+      <DHCPStart>NA</DHCPStart>
+      <DHCPEnd>NA</DHCPEnd>
+      <DHCPReserv>NA</DHCPReserv>
+      <VLAN>0</VLAN>
+      <RDNS>5.168.192.in-addr.arpa</RDNS>
+      <OptionalData>NA</OptionalData>
+    </Network>
+    <Network Id="ae27ca2a-7a85-4169-bb07-ca1c0e92969d" Name="FABRIC-SMB2">
+      <Active>True</Active>
+      <NetIP>192.168.6.0</NetIP>
+      <Gateway>NA</Gateway>
+      <DNS>NA</DNS>
+      <DNS>NA</DNS>
+      <SubNet>24</SubNet>
+      <VMMStart>192.168.6.50</VMMStart>
+      <VMMEnd>192.168.6.100</VMMEnd>
+      <VMMReserv>NA</VMMReserv>
+      <DHCPStart>NA</DHCPStart>
+      <DHCPEnd>NA</DHCPEnd>
+      <DHCPReserv>NA</DHCPReserv>
+      <VLAN>0</VLAN>
+      <RDNS>6.168.192.in-addr.arpa</RDNS>
+      <OptionalData>NA</OptionalData>
+    </Network>
+    <Network Id="80c41589-c5fc-4785-a673-e8b08996cfc2" Name="Internet">
+      <Active>True</Active>
+      <NetIP>NA</NetIP>
+      <Gateway>NA</Gateway>
+      <DNS>NA</DNS>
+      <DNS>NA</DNS>
+      <SubNet>NA</SubNet>
+      <VMMStart>NA</VMMStart>
+      <VMMEnd>NA</VMMEnd>
+      <VMMReserv>NA</VMMReserv>
+      <DHCPStart>NA</DHCPStart>
+      <DHCPEnd>NA</DHCPEnd>
+      <DHCPReserv>NA</DHCPReserv>
+      <VLAN>NA</VLAN>
+      <RDNS>NA</RDNS>
+      <OptionalData>NA</OptionalData>
+    </Network>
+  </Networks>
+  <Domains>
+    <Domain id="b203131c-170f-45a4-be62-3066dcd3fe6e" Name="FABRIC">
+      <Active>True</Active>
+      <DNSDomain>fabric.viamonstra.com</DNSDomain>
+      <DNSDomainExternal>viamonstra.com</DNSDomainExternal>
+      <DomainNetBios>FABRIC</DomainNetBios>
+      <DomainAdmin>Administrator</DomainAdmin>
+      <DomainAdminPassword>P@ssw0rd</DomainAdminPassword>
+      <DomainAdminDomain>FABRIC</DomainAdminDomain>
+      <DomainDS>dc=fabric,dc=viamonstra,dc=com</DomainDS>
+      <BaseOU>Fabric</BaseOU>
+      <MachienObjectOU>OU=Unassigned Servers,OU=Servers,OU=Computers,OU=Fabric,dc=viamonstra,dc=com</MachienObjectOU>
+      <SiteName>Fabric-HQ</SiteName>
+      <OptionalData>NA</OptionalData>
+      <DomainOUs>
+        <DomainOU Name="Accounts">
+          <Active>True</Active>
+          <Path>Root</Path>
+        </DomainOU>
+        <DomainOU Name="Computers">
+          <Active>True</Active>
+          <Path>Root</Path>
+        </DomainOU>
+        <DomainOU Name="Groups">
+          <Active>True</Active>
+          <Path>Root</Path>
+        </DomainOU>
+        <DomainOU Name="Admin Accounts">
+          <Active>True</Active>
+          <Path>OU=Accounts</Path>
+        </DomainOU>
+        <DomainOU Name="Service Accounts">
+          <Active>True</Active>
+          <Path>OU=Accounts</Path>
+        </DomainOU>
+        <DomainOU Name="User Accounts">
+          <Active>True</Active>
+          <Path>OU=Accounts</Path>
+        </DomainOU>
+        <DomainOU Name="Workstations">
+          <Active>True</Active>
+          <Path>OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="Servers">
+          <Active>True</Active>
+          <Path>OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="Admin Groups">
+          <Active>True</Active>
+          <Path>OU=Groups</Path>
+        </DomainOU>
+        <DomainOU Name="Server Groups">
+          <Active>True</Active>
+          <Path>OU=Groups</Path>
+        </DomainOU>
+        <DomainOU Name="User Groups">
+          <Active>True</Active>
+          <Path>OU=Groups</Path>
+        </DomainOU>
+        <DomainOU Name="Edge Servers">
+          <Active>True</Active>
+          <Path>OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="ADFS Servers">
+          <Active>True</Active>
+          <Path>OU=Edge Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="AzurePack Servers">
+          <Active>True</Active>
+          <Path>OU=Edge Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="Multitenant Gateway Servers">
+          <Active>True</Active>
+          <Path>OU=Edge Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="Remote Desktop Gateway Servers">
+          <Active>True</Active>
+          <Path>OU=Edge Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="Routing and Remote Access Servers">
+          <Active>True</Active>
+          <Path>OU=Edge Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="Web Application Proxy Servers">
+          <Active>True</Active>
+          <Path>OU=Edge Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="Infrastructure Servers">
+          <Active>True</Active>
+          <Path>OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="AzurePack SQL Servers">
+          <Active>True</Active>
+          <Path>OU=Infrastructure Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="AzurePack Web Servers">
+          <Active>True</Active>
+          <Path>OU=Infrastructure Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="Certificate Authority Servers">
+          <Active>True</Active>
+          <Path>OU=Infrastructure Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="File Servers">
+          <Active>True</Active>
+          <Path>OU=Infrastructure Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="Generic Servers">
+          <Active>True</Active>
+          <Path>OU=Infrastructure Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="Hyper-V Servers">
+          <Active>True</Active>
+          <Path>OU=Infrastructure Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="HyperConverged Servers">
+          <Active>True</Active>
+          <Path>OU=Infrastructure Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="Storage Servers">
+          <Active>True</Active>
+          <Path>OU=Infrastructure Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="System Center Servers">
+          <Active>True</Active>
+          <Path>OU=Infrastructure Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="System Center DPM Server">
+          <Active>True</Active>
+          <Path>OU=System Center Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="System Center Virtual Machine Manager Servers">
+          <Active>True</Active>
+          <Path>OU=System Center Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="WSUS Servers">
+          <Active>True</Active>
+          <Path>OU=Infrastructure Servers,OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="Old Servers">
+          <Active>True</Active>
+          <Path>OU=Servers,OU=Computers</Path>
+        </DomainOU>
+        <DomainOU Name="Unassigned Servers">
+          <Active>True</Active>
+          <Path>OU=Servers,OU=Computers</Path>
+        </DomainOU>
+      </DomainOUs>
+      <DomainAccounts>
+        <DomainAccount Name="admminy">
+          <Active>True</Active>
+          <AccountDescription>Mikael Nystrom</AccountDescription>
+          <OUName>Admin Accounts</OUName>
+          <AccountType>AdminAccount</AccountType>
+          <MemberOf>Domain Admins</MemberOf>
+          <MemberOf>Enterprise Admins</MemberOf>
+          <MemberOf>Domain Remote Desktop Users</MemberOf>
+          <MemberOf>Schema Admins</MemberOf>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="admjobr">
+          <Active>True</Active>
+          <AccountDescription>Jorgen Brandelius</AccountDescription>
+          <OUName>Admin Accounts</OUName>
+          <AccountType>AdminAccount</AccountType>
+          <MemberOf>Domain Admins</MemberOf>
+          <MemberOf>Enterprise Admins</MemberOf>
+          <MemberOf>Domain Remote Desktop Users</MemberOf>
+          <MemberOf>Schema Admins</MemberOf>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="admmala">
+          <Active>True</Active>
+          <AccountDescription>Markus Lassfolk</AccountDescription>
+          <OUName>Admin Accounts</OUName>
+          <AccountType>AdminAccount</AccountType>
+          <MemberOf>Domain Admins</MemberOf>
+          <MemberOf>Enterprise Admins</MemberOf>
+          <MemberOf>Domain Remote Desktop Users</MemberOf>
+          <MemberOf>Schema Admins</MemberOf>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="admpelo">
+          <Active>True</Active>
+          <AccountDescription>Peter Lofgren</AccountDescription>
+          <OUName>Admin Accounts</OUName>
+          <AccountType>AdminAccount</AccountType>
+          <MemberOf>Domain Admins</MemberOf>
+          <MemberOf>Enterprise Admins</MemberOf>
+          <MemberOf>Domain Remote Desktop Users</MemberOf>
+          <MemberOf>Schema Admins</MemberOf>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="admmale">
+          <Active>True</Active>
+          <AccountDescription>Mattias Lehmus</AccountDescription>
+          <OUName>Admin Accounts</OUName>
+          <AccountType>AdminAccount</AccountType>
+          <MemberOf>Domain Admins</MemberOf>
+          <MemberOf>Enterprise Admins</MemberOf>
+          <MemberOf>Domain Remote Desktop Users</MemberOf>
+          <MemberOf>Schema Admins</MemberOf>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="admjoar">
+          <Active>True</Active>
+          <AccountDescription>Johan Arwidmark</AccountDescription>
+          <OUName>Admin Accounts</OUName>
+          <AccountType>AdminAccount</AccountType>
+          <MemberOf>Domain Admins</MemberOf>
+          <MemberOf>Enterprise Admins</MemberOf>
+          <MemberOf>Domain Remote Desktop Users</MemberOf>
+          <MemberOf>Schema Admins</MemberOf>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="admalwi">
+          <Active>True</Active>
+          <AccountDescription>Alexander Christiansen Wikman</AccountDescription>
+          <OUName>Admin Accounts</OUName>
+          <AccountType>AdminAccount</AccountType>
+          <MemberOf>Domain Admins</MemberOf>
+          <MemberOf>Enterprise Admins</MemberOf>
+          <MemberOf>Domain Remote Desktop Users</MemberOf>
+          <MemberOf>Schema Admins</MemberOf>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="SVC_JD">
+          <Active>True</Active>
+          <AccountDescription>Join Domain Account</AccountDescription>
+          <OUName>Service Accounts</OUName>
+          <AccountType>ServiceAccount</AccountType>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="SVC_BA">
+          <Active>True</Active>
+          <AccountDescription>Build Account</AccountDescription>
+          <OUName>Service Accounts</OUName>
+          <AccountType>ServiceAccount</AccountType>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="SVC_SCVMM_SCOM">
+          <Active>True</Active>
+          <AccountDescription>PRO Connection Account for SCOM and SCVMM</AccountDescription>
+          <OUName>Service Accounts</OUName>
+          <AccountType>ServiceAccount</AccountType>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="SVC_SCVMM_AA">
+          <Active>True</Active>
+          <AccountDescription>Admin Account for SCVMM</AccountDescription>
+          <OUName>Service Accounts</OUName>
+          <MemberOf>Domain Admins</MemberOf>
+          <AccountType>ServiceAccount</AccountType>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="SVC_SPF_SA">
+          <Active>True</Active>
+          <AccountDescription>Service Account for SPF</AccountDescription>
+          <OUName>Service Accounts</OUName>
+          <AccountType>ServiceAccount</AccountType>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="SVC_SMA_SA">
+          <Active>True</Active>
+          <AccountDescription>Service Account for MA</AccountDescription>
+          <OUName>Service Accounts</OUName>
+          <AccountType>ServiceAccount</AccountType>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="SVC_SCOM_AA">
+          <Active>True</Active>
+          <AccountDescription>Action Account for SCOM</AccountDescription>
+          <OUName>Service Accounts</OUName>
+          <AccountType>ServiceAccount</AccountType>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="SVC_SCOR_SA">
+          <Active>True</Active>
+          <AccountDescription>Service Account for SCOR</AccountDescription>
+          <OUName>Service Accounts</OUName>
+          <AccountType>ServiceAccount</AccountType>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="SVC_SCVMM_SA">
+          <Active>True</Active>
+          <AccountDescription>Service Account for SCVMM</AccountDescription>
+          <OUName>Service Accounts</OUName>
+          <AccountType>ServiceAccount</AccountType>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="SVC_SCOM_SA">
+          <Active>True</Active>
+          <AccountDescription>Service Account for SCOM</AccountDescription>
+          <OUName>Service Accounts</OUName>
+          <AccountType>ServiceAccount</AccountType>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="SVC_ADDS_DHCP">
+          <Active>True</Active>
+          <AccountDescription>Service Account for ADDS DHCP</AccountDescription>
+          <OUName>Service Accounts</OUName>
+          <AccountType>ServiceAccount</AccountType>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+        <DomainAccount Name="SVC_WAP_SA">
+          <Active>True</Active>
+          <AccountDescription>Service Account for WAP</AccountDescription>
+          <OUName>Service Accounts</OUName>
+          <AccountType>ServiceAccount</AccountType>
+          <MemberOf>Domain Function SPF_Admin</MemberOf>
+          <MemberOf>Domain Function SPF_Provider</MemberOf>
+          <MemberOf>Domain Function SPF_Usage</MemberOf>
+          <MemberOf>Domain Function SPF_VMM</MemberOf>
+          <MemberOf>Domain Function SMA_WEB</MemberOf>
+          <PW>P@ssw0rd</PW>
+        </DomainAccount>
+      </DomainAccounts>
+      <DomainGroups>
+        <DomainGroup Name="Domain Remote Desktop Users">
+          <Active>True</Active>
+          <Description>NA</Description>
+          <DomainOU>Admin Groups</DomainOU>
+          <GroupScope>Global</GroupScope>
+        </DomainGroup>
+        <DomainGroup Name="Domain System Center Configuration Manager Admins">
+          <Active>True</Active>
+          <DomainOU>Admin Groups</DomainOU>
+          <GroupScope>Global</GroupScope>
+        </DomainGroup>
+        <DomainGroup Name="Domain System Center Virtual Machine Manager Admins">
+          <Active>True</Active>
+          <Description>NA</Description>
+          <DomainOU>Admin Groups</DomainOU>
+          <GroupScope>Global</GroupScope>
+        </DomainGroup>
+        <DomainGroup Name="Domain System Center Operations Manager Admins">
+          <Active>True</Active>
+          <Description>NA</Description>
+          <DomainOU>Admin Groups</DomainOU>
+          <GroupScope>Global</GroupScope>
+        </DomainGroup>
+        <DomainGroup Name="Domain System Center Service Manager Admins">
+          <Active>True</Active>
+          <Description>NA</Description>
+          <DomainOU>Admin Groups</DomainOU>
+          <GroupScope>Global</GroupScope>
+        </DomainGroup>
+        <DomainGroup Name="Domain System Center Data Protection Manager Admins">
+          <Active>True</Active>
+          <Description>NA</Description>
+          <DomainOU>Admin Groups</DomainOU>
+          <GroupScope>Global</GroupScope>
+        </DomainGroup>
+        <DomainGroup Name="Domain Local Admins">
+          <Active>True</Active>
+          <Description>NA</Description>
+          <DomainOU>Admin Groups</DomainOU>
+          <GroupScope>Global</GroupScope>
+        </DomainGroup>
+        <DomainGroup Name="Domain Function SPF_VMM">
+          <Active>True</Active>
+          <Description>NA</Description>
+          <DomainOU>Admin Groups</DomainOU>
+          <GroupScope>Global</GroupScope>
+        </DomainGroup>
+        <DomainGroup Name="Domain Function SPF_Usage">
+          <Active>True</Active>
+          <Description>NA</Description>
+          <DomainOU>Admin Groups</DomainOU>
+          <GroupScope>Global</GroupScope>
+        </DomainGroup>
+        <DomainGroup Name="Domain Function SPF_Provider">
+          <Active>True</Active>
+          <Description>NA</Description>
+          <DomainOU>Admin Groups</DomainOU>
+          <GroupScope>Global</GroupScope>
+        </DomainGroup>
+        <DomainGroup Name="Domain Function SPF_Admin">
+          <Active>True</Active>
+          <Description>NA</Description>
+          <DomainOU>Admin Groups</DomainOU>
+          <GroupScope>Global</GroupScope>
+        </DomainGroup>
+        <DomainGroup Name="Domain Function SMA_WEB">
+          <Active>True</Active>
+          <Description>NA</Description>
+          <DomainOU>Admin Groups</DomainOU>
+          <GroupScope>Global</GroupScope>
+        </DomainGroup>
+        <DomainGroup Name="Domain Function File Share Users">
+          <Active>True</Active>
+          <Description>NA</Description>
+          <DomainOU>Admin Groups</DomainOU>
+          <GroupScope>Global</GroupScope>
+        </DomainGroup>
+        <DomainGroup Name="Domain Function File Share Owners">
+          <Active>True</Active>
+          <Description>NA</Description>
+          <DomainOU>Admin Groups</DomainOU>
+          <GroupScope>Global</GroupScope>
+        </DomainGroup>
+        <DomainGroup Name="Domain Function Certificate Store File Server Users">
+          <Active>True</Active>
+          <Description>NA</Description>
+          <DomainOU>Admin Groups</DomainOU>
+          <GroupScope>Global</GroupScope>
+        </DomainGroup>
+        <DomainGroup Name="Domain Function Server Hyper-V Hosts">
+          <Active>True</Active>
+          <Description>NA</Description>
+          <DomainOU>Server Groups</DomainOU>
+          <GroupScope>Global</GroupScope>
+        </DomainGroup>
+      </DomainGroups>
+      <Certificates>
+        <Certificate Name="viamonstra-wildcard.pfx">
+          <Active>True</Active>
+          <Description>NA</Description>
+          <Path>C:\Setup\Certificates</Path>
+          <Destination>NA</Destination>
+          <PW>P@ssw0rd</PW>
+          <OptionalData>NA</OptionalData>
+        </Certificate>
+      </Certificates>
+    </Domain>
+  </Domains>
+  <Servers>
+    <Server id="300160d1-365e-41dc-a01c-8963955d924e" Name="TEST01" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FATEST01</ComputerName>
+      <Deploy>True</Deploy>
+      <DeployOrder>3</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <DependsOnServerID>1a103d8f-457b-440b-9721-e4b3e2ace69d</DependsOnServerID>
+      <Memory>1024</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Standard</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>NA</OOBName>
+      <OOBIPAddress>NA</OOBIPAddress>
+      <OOBSubnetMask>NA</OOBSubnetMask>
+      <OOBDefaultGateway>NA</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>True</Active>
+          <RoleUUID>33629b6b-dbbe-492e-8bf4-57bf5b55db32</RoleUUID>
+          <Config>First</Config>
+        </Role>
+        <Role Name="Role02">
+          <Active>True</Active>
+          <RoleUUID>9801a0a8-cacd-4cdc-851d-62ef3ba8b86e</RoleUUID>
+          <Config>First</Config>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>DHCP</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>DHCP</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>True</Active>
+          <Member>NIC01</Member>
+          <Member>NIC02</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>True</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>300</DiskSize>
+          <FileSystem>NTFS</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>True</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>300</DiskSize>
+          <FileSystem>REFS</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>True</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>300</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="1a103d8f-457b-440b-9721-e4b3e2ace69d" Name="ADDS01" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FAADDS01</ComputerName>
+      <Deploy>True</Deploy>
+      <DeployOrder>1</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <DependsOnServerID>NA</DependsOnServerID>
+      <Memory>1024</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Standard</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>False</DomainJoined>
+      <MachineObjectOU>NA</MachineObjectOU>
+      <OOBName>NA</OOBName>
+      <OOBIPAddress>NA</OOBIPAddress>
+      <OOBSubnetMask>NA</OOBSubnetMask>
+      <OOBDefaultGateway>NA</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>True</Active>
+          <RoleUUID>55f4de75-3a07-42f1-8324-474065860f08</RoleUUID>
+          <Config>First</Config>
+        </Role>
+        <Role Name="Role02">
+          <Active>True</Active>
+          <RoleUUID>696ec790-c452-4b80-a442-76bb9aaa7b21</RoleUUID>
+          <Config>First</Config>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>172.16.0.11</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>127.0.0.1</DNS>
+          <DNS>172.16.0.12</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>False</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>NA</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>True</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>100</DiskSize>
+          <FileSystem>NTFS</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>False</Active>
+          <DiskNumber>NA</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>NA</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="f5bb4b8c-b0f5-4926-b9bb-0d9587dac911" Name="ADDS02" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FAADDS02</ComputerName>
+      <Deploy>True</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <DependsOnServerID>1a103d8f-457b-440b-9721-e4b3e2ace69d</DependsOnServerID>
+      <Memory>1024</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Standard</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>NA</MachineObjectOU>
+      <OOBName>NA</OOBName>
+      <OOBIPAddress>NA</OOBIPAddress>
+      <OOBSubnetMask>NA</OOBSubnetMask>
+      <OOBDefaultGateway>NA</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>True</Active>
+          <RoleUUID>55f4de75-3a07-42f1-8324-474065860f08</RoleUUID>
+          <Config>Last</Config>
+        </Role>
+        <Role Name="Role02">
+          <Active>True</Active>
+          <RoleUUID>696ec790-c452-4b80-a442-76bb9aaa7b21</RoleUUID>
+          <Config>Last</Config>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>172.16.0.12</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>127.0.0.1</DNS>
+          <DNS>172.16.0.11</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>False</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>NA</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>True</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>100</DiskSize>
+          <FileSystem>NTFS</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>False</Active>
+          <DiskNumber>NA</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>NA</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="6bc0bc37-e057-48ac-b23a-4f300e04490e" Name="DEPL01" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FADEPL01</ComputerName>
+      <Deploy>True</Deploy>
+      <DeployOrder>4</DeployOrder>
+      <Finishaction>Shutdown</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <DependsOnServerID>1a103d8f-457b-440b-9721-e4b3e2ace69d</DependsOnServerID>
+      <Memory>1024</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Standard</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Generic Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>NA</OOBName>
+      <OOBIPAddress>NA</OOBIPAddress>
+      <OOBSubnetMask>NA</OOBSubnetMask>
+      <OOBDefaultGateway>NA</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>172.16.0.26</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>False</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>NA</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>True</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>300</DiskSize>
+          <FileSystem>NTFS</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>False</Active>
+          <DiskNumber>NA</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>NA</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="c30e5ff0-026e-4554-b066-f00b18c2ab14" Name="WSUS01" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FAWSUS01</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>4096</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Standard</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=WSUS Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>NA</OOBName>
+      <OOBIPAddress>NA</OOBIPAddress>
+      <OOBSubnetMask>NA</OOBSubnetMask>
+      <OOBDefaultGateway>NA</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>172.16.0.37</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>False</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>NA</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>True</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>300</DiskSize>
+          <FileSystem>NTFS</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>False</Active>
+          <DiskNumber>NA</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>NA</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="a6306440-4976-4125-985c-57fd7ba72419" Name="SCVM01" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FASCVM01</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>4096</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Standard</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=System Center Virtual Machine Manager Servers,OU=System Center Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>NA</OOBName>
+      <OOBIPAddress>NA</OOBIPAddress>
+      <OOBSubnetMask>NA</OOBSubnetMask>
+      <OOBDefaultGateway>NA</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>172.16.0.35</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>False</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>NA</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>True</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>300</DiskSize>
+          <FileSystem>NTFS</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>False</Active>
+          <DiskNumber>NA</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>NA</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="5ec01c2c-7913-41c2-b9df-65463f8f0839" Name="SCOR01" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FASCOR01</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Standard</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=System Center Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>NA</OOBName>
+      <OOBIPAddress>NA</OOBIPAddress>
+      <OOBSubnetMask>NA</OOBSubnetMask>
+      <OOBDefaultGateway>NA</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>172.16.0.34</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>False</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>NA</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>True</Active>
+          <DiskNumber>1A</DiskNumber>
+          <DiskSize>100</DiskSize>
+          <FileSystem>NTFS</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>False</Active>
+          <DiskNumber>NA</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NTFS</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>NA</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NTFS</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="6ab67d99-484f-4c5a-aeb8-42bd6d29c886" Name="SCOM01" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FASCOM01</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>4096</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Standard</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=System Center Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>NA</OOBName>
+      <OOBIPAddress>NA</OOBIPAddress>
+      <OOBSubnetMask>NA</OOBSubnetMask>
+      <OOBDefaultGateway>NA</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>172.16.0.33</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>False</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>172.16.0.33</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>True</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>100</DiskSize>
+          <PartitionType>GPT</PartitionType>
+          <FileSystem>NTFS</FileSystem>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>False</Active>
+          <DiskNumber>NA</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>NA</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="24a6349f-e43c-4a25-a679-3fa181e90026" Name="SCDP01" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FASCDP01</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>4096</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Standard</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=System Center DPM Server,OU=System Center Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>NA</OOBName>
+      <OOBIPAddress>NA</OOBIPAddress>
+      <OOBSubnetMask>NA</OOBSubnetMask>
+      <OOBDefaultGateway>NA</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>172.16.0.32</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>False</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>NA</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>True</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>300</DiskSize>
+          <FileSystem>NTFS</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>True</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>1000</DiskSize>
+          <FileSystem>NTFS</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>True</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>1000</DiskSize>
+          <FileSystem>NTFS</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="910edbf5-67c0-4a75-a8c1-022e3b8fcd6a" Name="RRAS01" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FARRAS01</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Standard</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Routing and Remote Access Servers,OU=Edge Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>NA</OOBName>
+      <OOBIPAddress>NA</OOBIPAddress>
+      <OOBSubnetMask>NA</OOBSubnetMask>
+      <OOBDefaultGateway>NA</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>172.16.0.1</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>50.124.229.111</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>80c41589-c5fc-4785-a673-e8b08996cfc2</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="00751dc1-d146-4c61-aa1f-6b292549c351" Name="RDGW01" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FARDGW01</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Standard</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Remote Desktop Gateway Servers,OU=Edge Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>NA</OOBName>
+      <OOBIPAddress>NA</OOBIPAddress>
+      <OOBSubnetMask>NA</OOBSubnetMask>
+      <OOBDefaultGateway>NA</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>172.16.0.31</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>False</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>NA</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="cae781b5-e94d-45b3-b0bc-962fc866e75d" Name="MGMT01" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FAMGMT01</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Virtual>True</Virtual>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Standard</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>NA</OOBName>
+      <OOBIPAddress>NA</OOBIPAddress>
+      <OOBSubnetMask>NA</OOBSubnetMask>
+      <OOBDefaultGateway>NA</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>172.16.0.29</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>False</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>NA</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>True</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>300</DiskSize>
+          <FileSystem>NTFS</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="72cecbfa-4959-498e-baca-8f0a2cfd256f" Name="SNAT01" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FASNAT01</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Standard</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Routing and Remote Access Servers,OU=Edge Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>NA</OOBName>
+      <OOBIPAddress>NA</OOBIPAddress>
+      <OOBSubnetMask>NA</OOBSubnetMask>
+      <OOBDefaultGateway>NA</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>172.16.0.1</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>50.124.229.111</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>80c41589-c5fc-4785-a673-e8b08996cfc2</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="a06a5eea-c264-4275-bb3c-a6a9c60ac2a9" Name="HOST01" Virtual="False">
+      <Active>True</Active>
+      <ComputerName>FAHOST01</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>FAHOST01.ilo</OOBName>
+      <OOBIPAddress>172.16.3.11</OOBIPAddress>
+      <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
+      <OOBDefaultGateway>172.16.0.1</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter id="NIC01">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:17:CC</MACAddress>
+          <Name>NIC01</Name>
+          <IPAddress>172.16.2.11</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC02">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:17:CD</MACAddress>
+          <Name>NIC02</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC03">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:17:CE</MACAddress>
+          <Name>NIC03</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC04">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:17:CF</MACAddress>
+          <Name>NIC04</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="Datadisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <PartitionType>GPT</PartitionType>
+          <FileSystem>NA</FileSystem>
+        </DataDisk>
+        <DataDisk Name="Datadisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <PartitionType>GPT</PartitionType>
+          <FileSystem>NA</FileSystem>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="ed37f52a-dc68-4ecc-bac3-01c2827c3819" Name="HOST02" Virtual="False">
+      <Active>True</Active>
+      <ComputerName>FAHOST02</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>FAHOST02.ilo</OOBName>
+      <OOBIPAddress>172.16.3.12</OOBIPAddress>
+      <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
+      <OOBDefaultGateway>172.16.0.1</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:19:B0</MACAddress>
+          <IPAddress>172.16.2.12</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:19:B1</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC03">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:19:B2</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC04">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:19:B3</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="Datadisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="Datadisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="c293c29a-94d2-4b7f-a395-538aa8699550" Name="vHOST01" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FAHOST01</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>FAHOST01.ilo</OOBName>
+      <OOBIPAddress>172.16.3.11</OOBIPAddress>
+      <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
+      <OOBDefaultGateway>172.16.0.1</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter id="NIC01">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:17:CC</MACAddress>
+          <Name>NIC01</Name>
+          <IPAddress>172.16.2.11</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC02">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:17:CD</MACAddress>
+          <Name>NIC02</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC03">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:17:CE</MACAddress>
+          <Name>NIC03</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC04">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:17:CF</MACAddress>
+          <Name>NIC04</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="Datadisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <PartitionType>GPT</PartitionType>
+          <FileSystem>NA</FileSystem>
+        </DataDisk>
+        <DataDisk Name="Datadisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <PartitionType>GPT</PartitionType>
+          <FileSystem>NA</FileSystem>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="1d4566ab-3700-4993-a45a-974805893e37" Name="vHOST02" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FAHOST02</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>FAHOST02.ilo</OOBName>
+      <OOBIPAddress>172.16.3.12</OOBIPAddress>
+      <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
+      <OOBDefaultGateway>172.16.0.1</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:19:B0</MACAddress>
+          <IPAddress>172.16.2.12</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:19:B1</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC03">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:19:B2</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC04">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:19:B3</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="Datadisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="Datadisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="20f60cde-8c07-467e-a88a-92bfd614d670" Name="HOST11" Virtual="False">
+      <Active>True</Active>
+      <ComputerName>FAHOST11</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>FAHOST11.ilo</OOBName>
+      <OOBIPAddress>172.16.3.31</OOBIPAddress>
+      <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
+      <OOBDefaultGateway>172.16.0.1</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:16:74</MACAddress>
+          <IPAddress>172.16.2.31</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:16:75</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC03">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:16:76</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC04">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:16:77</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC05">
+          <Active>True</Active>
+          <MACAddress>24:8A:07:6E:13:E0</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC06">
+          <Active>True</Active>
+          <MACAddress>24:8A:07:6E:13:E1</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>True</Active>
+          <Member>NIC01</Member>
+          <Member>NIC02</Member>
+          <Member>NIC03</Member>
+          <Member>NIC04</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="095cd3b4-8a02-405d-966b-76f23a0890a0" Name="HOST12" Virtual="False">
+      <Active>True</Active>
+      <ComputerName>FAHOST12</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>FAHOST12.ilo</OOBName>
+      <OOBIPAddress>172.16.3.32</OOBIPAddress>
+      <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
+      <OOBDefaultGateway>172.16.0.1</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:00</MACAddress>
+          <IPAddress>172.16.2.32</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:01</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC03">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:02</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC04">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:03</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC05">
+          <Active>True</Active>
+          <MACAddress>24:8A:07:6E:14:10</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC06">
+          <Active>True</Active>
+          <MACAddress>24:8A:07:6E:14:11</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>True</Active>
+          <Member>NIC01</Member>
+          <Member>NIC02</Member>
+          <Member>NIC03</Member>
+          <Member>NIC04</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="d2a38463-4f5c-4180-bff1-507aa4f85f26" Name="HOST13" Virtual="False">
+      <Active>True</Active>
+      <ComputerName>FAHOST13</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>FAHOST13.ilo</OOBName>
+      <OOBIPAddress>172.16.3.33</OOBIPAddress>
+      <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
+      <OOBDefaultGateway>172.16.0.1</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter id="NIC01">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:80</MACAddress>
+          <Name>NIC01</Name>
+          <IPAddress>172.16.2.33</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC02">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:81</MACAddress>
+          <Name>NIC02</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC03">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:82</MACAddress>
+          <Name>NIC03</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC04">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:83</MACAddress>
+          <Name>NIC04</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC05">
+          <Active>True</Active>
+          <MACAddress>24:8A:07:6E:18:E0</MACAddress>
+          <Name>NIC05</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC06">
+          <Active>True</Active>
+          <MACAddress>24:8A:07:6E:18:E1</MACAddress>
+          <Name>NIC06</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="Datadisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="Datadisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="Datadisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="ef08cc0d-d679-4f3e-91c4-21b0631b1734" Name="HOST14" Virtual="False">
+      <Active>True</Active>
+      <ComputerName>FAHOST14</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>FAHOST14.ilo</OOBName>
+      <OOBIPAddress>172.16.3.34</OOBIPAddress>
+      <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
+      <OOBDefaultGateway>172.16.0.1</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter id="NIC01">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:A4</MACAddress>
+          <Name>NIC01</Name>
+          <IPAddress>172.16.2.34</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC02">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:A5</MACAddress>
+          <Name>NIC02</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC03">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:A6</MACAddress>
+          <Name>NIC03</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC04">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:A7</MACAddress>
+          <Name>NIC04</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC05">
+          <Active>True</Active>
+          <MACAddress>24:8A:07:6E:18:D0</MACAddress>
+          <Name>NIC05</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC06">
+          <Active>True</Active>
+          <MACAddress>24:8A:07:6E:18:D1</MACAddress>
+          <Name>NIC06</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="Datadisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="Datadisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="Datadisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="8d7cde14-b09b-4414-8459-bedc5a6933be" Name="vHOST11" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FAHOST11</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>FAHOST11.ilo</OOBName>
+      <OOBIPAddress>172.16.3.31</OOBIPAddress>
+      <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
+      <OOBDefaultGateway>172.16.0.1</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:16:74</MACAddress>
+          <IPAddress>172.16.2.31</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:16:75</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC03">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:16:76</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC04">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:16:77</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC05">
+          <Active>True</Active>
+          <MACAddress>24:8A:07:6E:13:E0</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC06">
+          <Active>True</Active>
+          <MACAddress>24:8A:07:6E:13:E1</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>True</Active>
+          <Member>NIC01</Member>
+          <Member>NIC02</Member>
+          <Member>NIC03</Member>
+          <Member>NIC04</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="11982caf-a596-4bfa-877d-c891695f9442" Name="vHOST12" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FAHOST12</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>FAHOST12.ilo</OOBName>
+      <OOBIPAddress>172.16.3.32</OOBIPAddress>
+      <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
+      <OOBDefaultGateway>172.16.0.1</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:00</MACAddress>
+          <IPAddress>172.16.2.32</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:01</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC03">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:02</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC04">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:03</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC05">
+          <Active>True</Active>
+          <MACAddress>24:8A:07:6E:14:10</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC06">
+          <Active>True</Active>
+          <MACAddress>24:8A:07:6E:14:11</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>True</Active>
+          <Member>NIC01</Member>
+          <Member>NIC02</Member>
+          <Member>NIC03</Member>
+          <Member>NIC04</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="2df0bf73-95e4-4ae6-b876-e58e9bd2ef46" Name="vHOST13" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FAHOST13</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>FAHOST13.ilo</OOBName>
+      <OOBIPAddress>172.16.3.33</OOBIPAddress>
+      <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
+      <OOBDefaultGateway>172.16.0.1</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter id="NIC01">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:80</MACAddress>
+          <Name>NIC01</Name>
+          <IPAddress>172.16.2.33</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC02">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:81</MACAddress>
+          <Name>NIC02</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC03">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:82</MACAddress>
+          <Name>NIC03</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC04">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:83</MACAddress>
+          <Name>NIC04</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC05">
+          <Active>True</Active>
+          <MACAddress>24:8A:07:6E:18:E0</MACAddress>
+          <Name>NIC05</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC06">
+          <Active>True</Active>
+          <MACAddress>24:8A:07:6E:18:E1</MACAddress>
+          <Name>NIC06</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="Datadisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="Datadisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="Datadisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="bdc28f77-eeeb-4648-86fd-27caadf45f5c" Name="vHOST14" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FAHOST14</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>FAHOST14.ilo</OOBName>
+      <OOBIPAddress>172.16.3.34</OOBIPAddress>
+      <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
+      <OOBDefaultGateway>172.16.0.1</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter id="NIC01">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:A4</MACAddress>
+          <Name>NIC01</Name>
+          <IPAddress>172.16.2.34</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC02">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:A5</MACAddress>
+          <Name>NIC02</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC03">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:A6</MACAddress>
+          <Name>NIC03</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC04">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:AB:A7</MACAddress>
+          <Name>NIC04</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC05">
+          <Active>True</Active>
+          <MACAddress>24:8A:07:6E:18:D0</MACAddress>
+          <Name>NIC05</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC06">
+          <Active>True</Active>
+          <MACAddress>24:8A:07:6E:18:D1</MACAddress>
+          <Name>NIC06</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="Datadisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="Datadisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="Datadisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="c1bb0530-647e-4c48-8ec6-c6fa4a325961" Name="STORE01" Virtual="False">
+      <Active>True</Active>
+      <ComputerName>FAHOST01</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>FAHOST01.ilo</OOBName>
+      <OOBIPAddress>172.16.3.11</OOBIPAddress>
+      <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
+      <OOBDefaultGateway>172.16.0.1</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter id="NIC01">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:17:CC</MACAddress>
+          <Name>NIC01</Name>
+          <IPAddress>172.16.2.11</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC02">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:17:CD</MACAddress>
+          <Name>NIC02</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC03">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:17:CE</MACAddress>
+          <Name>NIC03</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC04">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:17:CF</MACAddress>
+          <Name>NIC04</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="Datadisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <PartitionType>GPT</PartitionType>
+          <FileSystem>NA</FileSystem>
+        </DataDisk>
+        <DataDisk Name="Datadisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <PartitionType>GPT</PartitionType>
+          <FileSystem>NA</FileSystem>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="eef775e7-345c-4f62-a145-b9aeec4d0930" Name="STORE02" Virtual="False">
+      <Active>True</Active>
+      <ComputerName>FAHOST02</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>FAHOST02.ilo</OOBName>
+      <OOBIPAddress>172.16.3.12</OOBIPAddress>
+      <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
+      <OOBDefaultGateway>172.16.0.1</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:19:B0</MACAddress>
+          <IPAddress>172.16.2.12</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:19:B1</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC03">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:19:B2</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC04">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:19:B3</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="Datadisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="Datadisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="a09e2750-abea-43d3-91d7-350f150d8ef2" Name="vSTORE01" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FAHOST01</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>FAHOST01.ilo</OOBName>
+      <OOBIPAddress>172.16.3.11</OOBIPAddress>
+      <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
+      <OOBDefaultGateway>172.16.0.1</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter id="NIC01">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:17:CC</MACAddress>
+          <Name>NIC01</Name>
+          <IPAddress>172.16.2.11</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC02">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:17:CD</MACAddress>
+          <Name>NIC02</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC03">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:17:CE</MACAddress>
+          <Name>NIC03</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter id="NIC04">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:17:CF</MACAddress>
+          <Name>NIC04</Name>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="Datadisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <PartitionType>GPT</PartitionType>
+          <FileSystem>NA</FileSystem>
+        </DataDisk>
+        <DataDisk Name="Datadisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <PartitionType>GPT</PartitionType>
+          <FileSystem>NA</FileSystem>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="ee481bc9-104f-46de-bf48-a8fa631c2d2a" Name="vSTORE02" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FAHOST02</ComputerName>
+      <Deploy>False</Deploy>
+      <DeployOrder>2</DeployOrder>
+      <Finishaction>Reboot</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <Memory>2048</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>FAHOST02.ilo</OOBName>
+      <OOBIPAddress>172.16.3.12</OOBIPAddress>
+      <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
+      <OOBDefaultGateway>172.16.0.1</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:19:B0</MACAddress>
+          <IPAddress>172.16.2.12</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:19:B1</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC03">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:19:B2</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC04">
+          <Active>True</Active>
+          <MACAddress>18:66:DA:EE:19:B3</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="Datadisk01">
+          <Active>False</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="Datadisk02">
+          <Active>False</Active>
+          <DiskNumber>2</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>3</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+  </Servers>
+  <VHDs>
+    <VHD id="9a7a8bcc-96c6-407c-aeee-db465657fa01" Name="WS2016_STANDARD_UI_UEFI_FABRIC_EVAL.vhdx">
+      <Active>False</Active>
+      <Description>NA</Description>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Standard</Edition>
+      <UI>StandardUI</UI>
+      <Location>C:\Setup\VHD</Location>
+      <License>EVAL</License>
+      <SourceFile>Install.wim</SourceFile>
+      <OptionalData>NA</OptionalData>
+    </VHD>
+    <VHD id="12525894-c132-4a08-9bcd-51e94c362f67" Name="WS2016_DATACENTER_UI_UEFI_FABRIC_EVAL.vhdx">
+      <Active>False</Active>
+      <Description>NA</Description>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <Location>C:\Setup\VHD</Location>
+      <License>EVAL</License>
+      <SourceFile>Install.wim</SourceFile>
+      <OptionalData>NA</OptionalData>
+    </VHD>
+    <VHD id="288dce45-1127-493e-ae12-cdd7a0ea861d" Name="WS2016_G2_DataCenter_UI_Fabric.vhdx">
+      <Active>True</Active>
+      <Description>NA</Description>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Datacenter</Edition>
+      <UI>StandardUI</UI>
+      <Location>C:\Setup\VHD</Location>
+      <License>VL</License>
+      <SourceFile>REFWS2016-001.wim</SourceFile>
+      <OptionalData>NA</OptionalData>
+    </VHD>
+    <VHD id="da187a7b-5ead-43ad-a83a-f6802a71edc3" Name="WS2016_G2_Standard_UI_Fabric.vhdx">
+      <Active>True</Active>
+      <Description>NA</Description>
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Standard</Edition>
+      <UI>StandardUI</UI>
+      <Location>C:\Setup\VHD</Location>
+      <License>VL</License>
+      <SourceFile>REFWS2016-003.wim</SourceFile>
+      <OptionalData>NA</OptionalData>
+    </VHD>
+  </VHDs>
+  <Roles>
+    <Role id="696ec790-c452-4b80-a442-76bb9aaa7b21" Name="DHCP">
+      <Active>True</Active>
+      <Description>NA</Description>
+      <Config>
+       <Common>
+        <ForestLevel>WS2016</ForestLevel>
+        <DomainLevel>ws2016</DomainLevel>
+        <DataDisk>DataDisk01</DataDisk>
+       </Common>
+       <First>
+        <ForestLevel>WS2016</ForestLevel>
+        <DomainLevel>ws2016</DomainLevel>
+        <DataDisk>DataDisk01</DataDisk>
+       </First>
+       <Last>
+        <ForestLevel>WS2016</ForestLevel>
+        <DomainLevel>ws2016</DomainLevel>
+        <DataDisk>DataDisk01</DataDisk>
+       </Last>
+      </Config>    </Role>
+    <Role id="55f4de75-3a07-42f1-8324-474065860f08" Name="ADDS">
+      <Active>True</Active>
+      <Description>NA</Description>
+      <Config>
+       <Common>
+        <DomainForestLevel>WS2016</DomainForestLevel>
+        <DataDisk>DataDisk01</DataDisk>
+       </Common>
+       <First>
+        <DomainForestLevel>WS2016</DomainForestLevel>
+        <DataDisk>DataDisk01</DataDisk>
+       </First>
+       <Last>
+        <DomainForestLevel>WS2016</DomainForestLevel>
+        <DataDisk>DataDisk01</DataDisk>
+       </Last>
+      </Config>
+    </Role>
+    <Role id="529d1c14-8848-479b-8acd-3a1437075d13" Name="DEPL">
+      <Active>False</Active>
+      <Description>NA</Description>
+      <Config>
+       <Common>
+        <DataDisk>DataDisk01</DataDisk>
+       </Common>
+       <First>
+        <DataDisk>DataDisk01</DataDisk>
+       </First>
+       <Last>
+        <DataDisk>DataDisk01</DataDisk>
+       </Last>
+      </Config>
+    </Role>
+    <Role id="33629b6b-dbbe-492e-8bf4-57bf5b55db32" Name="SampleRole01">
+      <Active>True</Active>
+      <Description>NA</Description>
+      <Config>
+       <Common>
+        <ForestLevel>WS2016</ForestLevel>
+        <DomainLevel>ws2016</DomainLevel>
+        <DataDisk>DataDisk01</DataDisk>
+       </Common>
+       <First>
+        <ForestLevel>WS2016</ForestLevel>
+        <DomainLevel>ws2016</DomainLevel>
+        <DataDisk>DataDisk01</DataDisk>
+       </First>
+       <Last>
+        <ForestLevel>WS2016</ForestLevel>
+        <DomainLevel>ws2016</DomainLevel>
+        <DataDisk>DataDisk01</DataDisk>
+       </Last>
+      </Config>    </Role>
+    <Role id="9801a0a8-cacd-4cdc-851d-62ef3ba8b86e" Name="SampleRole02">
+      <Active>True</Active>
+      <Description>NA</Description>
+      <Config>
+       <Common>
+        <ForestLevel>WS2016</ForestLevel>
+        <DomainLevel>ws2016</DomainLevel>
+        <DataDisk>DataDisk01</DataDisk>
+       </Common>
+       <First>
+        <ForestLevel>WS2016</ForestLevel>
+        <DomainLevel>ws2016</DomainLevel>
+        <DataDisk>DataDisk01</DataDisk>
+       </First>
+       <Last>
+        <ForestLevel>WS2016</ForestLevel>
+        <DomainLevel>ws2016</DomainLevel>
+        <DataDisk>DataDisk01</DataDisk>
+       </Last>
+      </Config>    </Role>
+  </Roles>
+  <Services>
+    <Service id="2d675e02-a9ae-45cc-908d-f069cf44c0dd" Name="SCOM2016">
+      <Active>True</Active>
+      <Description>NA</Description>
+      <HA>False</HA>
+      <Config>
+        <SQLINSTANCENAME>MSSQLServer</SQLINSTANCENAME>
+        <SQLINSTANCEDIR>SQLDB</SQLINSTANCEDIR>
+      </Config>
+    </Service>
+    <Service id="e3e9efe2-6ac9-4630-969f-ab11154feae8" Name="SCVMM2016">
+      <Active>True</Active>
+      <Description>NA</Description>
+      <HA>False</HA>
+      <Config>
+        <SQLINSTANCENAME>MSSQLServer</SQLINSTANCENAME>
+        <SQLINSTANCEDIR>SQLDB</SQLINSTANCEDIR>
+        <SCVMMBitsTcpPort>443</SCVMMBitsTcpPort>
+        <OOBAccountName>root</OOBAccountName>
+        <OOBAccountDescr>Out-of-band Administrator</OOBAccountDescr>
+        <OOBAccountPW>igwien</OOBAccountPW>
+      </Config>
+    </Service>
+    <Service id="a6296b2a-adc0-4fc3-927d-945ced3bd4d1" Name="SCOR2016">
+      <Active>True</Active>
+      <Description>NA</Description>
+      <HA>False</HA>
+      <Config>
+        <SQLINSTANCENAME>MSSQLServer</SQLINSTANCENAME>
+        <SQLINSTANCEDIR>SQLDB</SQLINSTANCEDIR>
+        <SMADBName>SMA</SMADBName>
+        <SMADBAuth>Windows</SMADBAuth>
+        <SMADBPort>1433</SMADBPort>
+        <SMADBServer>Localhost</SMADBServer>
+        <usageSecurityGroupUsers>Domain Function SPF_Usage</usageSecurityGroupUsers>
+        <AdminSecurityGroupUsers>Domain Function SPF_Admin</AdminSecurityGroupUsers>
+        <ProviderSecurityGroupUsers>Domain Function SPF_Provider</ProviderSecurityGroupUsers>
+        <VmmSecurityGroupUsers>Domain Function SPF_VMM</VmmSecurityGroupUsers>
+        <SMAAccessGroup>Domain Function SMA_WEB</SMAAccessGroup>
+      </Config>
+    </Service>
+    <Service id="b92f5063-5051-4471-8315-b0de328106fd" Name="SCDP2016">
+      <Active>True</Active>
+      <Description>NA</Description>
+      <HA>False</HA>
+      <Config>
+        <SQLINSTANCENAME>MSSQLServer</SQLINSTANCENAME>
+        <SQLINSTANCEDIR>SQLDB</SQLINSTANCEDIR>
+        <SqlAccountPassword>P@ssw0rd</SqlAccountPassword>
+      </Config>
+    </Service>
+  </Services>
+</FABRIC>
