@@ -11,7 +11,7 @@
     <CommonSetting id="bd2d0f66-edd2-4f8b-a0f5-2ed7e6d07fad" Name="CommonSetting">
       <Active>True</Active>
       <MajorVersion>10</MajorVersion>
-      <MinorVersion>0</MinorVersion>
+      <MinorVersion>1</MinorVersion>
       <Solution>Hydration</Solution>
       <CodeName>Genesis</CodeName>
       <LocalPassword>P@ssw0rd</LocalPassword>
@@ -475,7 +475,7 @@
     </Domain>
   </Domains>
   <Servers>
-    <Server id="1a103d8f-457b-440b-9721-e4b3e2ace69d" Name="ADDS01">
+    <Server id="1a103d8f-457b-440b-9721-e4b3e2ace69d" Name="ADDS01" Virtual="True">
       <Active>True</Active>
       <ComputerName>RNDDC01</ComputerName>
       <Deploy>True</Deploy>
@@ -483,8 +483,8 @@
       <Finishaction>Reboot</Finishaction>
       <WaitForDeployment>True</WaitForDeployment>
       <DependsOnServerID>NA</DependsOnServerID>
-      <Virtual>True</Virtual>
       <Memory>1024</Memory>
+      <BuildMemory>1024</BuildMemory>
       <CPUCount>2</CPUCount>
       <DiffOrCreate>Diff</DiffOrCreate>
       <Type>UEFI</Type>
@@ -590,7 +590,7 @@
         </DataDisk>
       </DataDisks>
     </Server>
-    <Server id="6bc0bc37-e057-48ac-b23a-4f300e04490e" Name="DEPL01">
+    <Server id="6bc0bc37-e057-48ac-b23a-4f300e04490e" Name="DEPL01" Virtual="True">
       <Active>True</Active>
       <ComputerName>RNDDEPL01</ComputerName>
       <Deploy>True</Deploy>
@@ -598,8 +598,8 @@
       <Finishaction>Shutdown</Finishaction>
       <WaitForDeployment>True</WaitForDeployment>
       <DependsOnServerID>1a103d8f-457b-440b-9721-e4b3e2ace69d</DependsOnServerID>
-      <Virtual>True</Virtual>
       <Memory>3072</Memory>
+      <BuildMemory>3072</BuildMemory>
       <CPUCount>2</CPUCount>
       <DiffOrCreate>Diff</DiffOrCreate>
       <Type>UEFI</Type>
@@ -703,15 +703,15 @@
         </DataDisk>
       </DataDisks>
     </Server>
-    <Server id="c30e5ff0-026e-4554-b066-f00b18c2ab14" Name="WSUS01">
+    <Server id="c30e5ff0-026e-4554-b066-f00b18c2ab14" Name="WSUS01" Virtual="True">
       <Active>True</Active>
       <ComputerName>RNDWSUS01</ComputerName>
       <Deploy>False</Deploy>
       <DeployOrder>2</DeployOrder>
       <Finishaction>Reboot</Finishaction>
       <WaitForDeployment>True</WaitForDeployment>
-      <Virtual>True</Virtual>
       <Memory>3072</Memory>
+      <BuildMemory>3072</BuildMemory>
       <CPUCount>2</CPUCount>
       <DiffOrCreate>Diff</DiffOrCreate>
       <Type>UEFI</Type>
@@ -815,15 +815,15 @@
         </DataDisk>
       </DataDisks>
     </Server>
-    <Server id="00751dc1-d146-4c61-aa1f-6b292549c351" Name="RDGW01">
+    <Server id="00751dc1-d146-4c61-aa1f-6b292549c351" Name="RDGW01" Virtual="True">
       <Active>False</Active>
       <ComputerName>RNDRDGW01</ComputerName>
       <Deploy>False</Deploy>
       <DeployOrder>2</DeployOrder>
       <Finishaction>Reboot</Finishaction>
       <WaitForDeployment>True</WaitForDeployment>
-      <Virtual>True</Virtual>
       <Memory>2048</Memory>
+      <BuildMemory>2048</BuildMemory>
       <CPUCount>2</CPUCount>
       <DiffOrCreate>Diff</DiffOrCreate>
       <Type>UEFI</Type>
@@ -927,15 +927,15 @@
         </DataDisk>
       </DataDisks>
     </Server>
-    <Server id="72cecbfa-4959-498e-baca-8f0a2cfd256f" Name="SNAT01">
+    <Server id="72cecbfa-4959-498e-baca-8f0a2cfd256f" Name="SNAT01" Virtual="True">
       <Active>False</Active>
       <ComputerName>RNDSNAT01</ComputerName>
       <Deploy>False</Deploy>
       <DeployOrder>2</DeployOrder>
       <Finishaction>Reboot</Finishaction>
       <WaitForDeployment>True</WaitForDeployment>
-      <Virtual>True</Virtual>
       <Memory>2048</Memory>
+      <BuildMemory>2048</BuildMemory>
       <CPUCount>2</CPUCount>
       <DiffOrCreate>Diff</DiffOrCreate>
       <Type>UEFI</Type>
