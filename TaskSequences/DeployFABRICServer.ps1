@@ -505,8 +505,8 @@ foreach($Role in $Roles){
 
                     #Restart
                     Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-                    Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
-                    Wait-VIAServiceToRun -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
+                    Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $domainCred
+                    Wait-VIAServiceToRun -VMname $($ServerData.ComputerName) -Credentials $domainCred
 
                     #Wait for AD to be operational
                     Update-VIALog -Data "Wait for AD to be operational"
