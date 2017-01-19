@@ -25,7 +25,6 @@
       <VMSwitchName>UplinkSwitchLAB</VMSwitchName>
       <VMSwitchNameInternet>UplinkSwitch</VMSwitchNameInternet>
       <WorkgroupName>WORKGROUP</WorkgroupName>
-      <VHDSize>90000</VHDSize>
       <OptionalData>NA</OptionalData>
       <PasswordUpdated>True</PasswordUpdated>
     </CommonSetting>
@@ -1153,56 +1152,6 @@
       </DataDisks>
     </Server>
   </Servers>
-  <VHDs>
-    <VHD id="9a7a8bcc-96c6-407c-aeee-db465657fa01" Name="WS2016_STANDARD_UI_UEFI_FABRIC_EVAL.vhdx">
-      <Active>False</Active>
-      <Description>NA</Description>
-      <Type>UEFI</Type>
-      <Version>WS2016</Version>
-      <Edition>Standard</Edition>
-      <UI>StandardUI</UI>
-      <Location>C:\Setup\VHD</Location>
-      <License>EVAL</License>
-      <SourceFile>Install.wim</SourceFile>
-      <OptionalData>NA</OptionalData>
-    </VHD>
-    <VHD id="12525894-c132-4a08-9bcd-51e94c362f67" Name="WS2016_DATACENTER_UI_UEFI_FABRIC_EVAL.vhdx">
-      <Active>False</Active>
-      <Description>NA</Description>
-      <Type>UEFI</Type>
-      <Version>WS2016</Version>
-      <Edition>Datacenter</Edition>
-      <UI>StandardUI</UI>
-      <Location>C:\Setup\VHD</Location>
-      <License>EVAL</License>
-      <SourceFile>Install.wim</SourceFile>
-      <OptionalData>NA</OptionalData>
-    </VHD>
-    <VHD id="288dce45-1127-493e-ae12-cdd7a0ea861d" Name="WS2016_G2_DataCenter_UI_Fabric.vhdx">
-      <Active>True</Active>
-      <Description>NA</Description>
-      <Type>UEFI</Type>
-      <Version>WS2016</Version>
-      <Edition>Datacenter</Edition>
-      <UI>StandardUI</UI>
-      <Location>C:\Setup\VHD</Location>
-      <License>VL</License>
-      <SourceFile>REFWS2016-001.wim</SourceFile>
-      <OptionalData>NA</OptionalData>
-    </VHD>
-    <VHD id="da187a7b-5ead-43ad-a83a-f6802a71edc3" Name="WS2016_G2_Standard_UI_Fabric.vhdx">
-      <Active>True</Active>
-      <Description>NA</Description>
-      <Type>UEFI</Type>
-      <Version>WS2016</Version>
-      <Edition>Standard</Edition>
-      <UI>StandardUI</UI>
-      <Location>C:\Setup\VHD</Location>
-      <License>VL</License>
-      <SourceFile>REFWS2016-003.wim</SourceFile>
-      <OptionalData>NA</OptionalData>
-    </VHD>
-  </VHDs>
   <Roles>
     <Role id="696ec790-c452-4b80-a442-76bb9aaa7b21" Name="DHCP">
       <Active>True</Active>

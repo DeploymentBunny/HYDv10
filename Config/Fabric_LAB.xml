@@ -25,7 +25,6 @@
       <VMSwitchName>UpLinkSwitch</VMSwitchName>
       <VMSwitchNameInternet>UplinkSwitch</VMSwitchNameInternet>
       <WorkgroupName>WORKGROUP</WorkgroupName>
-      <VHDSize>90000</VHDSize>
       <OptionalData>NA</OptionalData>
       <PasswordUpdated>True</PasswordUpdated>
     </CommonSetting>
@@ -33,7 +32,7 @@
   <ProductKeys>
     <ProductKey Id="fdb26de8-bbf8-4c25-b826-740e06672286" Name="ProduktKeySC2016">
       <Active>True</Active>
-      <Key></Key>
+      <Key>NA</Key>
     </ProductKey>
     <ProductKey Id="e1ea43a3-db10-49a3-a5e4-1ea3f310476d" Name="ProduktKeySC2012R2">
       <Active>False</Active>
@@ -193,6 +192,23 @@
       <DHCPEnd>NA</DHCPEnd>
       <DHCPReserv>NA</DHCPReserv>
       <VLAN>NA</VLAN>
+      <RDNS>NA</RDNS>
+      <OptionalData>NA</OptionalData>
+    </Network>
+    <Network Id="70f2efcd-143e-470a-8355-a65dfc96675c" Name="VLAN3010">
+      <Active>True</Active>
+      <NetIP>NA</NetIP>
+      <Gateway>NA</Gateway>
+      <DNS>NA</DNS>
+      <DNS>NA</DNS>
+      <SubNet>NA</SubNet>
+      <VMMStart>NA</VMMStart>
+      <VMMEnd>NA</VMMEnd>
+      <VMMReserv>NA</VMMReserv>
+      <DHCPStart>NA</DHCPStart>
+      <DHCPEnd>NA</DHCPEnd>
+      <DHCPReserv>NA</DHCPReserv>
+      <VLAN>3010</VLAN>
       <RDNS>NA</RDNS>
       <OptionalData>NA</OptionalData>
     </Network>
@@ -690,6 +706,26 @@
           <DNS>NA</DNS>
           <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
         </Networkadapter>
+        <Networkadapter Name="NIC03">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>DHCP</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>80c41589-c5fc-4785-a673-e8b08996cfc2</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC04">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>DHCP</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>70f2efcd-143e-470a-8355-a65dfc96675c</ConnectedToNetwork>
+        </Networkadapter>
       </Networkadapters>
       <NetworkTeams>
         <Networkteam Name="NICTeam01">
@@ -788,11 +824,11 @@
         <Networkadapter Name="NIC01">
           <Active>True</Active>
           <MACAddress>NA</MACAddress>
-          <IPAddress>172.16.0.11</IPAddress>
+          <IPAddress>192.168.1.200</IPAddress>
           <PrefixLength>NA</PrefixLength>
           <DefaultGateway>NA</DefaultGateway>
           <DNS>127.0.0.1</DNS>
-          <DNS>172.16.0.12</DNS>
+          <DNS>192.168.1.201</DNS>
           <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
         </Networkadapter>
         <Networkadapter Name="NIC02">
@@ -903,11 +939,11 @@
         <Networkadapter Name="NIC01">
           <Active>True</Active>
           <MACAddress>NA</MACAddress>
-          <IPAddress>172.16.0.12</IPAddress>
+          <IPAddress>192.168.1.201</IPAddress>
           <PrefixLength>NA</PrefixLength>
           <DefaultGateway>NA</DefaultGateway>
           <DNS>127.0.0.1</DNS>
-          <DNS>172.16.0.11</DNS>
+          <DNS>192.168.1.200</DNS>
           <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
         </Networkadapter>
         <Networkadapter Name="NIC02">
@@ -980,7 +1016,7 @@
       <Memory>1024</Memory>
       <BuildMemory>1024</BuildMemory>
       <CPUCount>2</CPUCount>
-      <DiffOrCreate>Diff</DiffOrCreate>
+      <DiffOrCreate>Diff</DiffOrCreate>.
       <Type>UEFI</Type>
       <Version>WS2016</Version>
       <Edition>Standard</Edition>
@@ -1016,7 +1052,120 @@
         <Networkadapter Name="NIC01">
           <Active>True</Active>
           <MACAddress>NA</MACAddress>
-          <IPAddress>172.16.0.26</IPAddress>
+          <IPAddress>192.168.1.245</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>9280db2e-6b5b-4770-9dd2-9e1f0292ea89</ConnectedToNetwork>
+        </Networkadapter>
+        <Networkadapter Name="NIC02">
+          <Active>False</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>NA</IPAddress>
+          <PrefixLength>NA</PrefixLength>
+          <DefaultGateway>NA</DefaultGateway>
+          <DNS>NA</DNS>
+          <DNS>NA</DNS>
+          <ConnectedToNetwork>NA</ConnectedToNetwork>
+        </Networkadapter>
+      </Networkadapters>
+      <NetworkTeams>
+        <Networkteam Name="NICTeam01">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+        <Networkteam Name="NICTeam02">
+          <Active>False</Active>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+          <Member>NA</Member>
+        </Networkteam>
+      </NetworkTeams>
+      <DataDisks>
+        <DataDisk Name="DataDisk01">
+          <Active>True</Active>
+          <DiskNumber>1</DiskNumber>
+          <DiskSize>300</DiskSize>
+          <FileSystem>NTFS</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk02">
+          <Active>False</Active>
+          <DiskNumber>NA</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+        <DataDisk Name="DataDisk03">
+          <Active>False</Active>
+          <DiskNumber>NA</DiskNumber>
+          <DiskSize>NA</DiskSize>
+          <FileSystem>NA</FileSystem>
+          <PartitionType>GPT</PartitionType>
+        </DataDisk>
+      </DataDisks>
+    </Server>
+    <Server id="e85aeac7-f337-43bf-b047-02c6fecd8fc6" Name="MDT01" Virtual="True">
+      <Active>True</Active>
+      <ComputerName>FAMDT01</ComputerName>
+      <Deploy>True</Deploy>
+      <DeployOrder>4</DeployOrder>
+      <Finishaction>Shutdown</Finishaction>
+      <WaitForDeployment>True</WaitForDeployment>
+      <DependsOnServerID>1a103d8f-457b-440b-9721-e4b3e2ace69d</DependsOnServerID>
+      <Memory>1024</Memory>
+      <BuildMemory>1024</BuildMemory>
+      <CPUCount>2</CPUCount>
+      <DiffOrCreate>Diff</DiffOrCreate>.
+      <Type>UEFI</Type>
+      <Version>WS2016</Version>
+      <Edition>Standard</Edition>
+      <UI>StandardUI</UI>
+      <DomainJoined>True</DomainJoined>
+      <MachineObjectOU>OU=Generic Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <OOBName>NA</OOBName>
+      <OOBIPAddress>NA</OOBIPAddress>
+      <OOBSubnetMask>NA</OOBSubnetMask>
+      <OOBDefaultGateway>NA</OOBDefaultGateway>
+      <OOBVLANID>NA</OOBVLANID>
+      <Roles>
+        <Role Name="Role01">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+        <Role Name="Role02">
+          <Active>False</Active>
+          <RoleUUID>NA</RoleUUID>
+        </Role>
+      </Roles>
+      <OptionalSettings>
+        <OptionalSetting Name="OptionalSetting01">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+        <OptionalSetting Name="OptionalSetting02">
+          <Active>False</Active>
+          <Data>NA</Data>
+        </OptionalSetting>
+      </OptionalSettings>
+      <Networkadapters>
+        <Networkadapter Name="NIC01">
+          <Active>True</Active>
+          <MACAddress>NA</MACAddress>
+          <IPAddress>192.168.1.210</IPAddress>
           <PrefixLength>NA</PrefixLength>
           <DefaultGateway>NA</DefaultGateway>
           <DNS>NA</DNS>
@@ -1128,7 +1277,7 @@
         <Networkadapter Name="NIC01">
           <Active>True</Active>
           <MACAddress>NA</MACAddress>
-          <IPAddress>172.16.0.37</IPAddress>
+          <IPAddress>192.168.1.240</IPAddress>
           <PrefixLength>NA</PrefixLength>
           <DefaultGateway>NA</DefaultGateway>
           <DNS>NA</DNS>
@@ -1240,7 +1389,7 @@
         <Networkadapter Name="NIC01">
           <Active>True</Active>
           <MACAddress>NA</MACAddress>
-          <IPAddress>172.16.0.35</IPAddress>
+          <IPAddress>192.168.1.216</IPAddress>
           <PrefixLength>NA</PrefixLength>
           <DefaultGateway>NA</DefaultGateway>
           <DNS>NA</DNS>
@@ -1352,7 +1501,7 @@
         <Networkadapter Name="NIC01">
           <Active>True</Active>
           <MACAddress>NA</MACAddress>
-          <IPAddress>172.16.0.34</IPAddress>
+          <IPAddress>192.168.1.218</IPAddress>
           <PrefixLength>NA</PrefixLength>
           <DefaultGateway>NA</DefaultGateway>
           <DNS>NA</DNS>
@@ -1464,7 +1613,7 @@
         <Networkadapter Name="NIC01">
           <Active>True</Active>
           <MACAddress>NA</MACAddress>
-          <IPAddress>172.16.0.33</IPAddress>
+          <IPAddress>192.168.1.217</IPAddress>
           <PrefixLength>NA</PrefixLength>
           <DefaultGateway>NA</DefaultGateway>
           <DNS>NA</DNS>
@@ -1474,7 +1623,7 @@
         <Networkadapter Name="NIC02">
           <Active>False</Active>
           <MACAddress>NA</MACAddress>
-          <IPAddress>172.16.0.33</IPAddress>
+          <IPAddress>NA</IPAddress>
           <PrefixLength>NA</PrefixLength>
           <DefaultGateway>NA</DefaultGateway>
           <DNS>NA</DNS>
@@ -1576,7 +1725,7 @@
         <Networkadapter Name="NIC01">
           <Active>True</Active>
           <MACAddress>NA</MACAddress>
-          <IPAddress>172.16.0.32</IPAddress>
+          <IPAddress>192.168.1.219</IPAddress>
           <PrefixLength>NA</PrefixLength>
           <DefaultGateway>NA</DefaultGateway>
           <DNS>NA</DNS>
@@ -1688,7 +1837,7 @@
         <Networkadapter Name="NIC01">
           <Active>True</Active>
           <MACAddress>NA</MACAddress>
-          <IPAddress>172.16.0.1</IPAddress>
+          <IPAddress>192.168.1.1</IPAddress>
           <PrefixLength>NA</PrefixLength>
           <DefaultGateway>NA</DefaultGateway>
           <DNS>NA</DNS>
@@ -1698,7 +1847,7 @@
         <Networkadapter Name="NIC02">
           <Active>True</Active>
           <MACAddress>NA</MACAddress>
-          <IPAddress>50.124.229.111</IPAddress>
+          <IPAddress>DHCP</IPAddress>
           <PrefixLength>NA</PrefixLength>
           <DefaultGateway>NA</DefaultGateway>
           <DNS>NA</DNS>
@@ -1800,7 +1949,7 @@
         <Networkadapter Name="NIC01">
           <Active>True</Active>
           <MACAddress>NA</MACAddress>
-          <IPAddress>172.16.0.31</IPAddress>
+          <IPAddress>192.168.1.6</IPAddress>
           <PrefixLength>NA</PrefixLength>
           <DefaultGateway>NA</DefaultGateway>
           <DNS>NA</DNS>
@@ -1869,11 +2018,13 @@
     <Server id="cae781b5-e94d-45b3-b0bc-962fc866e75d" Name="MGMT01" Virtual="True">
       <Active>True</Active>
       <ComputerName>FAMGMT01</ComputerName>
-      <Deploy>False</Deploy>
-      <DeployOrder>2</DeployOrder>
+      <Deploy>True</Deploy>
+      <DeployOrder>3</DeployOrder>
       <Finishaction>Reboot</Finishaction>
       <WaitForDeployment>True</WaitForDeployment>
-      <Virtual>True</Virtual>
+      <DependsOnServerID>1a103d8f-457b-440b-9721-e4b3e2ace69d</DependsOnServerID>
+      <Memory>1024</Memory>
+      <BuildMemory>1024</BuildMemory>
       <CPUCount>2</CPUCount>
       <DiffOrCreate>Diff</DiffOrCreate>
       <Type>UEFI</Type>
@@ -1911,7 +2062,7 @@
         <Networkadapter Name="NIC01">
           <Active>True</Active>
           <MACAddress>NA</MACAddress>
-          <IPAddress>172.16.0.29</IPAddress>
+          <IPAddress>192.168.1.212</IPAddress>
           <PrefixLength>NA</PrefixLength>
           <DefaultGateway>NA</DefaultGateway>
           <DNS>NA</DNS>
@@ -2023,7 +2174,7 @@
         <Networkadapter Name="NIC01">
           <Active>True</Active>
           <MACAddress>NA</MACAddress>
-          <IPAddress>172.16.0.1</IPAddress>
+          <IPAddress>192.168.1.1</IPAddress>
           <PrefixLength>NA</PrefixLength>
           <DefaultGateway>NA</DefaultGateway>
           <DNS>NA</DNS>
@@ -2033,7 +2184,7 @@
         <Networkadapter Name="NIC02">
           <Active>True</Active>
           <MACAddress>NA</MACAddress>
-          <IPAddress>50.124.229.111</IPAddress>
+          <IPAddress>DHCP</IPAddress>
           <PrefixLength>NA</PrefixLength>
           <DefaultGateway>NA</DefaultGateway>
           <DNS>NA</DNS>
@@ -2359,7 +2510,7 @@
     </Server>
     <Server id="c293c29a-94d2-4b7f-a395-538aa8699550" Name="vHOST01" Virtual="True">
       <Active>True</Active>
-      <ComputerName>FAHOST01</ComputerName>
+      <ComputerName>FAvHOST01</ComputerName>
       <Deploy>False</Deploy>
       <DeployOrder>2</DeployOrder>
       <Finishaction>Reboot</Finishaction>
@@ -2374,10 +2525,10 @@
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
       <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
-      <OOBName>FAHOST01.ilo</OOBName>
-      <OOBIPAddress>172.16.3.11</OOBIPAddress>
-      <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
-      <OOBDefaultGateway>172.16.0.1</OOBDefaultGateway>
+      <OOBName>NA</OOBName>
+      <OOBIPAddress>NA</OOBIPAddress>
+      <OOBSubnetMask>NA</OOBSubnetMask>
+      <OOBDefaultGateway>NA</OOBDefaultGateway>
       <OOBVLANID>NA</OOBVLANID>
       <Roles>
         <Role Name="Role01">
@@ -2402,9 +2553,9 @@
       <Networkadapters>
         <Networkadapter id="NIC01">
           <Active>True</Active>
-          <MACAddress>18:66:DA:EE:17:CC</MACAddress>
+          <MACAddress>NA</MACAddress>
           <Name>NIC01</Name>
-          <IPAddress>172.16.2.11</IPAddress>
+          <IPAddress>192.168.1.230</IPAddress>
           <PrefixLength>NA</PrefixLength>
           <DefaultGateway>NA</DefaultGateway>
           <DNS>NA</DNS>
@@ -2413,7 +2564,7 @@
         </Networkadapter>
         <Networkadapter id="NIC02">
           <Active>True</Active>
-          <MACAddress>18:66:DA:EE:17:CD</MACAddress>
+          <MACAddress>NA</MACAddress>
           <Name>NIC02</Name>
           <IPAddress>NA</IPAddress>
           <PrefixLength>NA</PrefixLength>
@@ -2424,7 +2575,7 @@
         </Networkadapter>
         <Networkadapter id="NIC03">
           <Active>True</Active>
-          <MACAddress>18:66:DA:EE:17:CE</MACAddress>
+          <MACAddress>NA</MACAddress>
           <Name>NIC03</Name>
           <IPAddress>NA</IPAddress>
           <PrefixLength>NA</PrefixLength>
@@ -2435,7 +2586,7 @@
         </Networkadapter>
         <Networkadapter id="NIC04">
           <Active>True</Active>
-          <MACAddress>18:66:DA:EE:17:CF</MACAddress>
+          <MACAddress>NA</MACAddress>
           <Name>NIC04</Name>
           <IPAddress>NA</IPAddress>
           <PrefixLength>NA</PrefixLength>
@@ -4402,56 +4553,6 @@
       </DataDisks>
     </Server>
   </Servers>
-  <VHDs>
-    <VHD id="9a7a8bcc-96c6-407c-aeee-db465657fa01" Name="WS2016_STANDARD_UI_UEFI_FABRIC_EVAL.vhdx">
-      <Active>False</Active>
-      <Description>NA</Description>
-      <Type>UEFI</Type>
-      <Version>WS2016</Version>
-      <Edition>Standard</Edition>
-      <UI>StandardUI</UI>
-      <Location>C:\Setup\VHD</Location>
-      <License>EVAL</License>
-      <SourceFile>Install.wim</SourceFile>
-      <OptionalData>NA</OptionalData>
-    </VHD>
-    <VHD id="12525894-c132-4a08-9bcd-51e94c362f67" Name="WS2016_DATACENTER_UI_UEFI_FABRIC_EVAL.vhdx">
-      <Active>False</Active>
-      <Description>NA</Description>
-      <Type>UEFI</Type>
-      <Version>WS2016</Version>
-      <Edition>Datacenter</Edition>
-      <UI>StandardUI</UI>
-      <Location>C:\Setup\VHD</Location>
-      <License>EVAL</License>
-      <SourceFile>Install.wim</SourceFile>
-      <OptionalData>NA</OptionalData>
-    </VHD>
-    <VHD id="288dce45-1127-493e-ae12-cdd7a0ea861d" Name="WS2016_G2_DataCenter_UI_Fabric.vhdx">
-      <Active>True</Active>
-      <Description>NA</Description>
-      <Type>UEFI</Type>
-      <Version>WS2016</Version>
-      <Edition>Datacenter</Edition>
-      <UI>StandardUI</UI>
-      <Location>C:\Setup\VHD</Location>
-      <License>VL</License>
-      <SourceFile>REFWS2016-001.wim</SourceFile>
-      <OptionalData>NA</OptionalData>
-    </VHD>
-    <VHD id="da187a7b-5ead-43ad-a83a-f6802a71edc3" Name="WS2016_G2_Standard_UI_Fabric.vhdx">
-      <Active>True</Active>
-      <Description>NA</Description>
-      <Type>UEFI</Type>
-      <Version>WS2016</Version>
-      <Edition>Standard</Edition>
-      <UI>StandardUI</UI>
-      <Location>C:\Setup\VHD</Location>
-      <License>VL</License>
-      <SourceFile>REFWS2016-003.wim</SourceFile>
-      <OptionalData>NA</OptionalData>
-    </VHD>
-  </VHDs>
   <Roles>
     <Role id="696ec790-c452-4b80-a442-76bb9aaa7b21" Name="DHCP">
       <Active>True</Active>
