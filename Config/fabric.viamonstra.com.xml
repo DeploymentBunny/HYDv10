@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<FABRIC id="fe11f36a-4f8c-413b-bd47-1a23849a1b6b" Name="FABRIC">
+<Settings id="fe11f36a-4f8c-413b-bd47-1a23849a1b6b" Name="fabric.viamonstra.com">
   <Customers>
     <Customer id="4e4b24cf-1f1b-4e1e-a526-ae89bdc0522b" Name="ViaMonstra">
       <Active>True</Active>
       <Contact>administrator@viamonstra.com</Contact>
+      <PrimaryDomainName>FABRIC</PrimaryDomainName>
       <OptionalData>NA</OptionalData>
     </Customer>
   </Customers>
@@ -76,7 +77,7 @@
     </ProductKey>
   </ProductKeys>
   <Networks>
-    <Network Id="9280db2e-6b5b-4770-9dd2-9e1f0292ea89" Name="FABRIC-MGMT">
+    <Network Id="9280db2e-6b5b-4770-9dd2-9e1f0292ea89" Name="MGMT">
       <Active>True</Active>
       <NetIP>192.168.1.0</NetIP>
       <Gateway>192.168.1.1</Gateway>
@@ -89,11 +90,11 @@
       <DHCPStart>192.168.1.101</DHCPStart>
       <DHCPEnd>192.168.1.150</DHCPEnd>
       <DHCPReserv>NA</DHCPReserv>
-      <VLAN>0</VLAN>
+      <VLAN>3010</VLAN>
       <RDNS>1.168.192.in-addr.arpa</RDNS>
       <OptionalData>NA</OptionalData>
     </Network>
-    <Network Id="67a81f5f-6c71-4811-9288-42b2392e3035" Name="FABRIC-LiveMig">
+    <Network Id="67a81f5f-6c71-4811-9288-42b2392e3035" Name="LiveMig">
       <Active>True</Active>
       <NetIP>192.168.2.0</NetIP>
       <Gateway>NA</Gateway>
@@ -106,11 +107,11 @@
       <DHCPStart>NA</DHCPStart>
       <DHCPEnd>NA</DHCPEnd>
       <DHCPReserv>NA</DHCPReserv>
-      <VLAN>0</VLAN>
+      <VLAN>3010</VLAN>
       <RDNS>2.168.192.in-addr.arpa</RDNS>
       <OptionalData>NA</OptionalData>
     </Network>
-    <Network Id="b255d80c-0ea2-4fce-9591-3475618a3965" Name="FABRIC-Heartbeat">
+    <Network Id="b255d80c-0ea2-4fce-9591-3475618a3965" Name="Heartbeat">
       <Active>True</Active>
       <NetIP>192.168.3.0</NetIP>
       <Gateway>NA</Gateway>
@@ -123,11 +124,11 @@
       <DHCPStart>NA</DHCPStart>
       <DHCPEnd>NA</DHCPEnd>
       <DHCPReserv>NA</DHCPReserv>
-      <VLAN>0</VLAN>
+      <VLAN>3010</VLAN>
       <RDNS>3.168.192.in-addr.arpa</RDNS>
       <OptionalData>NA</OptionalData>
     </Network>
-    <Network Id="c6e399f9-5f6e-40bf-81ad-752aa6012582" Name="FABRIC-PA">
+    <Network Id="c6e399f9-5f6e-40bf-81ad-752aa6012582" Name="PA">
       <Active>True</Active>
       <NetIP>192.168.4.0</NetIP>
       <Gateway>NA</Gateway>
@@ -140,11 +141,11 @@
       <DHCPStart>NA</DHCPStart>
       <DHCPEnd>NA</DHCPEnd>
       <DHCPReserv>NA</DHCPReserv>
-      <VLAN>0</VLAN>
+      <VLAN>3010</VLAN>
       <RDNS>4.168.192.in-addr.arpa</RDNS>
       <OptionalData>NA</OptionalData>
     </Network>
-    <Network Id="00a38fb0-96cf-4828-acad-4188b46559e7" Name="FABRIC-SMB1">
+    <Network Id="00a38fb0-96cf-4828-acad-4188b46559e7" Name="SMB1">
       <Active>True</Active>
       <NetIP>192.168.5.0</NetIP>
       <Gateway>NA</Gateway>
@@ -157,11 +158,11 @@
       <DHCPStart>NA</DHCPStart>
       <DHCPEnd>NA</DHCPEnd>
       <DHCPReserv>NA</DHCPReserv>
-      <VLAN>0</VLAN>
+      <VLAN>3010</VLAN>
       <RDNS>5.168.192.in-addr.arpa</RDNS>
       <OptionalData>NA</OptionalData>
     </Network>
-    <Network Id="ae27ca2a-7a85-4169-bb07-ca1c0e92969d" Name="FABRIC-SMB2">
+    <Network Id="ae27ca2a-7a85-4169-bb07-ca1c0e92969d" Name="SMB2">
       <Active>True</Active>
       <NetIP>192.168.6.0</NetIP>
       <Gateway>NA</Gateway>
@@ -174,7 +175,7 @@
       <DHCPStart>NA</DHCPStart>
       <DHCPEnd>NA</DHCPEnd>
       <DHCPReserv>NA</DHCPReserv>
-      <VLAN>0</VLAN>
+      <VLAN>3010</VLAN>
       <RDNS>6.168.192.in-addr.arpa</RDNS>
       <OptionalData>NA</OptionalData>
     </Network>
@@ -214,18 +215,18 @@
     </Network>
   </Networks>
   <Domains>
-    <Domain id="b203131c-170f-45a4-be62-3066dcd3fe6e" Name="FABRIC">
+    <Domain id="b203131c-170f-45a4-be62-3066dcd3fe6e" Name='FABRIC'>
       <Active>True</Active>
       <DNSDomain>fabric.viamonstra.com</DNSDomain>
       <DNSDomainExternal>viamonstra.com</DNSDomainExternal>
-      <DomainNetBios>FABRIC</DomainNetBios>
+      <DomainNetBios>viamonstra</DomainNetBios>
       <DomainAdmin>Administrator</DomainAdmin>
       <DomainAdminPassword>P@ssw0rd</DomainAdminPassword>
-      <DomainAdminDomain>FABRIC</DomainAdminDomain>
+      <DomainAdminDomain>viamonstra</DomainAdminDomain>
       <DomainDS>dc=fabric,dc=viamonstra,dc=com</DomainDS>
-      <BaseOU>Fabric</BaseOU>
-      <MachienObjectOU>OU=Unassigned Servers,OU=Servers,OU=Computers,OU=Fabric,dc=viamonstra,dc=com</MachienObjectOU>
-      <SiteName>Fabric-HQ</SiteName>
+      <BaseOU>fabric</BaseOU>
+      <MachienObjectOU>OU=Unassigned Servers,OU=Servers,OU=Computers,OU=fabric,dc=fabric,dc=viamonstra,dc=com</MachienObjectOU>
+      <SiteName>fabric-HQ</SiteName>
       <OptionalData>NA</OptionalData>
       <DomainOUs>
         <DomainOU Name="Accounts">
@@ -657,7 +658,7 @@
       <Edition>Standard</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>NA</OOBName>
       <OOBIPAddress>NA</OOBIPAddress>
       <OOBSubnetMask>NA</OOBSubnetMask>
@@ -1022,7 +1023,7 @@
       <Edition>Standard</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Generic Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Generic Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>NA</OOBName>
       <OOBIPAddress>NA</OOBIPAddress>
       <OOBSubnetMask>NA</OOBSubnetMask>
@@ -1135,7 +1136,7 @@
       <Edition>Standard</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Generic Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Generic Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>NA</OOBName>
       <OOBIPAddress>NA</OOBIPAddress>
       <OOBSubnetMask>NA</OOBSubnetMask>
@@ -1247,7 +1248,7 @@
       <Edition>Standard</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=WSUS Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=WSUS Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>NA</OOBName>
       <OOBIPAddress>NA</OOBIPAddress>
       <OOBSubnetMask>NA</OOBSubnetMask>
@@ -1359,7 +1360,7 @@
       <Edition>Standard</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=System Center Virtual Machine Manager Servers,OU=System Center Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=System Center Virtual Machine Manager Servers,OU=System Center Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>NA</OOBName>
       <OOBIPAddress>NA</OOBIPAddress>
       <OOBSubnetMask>NA</OOBSubnetMask>
@@ -1471,7 +1472,7 @@
       <Edition>Standard</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=System Center Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=System Center Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>NA</OOBName>
       <OOBIPAddress>NA</OOBIPAddress>
       <OOBSubnetMask>NA</OOBSubnetMask>
@@ -1583,7 +1584,7 @@
       <Edition>Standard</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=System Center Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=System Center Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>NA</OOBName>
       <OOBIPAddress>NA</OOBIPAddress>
       <OOBSubnetMask>NA</OOBSubnetMask>
@@ -1695,7 +1696,7 @@
       <Edition>Standard</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=System Center DPM Server,OU=System Center Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=System Center DPM Server,OU=System Center Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>NA</OOBName>
       <OOBIPAddress>NA</OOBIPAddress>
       <OOBSubnetMask>NA</OOBSubnetMask>
@@ -1807,7 +1808,7 @@
       <Edition>Standard</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Routing and Remote Access Servers,OU=Edge Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Routing and Remote Access Servers,OU=Edge Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>NA</OOBName>
       <OOBIPAddress>NA</OOBIPAddress>
       <OOBSubnetMask>NA</OOBSubnetMask>
@@ -1919,7 +1920,7 @@
       <Edition>Standard</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Remote Desktop Gateway Servers,OU=Edge Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Remote Desktop Gateway Servers,OU=Edge Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>NA</OOBName>
       <OOBIPAddress>NA</OOBIPAddress>
       <OOBSubnetMask>NA</OOBSubnetMask>
@@ -2032,7 +2033,7 @@
       <Edition>Standard</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>NA</OOBName>
       <OOBIPAddress>NA</OOBIPAddress>
       <OOBSubnetMask>NA</OOBSubnetMask>
@@ -2144,7 +2145,7 @@
       <Edition>Standard</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Routing and Remote Access Servers,OU=Edge Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Routing and Remote Access Servers,OU=Edge Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>NA</OOBName>
       <OOBIPAddress>NA</OOBIPAddress>
       <OOBSubnetMask>NA</OOBSubnetMask>
@@ -2256,7 +2257,7 @@
       <Edition>Datacenter</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>FAHOST01.ilo</OOBName>
       <OOBIPAddress>172.16.3.11</OOBIPAddress>
       <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
@@ -2392,7 +2393,7 @@
       <Edition>Datacenter</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>FAHOST02.ilo</OOBName>
       <OOBIPAddress>172.16.3.12</OOBIPAddress>
       <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
@@ -2524,7 +2525,7 @@
       <Edition>Datacenter</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>NA</OOBName>
       <OOBIPAddress>NA</OOBIPAddress>
       <OOBSubnetMask>NA</OOBSubnetMask>
@@ -2660,7 +2661,7 @@
       <Edition>Datacenter</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>FAHOST02.ilo</OOBName>
       <OOBIPAddress>172.16.3.12</OOBIPAddress>
       <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
@@ -2792,7 +2793,7 @@
       <Edition>Datacenter</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>FAHOST11.ilo</OOBName>
       <OOBIPAddress>172.16.3.31</OOBIPAddress>
       <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
@@ -2944,7 +2945,7 @@
       <Edition>Datacenter</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>FAHOST12.ilo</OOBName>
       <OOBIPAddress>172.16.3.32</OOBIPAddress>
       <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
@@ -3096,7 +3097,7 @@
       <Edition>Datacenter</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>FAHOST13.ilo</OOBName>
       <OOBIPAddress>172.16.3.33</OOBIPAddress>
       <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
@@ -3254,7 +3255,7 @@
       <Edition>Datacenter</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>FAHOST14.ilo</OOBName>
       <OOBIPAddress>172.16.3.34</OOBIPAddress>
       <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
@@ -3412,7 +3413,7 @@
       <Edition>Datacenter</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>FAHOST11.ilo</OOBName>
       <OOBIPAddress>172.16.3.31</OOBIPAddress>
       <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
@@ -3564,7 +3565,7 @@
       <Edition>Datacenter</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>FAHOST12.ilo</OOBName>
       <OOBIPAddress>172.16.3.32</OOBIPAddress>
       <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
@@ -3716,7 +3717,7 @@
       <Edition>Datacenter</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>FAHOST13.ilo</OOBName>
       <OOBIPAddress>172.16.3.33</OOBIPAddress>
       <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
@@ -3874,7 +3875,7 @@
       <Edition>Datacenter</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>FAHOST14.ilo</OOBName>
       <OOBIPAddress>172.16.3.34</OOBIPAddress>
       <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
@@ -4032,7 +4033,7 @@
       <Edition>Datacenter</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>FAHOST01.ilo</OOBName>
       <OOBIPAddress>172.16.3.11</OOBIPAddress>
       <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
@@ -4168,7 +4169,7 @@
       <Edition>Datacenter</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>FAHOST02.ilo</OOBName>
       <OOBIPAddress>172.16.3.12</OOBIPAddress>
       <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
@@ -4300,7 +4301,7 @@
       <Edition>Datacenter</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>FAHOST01.ilo</OOBName>
       <OOBIPAddress>172.16.3.11</OOBIPAddress>
       <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
@@ -4436,7 +4437,7 @@
       <Edition>Datacenter</Edition>
       <UI>StandardUI</UI>
       <DomainJoined>True</DomainJoined>
-      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=FABRIC,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
+      <MachineObjectOU>OU=Hyper-V Servers,OU=Infrastructure Servers,OU=Servers,OU=Computers,OU=fabric,DC=fabric,dc=viamonstra,dc=com</MachineObjectOU>
       <OOBName>FAHOST02.ilo</OOBName>
       <OOBIPAddress>172.16.3.12</OOBIPAddress>
       <OOBSubnetMask>255.255.252.0</OOBSubnetMask>
@@ -4700,4 +4701,4 @@
       </Config>
     </Service>
   </Services>
-</FABRIC>
+</Settings>

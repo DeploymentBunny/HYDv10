@@ -73,22 +73,22 @@ Import-Module C:\setup\Functions\VIAHypervModule.psm1 -Force
 Import-Module C:\setup\Functions\VIADeployModule.psm1 -Force
 Import-Module C:\Setup\Functions\VIAUtilityModule.psm1 -Force
 
-#Set Values
-$ServerName = $Server
-
 #Read data from Bootstrap XML
-$Global:BootstrapFile = "C:\Setup\HYDv10\Config\Bootstrap.xml"
-[xml]$Global:Bootstrap = Get-Content $BootstrapFile -ErrorAction Stop
+Write-Verbose "Reading $BootstrapFile"
+[xml]$Bootstrap = Get-Content $BootstrapFile -ErrorAction Stop
 
 #Read data from XML
 Write-Verbose "Reading $SettingsFile"
 [xml]$Settings = Get-Content $SettingsFile
-$CustomerData = $Settings.FABRIC.Customers.Customer
-$CommonSettingData = $Settings.FABRIC.CommonSettings.CommonSetting
-$ProductKeysData = $Settings.FABRIC.ProductKeys.ProductKey
-$NetworksData = $Settings.FABRIC.Networks.Network
-$DomainData = $Settings.FABRIC.Domains.Domain | Where-Object -Property Name -EQ -Value $DomainName
-$ServerData = $Settings.FABRIC.Servers.Server | Where-Object -Property Name -EQ -Value $ServerName
+
+#Set Values
+$ServerName = $Server
+$CustomerData = $Settings.settings.Customers.Customer
+$CommonSettingData = $Settings.settings.CommonSettings.CommonSetting
+$ProductKeysData = $Settings.settings.ProductKeys.ProductKey
+$NetworksData = $Settings.settings.Networks.Network
+$DomainData = $Settings.settings.Domains.Domain | Where-Object -Property Name -EQ -Value $DomainName
+$ServerData = $Settings.settings.Servers.Server | Where-Object -Property Name -EQ -Value $ServerName
 
 $NIC01 = $ServerData.Networkadapters.Networkadapter | Where-Object -Property Name -EQ -Value NIC01
 $NIC01RelatedData = $NetworksData | Where-Object -Property ID -EQ -Value $NIC01.ConnectedToNetwork
@@ -108,7 +108,7 @@ If($($ServerData.DomainJoined) -eq 'true'){$DomainOrWorkGroup = 'Domain'}else{$D
 
 if($Roles -eq $Null){
     foreach($Role in $ServerData.Roles.Role){
-        $RoleConfig = $Settings.FABRIC.Roles.Role | Where-Object Active -EQ $true | Where-Object id -EQ $Role.RoleUUID
+        $RoleConfig = $Settings.settings.Roles.Role | Where-Object Active -EQ $true | Where-Object id -EQ $Role.RoleUUID
         [array]$Roles += $RoleConfig.name
     }
 }
@@ -165,7 +165,8 @@ Remove-Item -Path $VIASetupCompletecmd.FullName
 #Set VLANid for NIC01
 $ConnectedtoNetwork = $NetworksData | Where-Object -Property id -EQ -Value $NIC01RelatedData.id
 if($ConnectedtoNetwork.VLAN -ne '0'){
-    Set-VMNetworkAdapterVlan -VMName $($ServerData.ComputerName) -VMNetworkAdapterName $NIC01.Name -VlanId $ConnectedtoNetwork.VLAN
+    Write-Verbose "Setting VLAN $($ConnectedtoNetwork.VLAN)"
+    Set-VMNetworkAdapterVlan -VMName $($ServerData.ComputerName) -VlanId $ConnectedtoNetwork.VLAN -Access
 }
 
 #Deploy VM
@@ -250,7 +251,6 @@ $Action = "Mount Media ISO"
 Update-VIALog -Data "Action: $Action"
 Set-VMDvdDrive -VMName $($ServerData.ComputerName) -Path $MediaISO
 
-
 #TBA
 #Configure Nic Teams
 $Teams = $ServerData.NetworkTeams.Networkteam | Where-Object -Property Active -EQ -Value $True
@@ -259,6 +259,7 @@ if(((($Teams.Name).count) -ge '1') -eq $true){
         $Team
     }
 }
+
 
 
 #Deploy VM end
@@ -371,14 +372,14 @@ foreach($Role in $Roles){
 
             #Add external Network Adapter
             $InternetID = '80c41589-c5fc-4785-a673-e8b08996cfc2'
-            $ExternalNicName = (($Settings.FABRIC.Servers.Server | Where-Object Name -EQ SNAT01).NetworkAdapters.NetworkAdapter | Where-Object ConnectedToNetwork -EQ $InternetID).Name
-            $ExternalNetname = ($Settings.FABRIC.Networks.Network | Where-Object id -EQ $InternetID).Name
-            $RDGWIntIP = (($Settings.FABRIC.Servers.Server | Where-Object Name -EQ RDGW01).NetworkAdapters.NetworkAdapter | Where-Object Name -EQ NIC01).IPAddress
-            $RDGWExtIP = (($Settings.FABRIC.Servers.Server | Where-Object Name -EQ RRAS01).NetworkAdapters.NetworkAdapter | Where-Object Name -EQ NIC02).IPAddress
+            $ExternalNicName = (($Settings.settings.Servers.Server | Where-Object Name -EQ SNAT01).NetworkAdapters.NetworkAdapter | Where-Object ConnectedToNetwork -EQ $InternetID).Name
+            $ExternalNetname = ($Settings.settings.Networks.Network | Where-Object id -EQ $InternetID).Name
+            $RDGWIntIP = (($Settings.settings.Servers.Server | Where-Object Name -EQ RDGW01).NetworkAdapters.NetworkAdapter | Where-Object Name -EQ NIC01).IPAddress
+            $RDGWExtIP = (($Settings.settings.Servers.Server | Where-Object Name -EQ RRAS01).NetworkAdapters.NetworkAdapter | Where-Object Name -EQ NIC02).IPAddress
             
             #Calculating Networkdata
             $FabricNetworkID = '9280db2e-6b5b-4770-9dd2-9e1f0292ea89'
-            $FabricNetwork = $Settings.FABRIC.Networks.Network | Where-Object -Property ID -EQ -Value $FabricNetworkID
+            $FabricNetwork = $Settings.settings.Networks.Network | Where-Object -Property ID -EQ -Value $FabricNetworkID
             $InternalIPInterfaceAddressPrefix = ($FabricNetwork.NetIP + '/' + $FabricNetwork.SubNet)
             $ExternalIPAddress = '0.0.0.0'
             $ExternalPort = '443'
@@ -420,14 +421,14 @@ foreach($Role in $Roles){
         'SNAT'{
             #Add external Network Adapter
             $InternetID = '80c41589-c5fc-4785-a673-e8b08996cfc2'
-            $ExternalNicName = (($Settings.FABRIC.Servers.Server | Where-Object Name -EQ SNAT01).NetworkAdapters.NetworkAdapter | Where-Object ConnectedToNetwork -EQ $InternetID).Name
-            $ExternalNetname = ($Settings.FABRIC.Networks.Network | Where-Object id -EQ $InternetID).Name
-            $RDGWIntIP = (($Settings.FABRIC.Servers.Server | Where-Object Name -EQ RDGW01).NetworkAdapters.NetworkAdapter | Where-Object Name -EQ NIC01).IPAddress
-            $RDGWExtIP = (($Settings.FABRIC.Servers.Server | Where-Object Name -EQ SNAT01).NetworkAdapters.NetworkAdapter | Where-Object Name -EQ NIC02).IPAddress
+            $ExternalNicName = (($Settings.settings.Servers.Server | Where-Object Name -EQ SNAT01).NetworkAdapters.NetworkAdapter | Where-Object ConnectedToNetwork -EQ $InternetID).Name
+            $ExternalNetname = ($Settings.settings.Networks.Network | Where-Object id -EQ $InternetID).Name
+            $RDGWIntIP = (($Settings.settings.Servers.Server | Where-Object Name -EQ RDGW01).NetworkAdapters.NetworkAdapter | Where-Object Name -EQ NIC01).IPAddress
+            $RDGWExtIP = (($Settings.settings.Servers.Server | Where-Object Name -EQ SNAT01).NetworkAdapters.NetworkAdapter | Where-Object Name -EQ NIC02).IPAddress
             
             #Calculating Networkdata
             $FabricNetworkID = '9280db2e-6b5b-4770-9dd2-9e1f0292ea89'
-            $FabricNetwork = $Settings.FABRIC.Networks.Network | Where-Object -Property ID -EQ -Value $FabricNetworkID
+            $FabricNetwork = $Settings.settings.Networks.Network | Where-Object -Property ID -EQ -Value $FabricNetworkID
             $InternalIPInterfaceAddressPrefix = ($FabricNetwork.NetIP + '/' + $FabricNetwork.SubNet)
             $ExternalIPAddress = '0.0.0.0'
             $ExternalPort = '443'
@@ -478,7 +479,7 @@ foreach($Role in $Roles){
             #Action
             $Action = "Set vars for $Role"
             Write-Verbose "Action: $Action - $Role"
-            $RoleConfig = ($Settings.FABRIC.Roles.Role | Where-Object Name -EQ $Role | Where-Object Active -EQ $true)
+            $RoleConfig = ($Settings.settings.Roles.Role | Where-Object Name -EQ $Role | Where-Object Active -EQ $true)
             $ServerRoleConfig = ($ServerData.Roles.Role | Where-Object RoleUUID -EQ $RoleConfig.id).config
             Write-Verbose "Action: $Action - $Role - $ServerRoleConfig"
             switch ($ServerRoleConfig){
@@ -487,8 +488,8 @@ foreach($Role in $Roles){
                     $FQDN = $DomainData.DNSDomain
                     $NetBiosDomainName = $DomainData.DomainNetBios
                     $SiteName = $DomainData.SiteName
-                    $DomainForestLevel = ($Settings.FABRIC.Roles.Role | Where-Object Name -EQ $Role | Where-Object Active -EQ $true).config.$ServerRoleConfig.DomainForestLevel
-                    $DataDiskName = ($Settings.FABRIC.Roles.Role | Where-Object Name -EQ $Role | Where-Object Active -EQ $true).config.$ServerRoleConfig.datadisk
+                    $DomainForestLevel = ($Settings.settings.Roles.Role | Where-Object Name -EQ $Role | Where-Object Active -EQ $true).config.$ServerRoleConfig.DomainForestLevel
+                    $DataDiskName = ($Settings.settings.Roles.Role | Where-Object Name -EQ $Role | Where-Object Active -EQ $true).config.$ServerRoleConfig.datadisk
 
                     $ScriptBlock = {
                         $DatabaseRoot = $(Get-Volume -FileSystemLabel $Using:DataDiskName).DriveLetter + ":\"
@@ -566,7 +567,7 @@ foreach($Role in $Roles){
                     $Action = "Adding default Rev DNS Zones"
                     Write-Verbose "Action: $Action"
                     Start-Sleep 60
-                    $RevDNSZones = ($Settings.Fabric.Networks.Network| Where-Object -Property RDNS -Like *in-addr.arpa).rdns
+                    $RevDNSZones = ($Settings.settings.Networks.Network| Where-Object -Property RDNS -Like *in-addr.arpa).rdns
                     foreach($RevDNSZone in $RevDNSZones){
                         Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADDSRevDNSZone.ps1 -ArgumentList $RevDNSZone -ErrorAction Continue -Verbose -Credential $domainCred
                     }
@@ -622,8 +623,8 @@ foreach($Role in $Roles){
                     $FQDN = $DomainData.DNSDomain
                     $NetBiosDomainName = $DomainData.DomainNetBios
                     $SiteName = $DomainData.SiteName
-                    $DomainForestLevel = ($Settings.FABRIC.Roles.Role | Where-Object Name -EQ $Role | Where-Object Active -EQ $true).config.$ServerRoleConfig.DomainForestLevel
-                    $DataDiskName = ($Settings.FABRIC.Roles.Role | Where-Object Name -EQ $Role | Where-Object Active -EQ $true).config.$ServerRoleConfig.datadisk
+                    $DomainForestLevel = ($Settings.settings.Roles.Role | Where-Object Name -EQ $Role | Where-Object Active -EQ $true).config.$ServerRoleConfig.DomainForestLevel
+                    $DataDiskName = ($Settings.settings.Roles.Role | Where-Object Name -EQ $Role | Where-Object Active -EQ $true).config.$ServerRoleConfig.datadisk
 
                     $ScriptBlock = {
                         $DatabaseRoot = $(Get-Volume -FileSystemLabel $Using:DataDiskName).DriveLetter + ":\"
@@ -659,17 +660,6 @@ foreach($Role in $Roles){
                     } -Credential $domainCred
 
                     #Action
-                    $Action = "Enable Active Directory Optional Features"
-                    Write-Verbose "Action: $Action"
-                    Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
-                        [cmdletbinding(SupportsShouldProcess=$True)]
-                        Param()
-                        $FQDN = (Get-ADDomain).DNSRoot
-                        $DomainDN = (Get-ADDomain).DistinguishedName
-                        Enable-ADOptionalFeature –Identity "CN=Recycle Bin Feature,CN=Optional Features,CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,$DomainDN" –Scope ForestOrConfigurationSet –Target "$FQDN" -Confirm:$false
-                    } -Credential $domainCred
-
-                    #Action
                     #Check if this is needed, seems to be set in 2016
                     $Action = "Enable Automatic DFSR Recovery"
                     Write-Verbose "Action: $Action"
@@ -692,7 +682,7 @@ foreach($Role in $Roles){
             #Action
             $Action = "Set vars for $Role"
             Write-Verbose "Action: $Action - $Role"
-            $RoleConfig = ($Settings.FABRIC.Roles.Role | Where-Object Name -EQ $Role | Where-Object Active -EQ $true)
+            $RoleConfig = ($Settings.settings.Roles.Role | Where-Object Name -EQ $Role | Where-Object Active -EQ $true)
             $ServerRoleConfig = ($ServerData.Roles.Role | Where-Object RoleUUID -EQ $RoleConfig.id).config
             Write-Verbose "Action: $Action - $Role - $ServerRoleConfig"
 
@@ -720,7 +710,7 @@ foreach($Role in $Roles){
                     $Scopes = Get-DhcpServerv4Scope -ComputerName $PriDHCPServer
                     $Scopes.ScopeId
                     Add-DhcpServerv4Failover -ComputerName $PriDHCPServer -Name ($PriDHCPServer + '-' +$SecDHCPServer) -PartnerServer $SecDHCPServer -ScopeId $Scopes.ScopeId -LoadBalancePercent 70 -MaxClientLeadTime 2:00:00 -AutoStateTransition $true -StateSwitchInterval 2:00:00
-                } -Credential $domainCred -ArgumentList ($Settings.FABRIC.Servers.Server | Where-Object -Property Name -EQ ADDS01).computername,($Settings.FABRIC.Servers.Server | Where-Object -Property Name -EQ ADDS02).computername
+                } -Credential $domainCred -ArgumentList ($Settings.settings.Servers.Server | Where-Object -Property Name -EQ ADDS01).computername,($Settings.settings.Servers.Server | Where-Object -Property Name -EQ ADDS02).computername
             }
             #Action
             $Action = "Configure DHCP..."
@@ -804,7 +794,7 @@ foreach($Role in $Roles){
             $Action = "Install Application"
             Update-VIALog -Data "Action: $Action - $App"
             $ServiceAccount = $DomainData.DomainAccounts.DomainAccount| Where-Object AccountDescription -EQ 'Service Account for SCVMM'
-            $Service01 = $Settings.FABRIC.Services.Service | Where-Object Name -EQ SCVMM2016
+            $Service01 = $Settings.settings.Services.Service | Where-Object Name -EQ SCVMM2016
             $Source = 'D:\SC 2016 VMM\setup.exe'
             $SCVMRole = 'Full'
             $SCVMMDomain = $DomainName
@@ -867,7 +857,7 @@ foreach($Role in $Roles){
             #Install OpsMgr Server
             $ServiceAccount = $DomainData.DomainAccounts.DomainAccount| Where-Object AccountDescription -EQ 'Service Account for SCOM'
             $ActionAccount = $DomainData.DomainAccounts.DomainAccount| Where-Object AccountDescription -EQ 'Action Account for SCOM'
-            $Service01 = $Settings.FABRIC.Services.Service | Where-Object Name -EQ SCOM2016
+            $Service01 = $Settings.settings.Services.Service | Where-Object Name -EQ SCOM2016
             $Source = 'D:\SC 2016 OM\setup.exe'
             $SCOMRole = 'OMServer'
             Invoke-Command -VMName $($ServerData.ComputerName) -Scriptblock{
@@ -957,7 +947,7 @@ foreach($Role in $Roles){
             #Action
             $App = "SCOM 2016"
             $Action = "Add Product Key and Activate SCOM"
-            $ProductKey = ($Settings.Fabric.ProductKeys.ProductKey | Where-Object -Property Name -EQ -Value ProduktKeySC2016).key
+            $ProductKey = ($Settings.settings.ProductKeys.ProductKey | Where-Object -Property Name -EQ -Value ProduktKeySC2016).key
             if($ProductKey -ne 'NA'){
                 Update-VIALog -Data "Action: $Action - $App"
                 Invoke-Command -VMName $ServerData.ComputerName -Scriptblock{
@@ -976,7 +966,7 @@ foreach($Role in $Roles){
         }
         'SCDP'{
             #Get Servicedata
-            $ServicesData = $Settings.FABRIC.Services.Service | Where-Object -Property Name -EQ -Value 'SCDP2016'
+            $ServicesData = $Settings.settings.Services.Service | Where-Object -Property Name -EQ -Value 'SCDP2016'
             $SQLINSTANCENAME = $ServicesData.config.SQLINSTANCENAME
             $SQLINSTANCEDIR = "E:\$($ServicesData.config.SQLINSTANCEDIR)"
 
