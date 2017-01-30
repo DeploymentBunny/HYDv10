@@ -65,7 +65,6 @@ Param
 
 #Read data from Bootstrap XML
 Write-Verbose "Reading $BootstrapFile"
-$Global:BootstrapFile = "C:\Setup\HYDv10\Config\Bootstrap.xml"
 [xml]$Global:Bootstrap = Get-Content $BootstrapFile -ErrorAction Stop
 
 #Read data from XML

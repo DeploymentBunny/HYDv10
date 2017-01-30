@@ -79,7 +79,7 @@ Write-Verbose "Reading $BootstrapFile"
 
 #Read data from XML
 Write-Verbose "Reading $SettingsFile"
-[xml]$Settings = Get-Content $SettingsFile
+[xml]$Settings = Get-Content $SettingsFile -ErrorAction Stop
 
 #Set Values
 $ServerName = $Server
@@ -297,6 +297,30 @@ foreach($Role in $Roles){
             #Restart
             Update-VIALog -Data "Restart $($ServerData.ComputerName)"
             Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
+            Wait-VIAServiceToRun -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
+        }
+        'VCompute'{
+            #Stop VM
+            Stop-VM -Name $($ServerData.ComputerName)
+
+            #Configure for Hyper-v in Hyper-V
+            Enable-VIANestedHyperV -VMname $($ServerData.ComputerName)
+
+            #Restart
+            Update-VIALog -Data "Restart $($ServerData.ComputerName)"
+            Wait-VIAVMStart -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
+            Wait-VIAServiceToRun -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
+        }
+        'vConverged'{
+            #Stop VM
+            Stop-VM -Name $($ServerData.ComputerName)
+
+            #Configure for Hyper-v in Hyper-V
+            Enable-VIANestedHyperV -VMname $($ServerData.ComputerName)
+
+            #Restart
+            Update-VIALog -Data "Restart $($ServerData.ComputerName)"
+            Wait-VIAVMStart -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
             Wait-VIAServiceToRun -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
         }
         Default {

@@ -220,6 +220,27 @@ if($MDTIntegration -eq "YES"){
 
 switch ($Role)
 {
+    'VCompute'
+    {
+        Write-Verbose "Adding Windows Features for selected role: $Role"
+        $ServicesToInstall = @(
+        "Hyper-V",
+        "Failover-Clustering"
+        )
+        Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
+    }
+    'vConverged'
+    {
+        Write-Verbose "Adding Windows Features for selected role: $Role"
+        $ServicesToInstall = @(
+        "FS-FileServer",
+        "Data-Center-Bridging",
+        "Failover-Clustering",
+        "FS-Data-Deduplication",
+        "Hyper-V"
+        )
+        Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
+    }
     LABHOST
     {
         Write-Verbose "Adding Windows Features for selected role: $Role"
@@ -441,7 +462,8 @@ switch ($Role)
         $Arguments = " /Online /Enable-feature /All /FeatureName:Microsoft-Hyper-V /FeatureName:Microsoft-Hyper-V-Management-PowerShell /quiet /norestart"
         Invoke-VIAExe -Executable $Executable -Arguments $Arguments
     }
-    SCOR{
+    SCOR
+    {
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Web-Common-Http",
@@ -455,7 +477,8 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools
     }
-    'SCOM'{
+    'SCOM'
+    {
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Web-Default-Doc",          
