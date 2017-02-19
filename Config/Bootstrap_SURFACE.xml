@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BootStrap>
+ <CommonSettings>
+  <CommonSetting id="005cc9f0-872c-443e-9c93-fb27824b70cf" Name="CommonSetting">
+   <Active>True</Active>
+   <MajorVersion>10</MajorVersion>
+   <MinorVersion>1</MinorVersion>
+   <Solution>HYDv10</Solution>
+   <CodeName>Genesis</CodeName>
+   <VHDSize>90000</VHDSize>
+   <OptionalData>NA</OptionalData>
+   <Logpath>C:\Setup\HYDv10\Log\HYDv10.log</Logpath>
+   <VMSwitch>UplinkSwitchNAT</VMSwitch>
+   <VMSwitchInternet>UplinkSwitch</VMSwitchInternet>
+  </CommonSetting>
+ </CommonSettings>
+ <VHDs>
+  <VHD id="9a7a8bcc-96c6-407c-aeee-db465657fa01" Name="WS2016_Standard_UEFI_GUI_EVAL_Fabric.vhdx">
+   <Active>False</Active>
+   <Version>WS2016</Version>
+   <Type>UEFI</Type>
+   <Edition>Standard</Edition>
+   <UI>GUI</UI>
+   <Path>C:\Setup\VHD</Path>
+   <License>EVAL</License>
+   <Source>ISO</Source>
+   <Index>2</Index>
+   <Usage>Fabric</Usage>
+   <Extension>VHDX</Extension>
+   <OptionalData>NA</OptionalData>
+   <RelatedItem>36083712-8cac-4f8a-98fb-a7adab2648cb</RelatedItem>
+  </VHD>
+  <VHD id="12525894-c132-4a08-9bcd-51e94c362f67" Name="WS2016_Datacenter_UEFI_GUI_EVAL_Fabric.vhdx">
+   <Active>True</Active>
+   <Type>UEFI</Type>
+   <Version>WS2016</Version>
+   <Edition>Datacenter</Edition>
+   <UI>GUI</UI>
+   <Path>C:\Setup\VHD</Path>
+   <License>EVAL</License>
+   <Source>ISO</Source>
+   <Index>4</Index>
+   <Usage>Fabric</Usage>
+   <Extension>VHDX</Extension>
+   <OptionalData>NA</OptionalData>
+   <RelatedItem>36083712-8cac-4f8a-98fb-a7adab2648cb</RelatedItem>
+  </VHD>
+  <VHD id="54309b8c-9c71-47c3-ad62-6a3f563ea7a4" Name="WS2016_Standard_UEFI_CORE_EVAL_Fabric.vhdx">
+   <Active>False</Active>
+   <Type>UEFI</Type>
+   <Version>WS2016</Version>
+   <Edition>Standard</Edition>
+   <UI>CORE</UI>
+   <Path>C:\Setup\VHD</Path>
+   <License>EVAL</License>
+   <Source>ISO</Source>
+   <Index>1</Index>
+   <Usage>Fabric</Usage>
+   <Extension>VHDX</Extension>
+   <OptionalData>NA</OptionalData>
+   <RelatedItem>36083712-8cac-4f8a-98fb-a7adab2648cb</RelatedItem>
+  </VHD>
+  <VHD id="253882b6-b9fc-45e9-88f6-1a0b49512b53" Name="WS2016_Datacenter_UEFI_CORE_EVAL_Fabric.vhdx">
+   <Active>False</Active>
+   <Type>UEFI</Type>
+   <Version>WS2016</Version>
+   <Edition>Datacenter</Edition>
+   <UI>CORE</UI>
+   <Path>C:\Setup\VHD</Path>
+   <License>EVAL</License>
+   <Source>ISO</Source>
+   <Index>3</Index>
+   <Usage>Fabric</Usage>
+   <Extension>VHDX</Extension>
+   <OptionalData>NA</OptionalData>
+   <RelatedItem>36083712-8cac-4f8a-98fb-a7adab2648cb</RelatedItem>
+  </VHD>
+  <VHD id="da187a7b-5ead-43ad-a83a-f6802a71edc3" Name="WS2016_Standard_UEFI_GUI_VL_Fabric.vhdx">
+   <Active>False</Active>
+   <Type>UEFI</Type>
+   <Version>WS2016</Version>
+   <Edition>Standard</Edition>
+   <UI>GUI</UI>
+   <Path>C:\Setup\VHD</Path>
+   <License>VL</License>
+   <Source>WIM</Source>
+   <Index>1</Index>
+   <Usage>Fabric</Usage>
+   <Extension>VHDX</Extension>
+   <OptionalData>NA</OptionalData>
+   <RelatedItem>a7a19772-524f-4f9f-8f98-ae3e027b6baa</RelatedItem>
+  </VHD>
+  <VHD id="288dce45-1127-493e-ae12-cdd7a0ea861d" Name="WS2016_Datacenter_UEFI_GUI_VL_Fabric.vhdx">
+   <Active>False</Active>
+   <Type>UEFI</Type>
+   <Version>WS2016</Version>
+   <Edition>Datacenter</Edition>
+   <UI>GUI</UI>
+   <Path>C:\Setup\VHD</Path>
+   <License>VL</License>
+   <Source>WIM</Source>
+   <Index>1</Index>
+   <Usage>Fabric</Usage>
+   <Extension>VHDX</Extension>
+   <OptionalData>NA</OptionalData>
+   <RelatedItem>614e2f16-4585-4405-8dbb-85cdec582d4f</RelatedItem>
+  </VHD>
+  <VHD id="f6023e03-0f17-4b4b-9bfe-1a0aa278d0d8" Name="WS2016_Standard_UEFI_CORE_VL_Fabric.vhdx">
+   <Active>False</Active>
+   <Type>UEFI</Type>
+   <Version>WS2016</Version>
+   <Edition>Standard</Edition>
+   <UI>CORE</UI>
+   <Path>C:\Setup\VHD</Path>
+   <License>VL</License>
+   <Source>WIM</Source>
+   <Index>1</Index>
+   <Usage>Fabric</Usage>
+   <Extension>VHDX</Extension>
+   <OptionalData>NA</OptionalData>
+   <RelatedItem>c773718b-17da-4959-bff0-ab943cbc27c2</RelatedItem>
+  </VHD>
+  <VHD id="9de3db72-b6ce-451c-a325-4d0b049e820b" Name="WS2016_Datacenter_UEFI_CORE_VL_Fabric.vhdx">
+   <Active>False</Active>
+   <Type>UEFI</Type>
+   <Version>WS2016</Version>
+   <Edition>Datacenter</Edition>
+   <UI>CORE</UI>
+   <Path>C:\Setup\VHD</Path>
+   <License>VL</License>
+   <Source>WIM</Source>
+   <Index>1</Index>
+   <Usage>Fabric</Usage>
+   <Extension>VHDX</Extension>
+   <OptionalData>NA</OptionalData>
+   <RelatedItem>a8cbc01d-eced-43dc-84dd-55aef5268f79</RelatedItem>
+  </VHD>
+ </VHDs>
+ <ISOs>
+  <ISO id="3ad1468c-2b5a-4467-8ed2-ec8392ed6a42" Name="HYDv10.iso">
+   <Active>True</Active>
+   <Custom>True</Custom>
+   <Description>NA</Description>
+   <Path>C:\Setup\ISO</Path>
+   <OptionalData>NA</OptionalData>
+  </ISO>
+  <ISO id="36083712-8cac-4f8a-98fb-a7adab2648cb" Name="WS2016_EVAL.iso">
+   <Active>True</Active>
+   <Custom>False</Custom>
+   <Description>NA</Description>
+   <Path>C:\Setup\ISO</Path>
+   <OptionalData>NA</OptionalData>
+  </ISO>
+  <ISO id="f24df7ff-657b-4237-9519-f9071c7e8c44" Name="WS2016_VL.iso">
+   <Active>False</Active>
+   <Custom>False</Custom>
+   <Description>NA</Description>
+   <Path>C:\Setup\ISO</Path>
+   <OptionalData>NA</OptionalData>
+  </ISO>
+ </ISOs>
+ <WIMs>
+  <WIM id="a7a19772-524f-4f9f-8f98-ae3e027b6baa" Name="RWS2016-001.wim">
+   <Active>False</Active>
+   <Path>C:\Setup\WIM</Path>
+   <Version>WS2016</Version>
+   <Edition>Standard</Edition>
+   <UI>GUI</UI>
+   <License>VL</License>
+   <Index>1</Index>
+  </WIM>
+  <WIM id="614e2f16-4585-4405-8dbb-85cdec582d4f" Name="RWS2016-002.wim">
+   <Active>False</Active>
+   <Path>C:\Setup\WIM</Path>
+   <Version>WS2016</Version>
+   <Edition>Datacenter</Edition>
+   <UI>GUI</UI>
+   <License>VL</License>
+   <Index>1</Index>
+  </WIM>
+  <WIM id="c773718b-17da-4959-bff0-ab943cbc27c2" Name="RWS2016-003.wim">
+   <Active>False</Active>
+   <Path>C:\Setup\WIM</Path>
+   <Version>WS2016</Version>
+   <Edition>Standard</Edition>
+   <UI>CORE</UI>
+   <License>VL</License>
+   <Index>1</Index>
+  </WIM>
+  <WIM id="a8cbc01d-eced-43dc-84dd-55aef5268f79" Name="RWS2016-004.wim">
+   <Active>False</Active>
+   <Path>C:\Setup\WIM</Path>
+   <Version>WS2016</Version>
+   <Edition>Datacenter</Edition>
+   <UI>CORE</UI>
+   <License>VL</License>
+   <Index>1</Index>
+  </WIM>
+ </WIMs>
+ <ISOFolders>
+  <ISOFolder RelatedItem="3ad1468c-2b5a-4467-8ed2-ec8392ed6a42" Path="C:\Setup\Downloads\SC 2016 DPM" Active="True"></ISOFolder>
+  <ISOFolder RelatedItem="3ad1468c-2b5a-4467-8ed2-ec8392ed6a42" Path="C:\Setup\Downloads\SC 2016 OM" Active="True"></ISOFolder>
+  <ISOFolder RelatedItem="3ad1468c-2b5a-4467-8ed2-ec8392ed6a42" Path="C:\Setup\Downloads\SC 2016 VMM" Active="True"></ISOFolder>
+  <ISOFolder RelatedItem="3ad1468c-2b5a-4467-8ed2-ec8392ed6a42" Path="C:\Setup\Downloads\SQL 2014 Express SP1" Active="True"></ISOFolder>
+  <ISOFolder RelatedItem="3ad1468c-2b5a-4467-8ed2-ec8392ed6a42" Path="C:\Setup\Downloads\SQL 2014 STD SP1" Active="True"></ISOFolder>
+  <ISOFolder RelatedItem="3ad1468c-2b5a-4467-8ed2-ec8392ed6a42" Path="C:\Setup\Downloads\SQL 2016 STD SP1" Active="True"></ISOFolder>
+  <ISOFolder RelatedItem="3ad1468c-2b5a-4467-8ed2-ec8392ed6a42" Path="C:\Setup\Downloads\Windows ADK 10 1607" Active="True"></ISOFolder>
+  <ISOFolder RelatedItem="3ad1468c-2b5a-4467-8ed2-ec8392ed6a42" Path="C:\Setup\Downloads\Windows Server 2016" Active="True"></ISOFolder>
+  <ISOFolder RelatedItem="3ad1468c-2b5a-4467-8ed2-ec8392ed6a42" Path="C:\Setup\Downloads\Report Viewer 2008 SP1" Active="True"></ISOFolder>
+  <ISOFolder RelatedItem="3ad1468c-2b5a-4467-8ed2-ec8392ed6a42" Path="C:\Setup\Downloads\MDT 8443" Active="True"></ISOFolder>
+ </ISOFolders>
+ <Folders>
+  <Folder id="108976e0-27a1-4a4a-b112-c20a49a76dbc" Name="VMFolder">
+   <Active>True</Active>
+   <Path>C:\VMs</Path>  
+  </Folder>
+  <Folder id="cb1adef8-99ac-4553-a876-5fd3dbabb117" Name="DownloadFolder">
+   <Active>True</Active>
+   <Path>C:\Setup\Downloads</Path>  
+  </Folder>
+  <Folder id="e29acaf0-2b12-4d41-8981-a095a5e9b680" Name="HYDv10Folder">
+   <Active>True</Active>
+   <Path>C:\Setup\HYDv10</Path>  
+  </Folder>
+  <Folder id="5c9a73b0-89d2-4f09-b676-74daeca09aa0" Name="TempISO">
+   <Active>True</Active>
+   <Path>C:\Setup\TempISO</Path>  
+  </Folder>
+  <Folder id="965ed8ab-3192-47f6-9fb5-b4cc876f933d" Name="Logfolder">
+   <Active>True</Active>
+   <Path>C:\Setup\HYDv10\Log</Path>  
+  </Folder>
+  <Folder id="b411f98d-81cb-4b8f-8f99-28e285a7d9bf" Name="WS2016PackagesFolder">
+   <Active>True</Active>
+   <Path>C:\Setup\Packages\WS2016</Path>  
+  </Folder>
+ </Folders>
+ <Networks>
+  <Network id="c9632462-ba5d-4f65-8e79-efea3bda5d5e" Name="FABRIC-MGMT">
+   <Active>True</Active>
+   <VMSwitchName>UplinkSwitchNAT</VMSwitchName>
+  </Network>
+  <Network id="c9632462-ba5d-4f65-8e79-efea3bda5d5e" Name="FABRIC-LiveMig">
+   <Active>True</Active>
+   <VMSwitchName>UplinkSwitchNAT</VMSwitchName>
+  </Network>
+  <Network id="c9632462-ba5d-4f65-8e79-efea3bda5d5e" Name="FABRIC-Heartbeat">
+   <Active>True</Active>
+   <VMSwitchName>UplinkSwitchNAT</VMSwitchName>
+  </Network>
+  <Network id="c9632462-ba5d-4f65-8e79-efea3bda5d5e" Name="FABRIC-PA">
+   <Active>True</Active>
+   <VMSwitchName>UplinkSwitchNAT</VMSwitchName>
+  </Network>
+  <Network id="c9632462-ba5d-4f65-8e79-efea3bda5d5e" Name="FABRIC-SMB1">
+   <Active>True</Active>
+   <VMSwitchName>UplinkSwitchNAT</VMSwitchName>
+  </Network>
+  <Network id="c9632462-ba5d-4f65-8e79-efea3bda5d5e" Name="FABRIC-SMB2">
+   <Active>True</Active>
+   <VMSwitchName>UplinkSwitchNAT</VMSwitchName>
+  </Network>
+  <Network id="c9632462-ba5d-4f65-8e79-efea3bda5d5e" Name="Internet">
+   <Active>True</Active>
+   <VMSwitchName>UplinkSwitch</VMSwitchName>
+  </Network>
+  <Network id="ae24f5f8-2130-42ac-a22e-1cfad9da91d1" Name="VLAN3010">
+   <Active>True</Active>
+   <VMSwitchName>UplinkSwitch</VMSwitchName>
+  </Network>
+ </Networks>
+</BootStrap>

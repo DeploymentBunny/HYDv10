@@ -119,6 +119,7 @@ if($FinishAction -eq $Null){
 
 #Verbose output
 Write-Verbose "ServerName: $($ServerData.ComputerName)"
+Write-Verbose "VMName: $($ServerData.VMname)"
 Write-Verbose "Roles: $Roles"
 Write-Verbose "Joined to: $DomainOrWorkGroup"
 Write-Verbose "Datadisks: $(($ServerData.DataDisks.DataDisk | Where-Object Active -NE False).Name)"
@@ -131,14 +132,14 @@ if($DomainOrWorkGroup -eq 'Domain'){$DefaultCred = $domainCred}
 
 ### End Init ###
 
-If ((Test-VIAVMExists -VMname $($ServerData.ComputerName)) -eq $true){Write-Warning "$($ServerData.ComputerName) already exist";Exit}
-Write-Verbose "Creating $($ServerData.ComputerName)"
-$VM = New-VIAVM -VMName $($ServerData.ComputerName) -VMMem $VMMemory -VMvCPU 2 -VMLocation $VMLocation -VHDFile $VHDImage -DiskMode Diff -VMSwitchName $VMSwitchName -VMGeneration 2 -Verbose
+If ((Test-VIAVMExists -VMname $($ServerData.VMName)) -eq $true){Write-Warning "$($ServerData.VMName) already exist";Exit}
+Write-Verbose "Creating $($ServerData.VMName)"
+$VM = New-VIAVM -VMName $($ServerData.VMName) -VMMem $VMMemory -VMvCPU 2 -VMLocation $VMLocation -VHDFile $VHDImage -DiskMode Diff -VMSwitchName $VMSwitchName -VMGeneration 2 -Verbose
 
 #Enable Device Naming
 $Action = "Enable Device Naming"
 Write-Verbose "$Action"
-Enable-VIAVMDeviceNaming -VMName $($ServerData.ComputerName)
+Enable-VIAVMDeviceNaming -VMName $($ServerData.VMName)
 
 if($DomainOrWorkGroup -eq 'Workgroup'){
     $VIAUnattendXML = New-VIAUnattendXML -Computername $($ServerData.ComputerName) -OSDAdapter0IPAddressList $NIC01.IPAddress -DomainOrWorkGroup Workgroup -ProtectYourPC 3 -OSDAdapter0Gateways $NIC01RelatedData.Gateway -OSDAdapter0DNS1 $NIC01RelatedData.DNS[0] -OSDAdapter0DNS2 $NIC01RelatedData.DNS[1] -OSDAdapter0SubnetMaskPrefix $NIC01RelatedData.SubNet -OrgName $CustomerData.Name -Fullname $CustomerData.Name -TimeZoneName $CommonSettingData.TimeZoneName
@@ -149,7 +150,7 @@ if($DomainOrWorkGroup -eq 'Domain'){
 }
 
 $VIASetupCompletecmd = New-VIASetupCompleteCMD -Command $VIASetupCompletecmdCommand -Verbose
-$VHDFile = (Get-VMHardDiskDrive -VMName $($ServerData.ComputerName)).Path
+$VHDFile = (Get-VMHardDiskDrive -VMName $($ServerData.VMName)).Path
 Mount-VIAVHDInFolder -VHDfile $VHDFile -VHDClass UEFI -MountFolder $MountFolder 
 New-Item -Path "$MountFolder\Windows\Panther" -ItemType Directory -Force | Out-Null
 New-Item -Path "$MountFolder\Windows\Setup" -ItemType Directory -Force | Out-Null
@@ -166,15 +167,15 @@ Remove-Item -Path $VIASetupCompletecmd.FullName
 $ConnectedtoNetwork = $NetworksData | Where-Object -Property id -EQ -Value $NIC01RelatedData.id
 if($ConnectedtoNetwork.VLAN -ne '0'){
     Write-Verbose "Setting VLAN $($ConnectedtoNetwork.VLAN)"
-    Set-VMNetworkAdapterVlan -VMName $($ServerData.ComputerName) -VlanId $ConnectedtoNetwork.VLAN -Access
+    Set-VMNetworkAdapterVlan -VMName $($ServerData.VMName) -VlanId $ConnectedtoNetwork.VLAN -Access
 }
 
 #Deploy VM
 $Action = "Deploy VM"
 Write-Verbose "$Action"
-Wait-VIAVMStart -VMname $($ServerData.ComputerName) -Credentials $localCred
-Wait-VIAVMDeployment -VMname $($ServerData.ComputerName)
-Wait-VIAServiceToRun -VMname $($ServerData.ComputerName) -Credentials $localCred
+Wait-VIAVMStart -VMname $($ServerData.VMName) -Credentials $localCred
+Wait-VIAVMDeployment -VMname $($ServerData.VMName)
+Wait-VIAServiceToRun -VMname $($ServerData.VMName) -Credentials $localCred
 
 #Wait just to be sure it will work to logon
 Start-Sleep -Seconds 45
@@ -182,23 +183,23 @@ Start-Sleep -Seconds 45
 #Action
 $Action = "Enable Remote Desktop"
 Write-Verbose "Action: $Action"
-try{Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /AR 0} -ErrorAction Stop -Credential $DefaultCred}catch{Write-Warning "Woops..."}
+try{Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /AR 0} -ErrorAction Stop -Credential $DefaultCred}catch{Write-Warning "Woops..."}
 
 #Action
 $Action = "Set Remote Destop Security"
 Write-Verbose "Action: $Action"
-try{Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /CS 0} -ErrorAction Stop -Credential $DefaultCred}catch{Write-Warning "Woops..."}
+try{Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {cscript.exe C:\windows\system32\SCregEdit.wsf /CS 0} -ErrorAction Stop -Credential $DefaultCred}catch{Write-Warning "Woops..."}
 
 #Rename Default NetworkAdapter
 $Action = "Rename Default NetworkAdapter"
 Write-Verbose "$Action"
-Rename-VMNetworkAdapter -VMName $($ServerData.ComputerName) -NewName $NIC01.Name 
+Rename-VMNetworkAdapter -VMName $($ServerData.VMName) -NewName $NIC01.Name 
 $NewNicName = $($NIC01.Name)
 $RemoteCommand = {
     Import-Module C:\Setup\Functions\VIANicModule.psm1
     Rename-VIANetAdapterUsingDeviceNaming -VMDeviceName $Using:NewNicName
 }
-Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock $RemoteCommand -Credential $DefaultCred -HideComputerName -Verbose
+Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock $RemoteCommand -Credential $DefaultCred -HideComputerName -Verbose
 
 #Add rest of the Network Adapters
 $Action = "Add rest of the Network Adapters"
@@ -207,9 +208,9 @@ $Nics = $ServerData.Networkadapters.Networkadapter | Where-Object -Property Acti
 foreach($Item in $Nics){
     $ConnectedtoNetwork = $NetworksData | Where-Object -Property id -EQ -Value $item.ConnectedToNetwork
     $VMSwitchName = ($Bootstrap.BootStrap.Networks.Network | Where-Object -Property Name -EQ -Value $ConnectedtoNetwork.Name).VMSwitchName
-    Add-VMNetworkAdapter -VMName $($ServerData.ComputerName) -SwitchName $VMSwitchName -Name $Item.Name -DeviceNaming On
+    Add-VMNetworkAdapter -VMName $($ServerData.VMName) -SwitchName $VMSwitchName -Name $Item.Name -DeviceNaming On
     if(!($ConnectedtoNetwork.VLAN -eq 'NA')){
-        Set-VMNetworkAdapterVlan -VMName $($ServerData.ComputerName) -VMNetworkAdapterName $Item.Name -VlanId $ConnectedtoNetwork.VLAN -Access
+        Set-VMNetworkAdapterVlan -VMName $($ServerData.VMName) -VMNetworkAdapterName $Item.Name -VlanId $ConnectedtoNetwork.VLAN -Access
     }
 }
 
@@ -223,7 +224,7 @@ foreach($Item in $Nics){
         Import-Module C:\Setup\Functions\VIANicModule.psm1
         Rename-VIANetAdapterUsingDeviceNaming -VMDeviceName $Using:NewNicName
     }
-    Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock $RemoteCommand -Credential $DefaultCred -HideComputerName -Verbose
+    Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock $RemoteCommand -Credential $DefaultCred -HideComputerName -Verbose
 }
 
 #Action
@@ -231,7 +232,7 @@ $Action = "Add Datadisks"
 Write-Verbose "$Action"
 foreach($obj in $ServerData.DataDisks.DataDisk){
     If($obj.DiskSize -ne 'NA'){
-     C:\Setup\HYDv10\Scripts\New-VIADataDisk.ps1 -VMName $($ServerData.ComputerName) -DiskLabel $obj.Name -DiskSize $obj.DiskSize
+     C:\Setup\HYDv10\Scripts\New-VIADataDisk.ps1 -VMName $($ServerData.VMName) -DiskLabel $obj.Name -DiskSize $obj.DiskSize
     }
 }
 
@@ -243,13 +244,13 @@ foreach ($obj in ($ServerData.DataDisks.DataDisk | Where-Object Active -EQ $true
         Import-Module C:\Setup\Functions\VIAStorageModule.psm1
         Initialize-VIADataDisk -DiskNumber $Using:obj.DiskNumber -FileSystem $Using:obj.FileSystem -PartitionType $Using:obj.PartitionType -FileSystemLabel $Using:obj.Name
     }
-    Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock $RemoteCommand -Credential $DefaultCred -HideComputerName -Verbose
+    Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock $RemoteCommand -Credential $DefaultCred -HideComputerName -Verbose
 }
 
 #Action
 $Action = "Mount Media ISO"
 Update-VIALog -Data "Action: $Action"
-Set-VMDvdDrive -VMName $($ServerData.ComputerName) -Path $MediaISO
+Set-VMDvdDrive -VMName $($ServerData.VMName) -Path $MediaISO
 
 #TBA
 #Configure Nic Teams
@@ -282,7 +283,7 @@ foreach($Role in $Roles){
             $Action = "Install Application"
             Update-VIALog -Data "Action: $Action - $App"
             $Source = 'D:\Report Viewer 2008 SP1\ReportViewer.exe'
-            Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallReportViewer2008SP1.ps1 -ArgumentList $Source -ErrorAction Stop -Credential $DefaultCred
+            Invoke-Command -VMName $ServerData.VMName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallReportViewer2008SP1.ps1 -ArgumentList $Source -ErrorAction Stop -Credential $DefaultCred
 
             #Action
             $App = "SQLExpress"
@@ -292,36 +293,36 @@ foreach($Role in $Roles){
             $SQLSetup = 'D:\SQL 2014 Express SP1\SETUP.EXE'
             $SQLINSTANCENAME = "SQLExpress"
             $SQLINSTANCEDIR = "E:\SQLDB"
-            Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSQLServer2014SP1Express.ps1 -ArgumentList $SQLSetup,$SQLINSTANCENAME,$SQLINSTANCEDIR -ErrorAction Stop  -Credential $DefaultCred
+            Invoke-Command -VMName $ServerData.VMName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSQLServer2014SP1Express.ps1 -ArgumentList $SQLSetup,$SQLINSTANCENAME,$SQLINSTANCEDIR -ErrorAction Stop  -Credential $DefaultCred
 
             #Restart
-            Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-            Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
-            Wait-VIAServiceToRun -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
+            Update-VIALog -Data "Restart $($ServerData.VMName)"
+            Wait-VIAVMRestart -VMname $($ServerData.VMName) -Credentials $DefaultCred
+            Wait-VIAServiceToRun -VMname $($ServerData.VMName) -Credentials $DefaultCred
         }
         'VCompute'{
             #Stop VM
-            Stop-VM -Name $($ServerData.ComputerName)
+            Stop-VM -Name $($ServerData.VMName)
 
             #Configure for Hyper-v in Hyper-V
-            Enable-VIANestedHyperV -VMname $($ServerData.ComputerName)
+            Enable-VIANestedHyperV -VMname $($ServerData.VMName)
 
             #Restart
-            Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-            Wait-VIAVMStart -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
-            Wait-VIAServiceToRun -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
+            Update-VIALog -Data "Restart $($ServerData.VMName)"
+            Wait-VIAVMStart -VMname $($ServerData.VMName) -Credentials $DefaultCred
+            Wait-VIAServiceToRun -VMname $($ServerData.VMName) -Credentials $DefaultCred
         }
         'vConverged'{
             #Stop VM
-            Stop-VM -Name $($ServerData.ComputerName)
+            Stop-VM -Name $($ServerData.VMName)
 
             #Configure for Hyper-v in Hyper-V
-            Enable-VIANestedHyperV -VMname $($ServerData.ComputerName)
+            Enable-VIANestedHyperV -VMname $($ServerData.VMName)
 
             #Restart
-            Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-            Wait-VIAVMStart -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
-            Wait-VIAServiceToRun -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
+            Update-VIALog -Data "Restart $($ServerData.VMName)"
+            Wait-VIAVMStart -VMname $($ServerData.VMName) -Credentials $DefaultCred
+            Wait-VIAServiceToRun -VMname $($ServerData.VMName) -Credentials $DefaultCred
         }
         Default {
             Write-Verbose "Nothing to do for $role"
@@ -334,7 +335,7 @@ Foreach($role in $roles){
     #Action
     $Action = "Add Roles And Features"
     Update-VIALog -Data "Action: $Action - $ROLE"
-    $Return = Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+    $Return = Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
         Param(
         $Role
         )
@@ -344,10 +345,10 @@ Foreach($role in $roles){
 }
 
 #Restart
-Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
+Update-VIALog -Data "Restart $($ServerData.VMName)"
+Wait-VIAVMRestart -VMname $($ServerData.VMName) -Credentials $DefaultCred
 Start-Sleep -Seconds 20
-Wait-VIAServiceToRun -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
+Wait-VIAServiceToRun -VMname $($ServerData.VMName) -Credentials $DefaultCred
 
 #Configure Roles And Features
 foreach($Role in $Roles){
@@ -360,11 +361,11 @@ foreach($Role in $Roles){
             $DataDiskLabel = "DataDisk01"
             $RunAsAccount = "Administrator"
             $RunAsAccountPassword = "P@ssw0rd"
-            Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARole-DEPL.ps1 -ArgumentList $DataDiskLabel,$RunAsAccount,$RunAsAccountPassword -ErrorAction Stop -Credential $domainCred
+            Invoke-Command -VMName $($ServerData.VMName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARole-DEPL.ps1 -ArgumentList $DataDiskLabel,$RunAsAccount,$RunAsAccountPassword -ErrorAction Stop -Credential $domainCred
             
             $Action = "Share Applicationroot"
             Update-VIALog -Data "Action: $Action - $ROLE"
-            Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+            Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
                 Param(
                 $DataDiskLabel
                 )
@@ -385,7 +386,7 @@ foreach($Role in $Roles){
             $Group = "Domain Remote Desktop Users"
             $DomainNetBios = $DomainData.DomainNetBios
             $RemoteFQDN = "rdgw." + $DomainData.DNSDomainExternal
-            Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARDGW01Config.ps1 -ArgumentList $Group,$DomainNetBios,$RemoteFQDN -Verbose -Credential $domainCred
+            Invoke-Command -VMName $($ServerData.VMName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARDGW01Config.ps1 -ArgumentList $Group,$DomainNetBios,$RemoteFQDN -Verbose -Credential $domainCred
         }
         'RRAS'{
             #Remove Net Route
@@ -412,7 +413,7 @@ foreach($Role in $Roles){
 
             #Configure the external IP
             if($RDGWExtIP -ne 'DHCP'){
-                Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+                Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
                     Param(
                         $RDGWExtIP,$Subnet,$Gateway,$ExternalNicName
                     )
@@ -424,7 +425,7 @@ foreach($Role in $Roles){
             }
 
             #Configure NAT rules
-            Invoke-Command -VMName $($ServerData.ComputerName)  -ScriptBlock {
+            Invoke-Command -VMName $($ServerData.VMName)  -ScriptBlock {
                 Param(
                 $RDGWIntIP,$InternalIPInterfaceAddressPrefix,$ExternalIPAddress,$ExternalPort,$Protocol,$ExternalNetname
                 )
@@ -434,7 +435,7 @@ foreach($Role in $Roles){
 
             #Not Tested
             #Change Netbinding on th External NIC
-            Invoke-Command -VMName $($ServerData.ComputerName)  -ScriptBlock {
+            Invoke-Command -VMName $($ServerData.VMName)  -ScriptBlock {
                 Param(
                 $ExternalNicName
                 )
@@ -461,7 +462,7 @@ foreach($Role in $Roles){
 
             #Configure the external IP
             if($RDGWExtIP -ne 'DHCP'){
-                Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+                Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
                     Param(
                         $RDGWExtIP,$Subnet,$Gateway,$ExternalNicName
                     )
@@ -473,7 +474,7 @@ foreach($Role in $Roles){
             }
 
             #Configure NAT rules
-            Invoke-Command -VMName $($ServerData.ComputerName)  -ScriptBlock {
+            Invoke-Command -VMName $($ServerData.VMName)  -ScriptBlock {
                 Param(
                 $RDGWIntIP,$InternalIPInterfaceAddressPrefix,$ExternalIPAddress,$ExternalPort,$Protocol,$ExternalNetname
                 )
@@ -483,7 +484,7 @@ foreach($Role in $Roles){
 
             #Not Tested
             #Change Netbinding on th External NIC
-            Invoke-Command -VMName $($ServerData.ComputerName)  -ScriptBlock {
+            Invoke-Command -VMName $($ServerData.VMName)  -ScriptBlock {
                 Param(
                 $ExternalNicName
                 )
@@ -492,7 +493,7 @@ foreach($Role in $Roles){
         }
         'WSUS'{
             $DataDiskLabel = "DataDisk01"
-            Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+            Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
                 Param(
                 $DataDiskLabel
                 )
@@ -526,21 +527,21 @@ foreach($Role in $Roles){
                         Write-Verbose "-Password $Using:Password -FQDN $Using:FQDN -NetBiosDomainName $Using:NetBiosDomainName -DomainForestLevel $Using:DomainForestLevel -DatabaseRoot $DatabaseRoot"
                         C:\Setup\HYDv10\Scripts\Set-VIARole-ADDS.ps1 -Password $Using:Password -FQDN $Using:FQDN -NetBiosDomainName $Using:NetBiosDomainName -DomainForestLevel $Using:DomainForestLevel -DatabaseRoot $DatabaseRoot -Config $Using:ServerRoleConfig
                     }
-                    Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock $ScriptBlock -Credential $DefaultCred
+                    Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock $ScriptBlock -Credential $DefaultCred
 
                     #Restart
-                    Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-                    Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $domainCred
-                    Wait-VIAServiceToRun -VMname $($ServerData.ComputerName) -Credentials $domainCred
+                    Update-VIALog -Data "Restart $($ServerData.VMName)"
+                    Wait-VIAVMRestart -VMname $($ServerData.VMName) -Credentials $domainCred
+                    Wait-VIAServiceToRun -VMname $($ServerData.VMName) -Credentials $domainCred
 
                     #Wait for AD to be operational
                     Update-VIALog -Data "Wait for AD to be operational"
-                    Wait-VIAVMADDSReady -VMname $($ServerData.ComputerName) -Credentials $domainCred
+                    Wait-VIAVMADDSReady -VMname $($ServerData.VMName) -Credentials $domainCred
 
                     #Action
                     $Action = "SET sc.exe config NlaSvc start=delayed-auto"
                     Write-Verbose "Action: $Action"
-                    Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+                    Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
                         [cmdletbinding(SupportsShouldProcess=$True)]
                         Param(
                         )
@@ -551,7 +552,7 @@ foreach($Role in $Roles){
                     #Action
                     $Action = "Enable Active Directory Optional Features"
                     Write-Verbose "Action: $Action"
-                    Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+                    Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
                         [cmdletbinding(SupportsShouldProcess=$True)]
                         Param()
                         $FQDN = (Get-ADDomain).DNSRoot
@@ -563,21 +564,21 @@ foreach($Role in $Roles){
                     #Check if this is needed, seems to be set in 2016
                     $Action = "Enable Automatic DFSR Recovery"
                     Write-Verbose "Action: $Action"
-                    Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+                    Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
                         New-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Services\DFSR\Parameters -Name StopReplicationOnAutoRecovery -Value 0 -Force
                     } -Credential $domainCred
 
                     #Action
                     $Action = "Disable WMI as time provider"
                     Write-Verbose "Action: $Action"
-                    Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+                    Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
                         Set-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Services\W32Time\TimeProviders\VMICTimeProvider -Name Enabled -Value 0
                     } -Credential $domainCred
 
                     #Action
                     $Action = "Change AD Site name"
                     Write-Verbose "Action: $Action"
-                    Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADDSSiteName.ps1 -ArgumentList $DomainData.SiteName -ErrorAction Stop -Credential $domainCred
+                    Invoke-Command -VMName $($ServerData.VMName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADDSSiteName.ps1 -ArgumentList $DomainData.SiteName -ErrorAction Stop -Credential $domainCred
 
                     #Action
                     $Action = "Configure Subnets"
@@ -585,7 +586,7 @@ foreach($Role in $Roles){
                     $ADSubnets = foreach($network in ($NetworksData | Where-Object -Property NetIP -NE -Value 'NA')){
                         "$($network.NetIP)/$($network.SubNet)"
                     }
-                    Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADSiteSubnet.ps1 -ArgumentList $DomainData.SiteName,$ADSubnets -ErrorAction Stop -Credential $domainCred
+                    Invoke-Command -VMName $($ServerData.VMName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADSiteSubnet.ps1 -ArgumentList $DomainData.SiteName,$ADSubnets -ErrorAction Stop -Credential $domainCred
 
                     #Action
                     $Action = "Adding default Rev DNS Zones"
@@ -593,12 +594,12 @@ foreach($Role in $Roles){
                     Start-Sleep 60
                     $RevDNSZones = ($Settings.settings.Networks.Network| Where-Object -Property RDNS -Like *in-addr.arpa).rdns
                     foreach($RevDNSZone in $RevDNSZones){
-                        Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADDSRevDNSZone.ps1 -ArgumentList $RevDNSZone -ErrorAction Continue -Verbose -Credential $domainCred
+                        Invoke-Command -VMName $($ServerData.VMName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIAADDSRevDNSZone.ps1 -ArgumentList $RevDNSZone -ErrorAction Continue -Verbose -Credential $domainCred
                     }
 
                     #Action
                     $Action = "Remove DNS Forwarders"
-                    Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+                    Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
                         [cmdletbinding(SupportsShouldProcess=$True)]
                         Param(
                         )
@@ -609,7 +610,7 @@ foreach($Role in $Roles){
                     $Action = "Configure Client DNS"
                     Write-Verbose "Action: $Action"
                     $ClientDNSServerAddr = "$($NIC01.DNS[0]),$($NIC01.DNS[1])"
-                    Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+                    Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
                         [cmdletbinding(SupportsShouldProcess=$True)]
                         Param(
                         $ClientDNSServerAddr
@@ -620,27 +621,27 @@ foreach($Role in $Roles){
                     #Action
                     $Action = "Create base OU"
                     Write-Verbose "Action: $Action"
-                    Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADBaseOU.ps1 -ArgumentList $DomainData.BaseOU -ErrorAction Stop -Credential $domainCred
+                    Invoke-Command -VMName $($ServerData.VMName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADBaseOU.ps1 -ArgumentList $DomainData.BaseOU -ErrorAction Stop -Credential $domainCred
 
                     #Action
                     $Action = "Create Sub OUs"
                     Write-Verbose "Action: $Action"
-                    Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADStructure.ps1 -ArgumentList $($DomainData.BaseOU),$($DomainData.DomainOUs.DomainOU) -ErrorAction Stop -Credential $domainCred
+                    Invoke-Command -VMName $($ServerData.VMName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADStructure.ps1 -ArgumentList $($DomainData.BaseOU),$($DomainData.DomainOUs.DomainOU) -ErrorAction Stop -Credential $domainCred
 
                     #Action
                     $Action = "Create AD Groups"
                     Write-Verbose "Action: $Action"
-                    Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADGroups.ps1 -ArgumentList $($DomainData.BaseOU),$($DomainData.DomainGroups.DomainGroup) -ErrorAction Stop -Credential $domainCred
+                    Invoke-Command -VMName $($ServerData.VMName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADGroups.ps1 -ArgumentList $($DomainData.BaseOU),$($DomainData.DomainGroups.DomainGroup) -ErrorAction Stop -Credential $domainCred
 
                     #Action
                     $Action = "Create AD Accounts"
                     Write-Verbose "Action: $Action"
-                    Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADAccount.ps1 -ArgumentList $($DomainData.BaseOU),$($DomainData.DomainAccounts.DomainAccount) -ErrorAction Stop -Credential $domainCred
+                    Invoke-Command -VMName $($ServerData.VMName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAADAccount.ps1 -ArgumentList $($DomainData.BaseOU),$($DomainData.DomainAccounts.DomainAccount) -ErrorAction Stop -Credential $domainCred
 
                     #Action
                     $Action = "Add User to Groups"
                     Write-Verbose "Action: $Action"
-                    Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAAddAccountToGroups.ps1 -ArgumentList $($DomainData.BaseOU),$($DomainData.DomainAccounts.DomainAccount) -ErrorAction Stop -Credential $domainCred
+                    Invoke-Command -VMName $($ServerData.VMName) -FilePath C:\Setup\HYDv10\Scripts\New-VIAAddAccountToGroups.ps1 -ArgumentList $($DomainData.BaseOU),$($DomainData.DomainAccounts.DomainAccount) -ErrorAction Stop -Credential $domainCred
                 }
                 'Last'{
                     $Password = $DomainData.DomainAdminPassword
@@ -661,21 +662,21 @@ foreach($Role in $Roles){
                         Write-Verbose "-Password $Using:Password -FQDN $Using:FQDN -NetBiosDomainName $Using:NetBiosDomainName -DomainForestLevel $Using:DomainForestLevel -DatabaseRoot $DatabaseRoot"
                         C:\Setup\HYDv10\Scripts\Set-VIARole-ADDS.ps1 -Password $Using:Password -FQDN $Using:FQDN -NetBiosDomainName $Using:NetBiosDomainName -DomainForestLevel $Using:DomainForestLevel -DatabaseRoot $DatabaseRoot -Config $Using:ServerRoleConfig -SiteName $Using:SiteName
                     }
-                    Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock $ScriptBlock -Credential $DefaultCred
+                    Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock $ScriptBlock -Credential $DefaultCred
 
                     #Restart
-                    Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-                    Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
-                    Wait-VIAServiceToRun -VMname $($ServerData.ComputerName) -Credentials $DefaultCred
+                    Update-VIALog -Data "Restart $($ServerData.VMName)"
+                    Wait-VIAVMRestart -VMname $($ServerData.VMName) -Credentials $DefaultCred
+                    Wait-VIAServiceToRun -VMname $($ServerData.VMName) -Credentials $DefaultCred
 
                     #Wait for AD to be operational
                     Update-VIALog -Data "Wait for AD to be operational"
-                    Wait-VIAVMADDSReady -VMname $($ServerData.ComputerName) -Credentials $domainCred
+                    Wait-VIAVMADDSReady -VMname $($ServerData.VMName) -Credentials $domainCred
 
                     #Action
                     $Action = "SET sc.exe config NlaSvc start=delayed-auto"
                     Write-Verbose "Action: $Action"
-                    Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+                    Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
                         [cmdletbinding(SupportsShouldProcess=$True)]
                         Param(
                         )
@@ -687,14 +688,14 @@ foreach($Role in $Roles){
                     #Check if this is needed, seems to be set in 2016
                     $Action = "Enable Automatic DFSR Recovery"
                     Write-Verbose "Action: $Action"
-                    Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+                    Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
                         New-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Services\DFSR\Parameters -Name StopReplicationOnAutoRecovery -Value 0 -Force
                     } -Credential $domainCred
 
                     #Action
                     $Action = "Disable WMI as time provider"
                     Write-Verbose "Action: $Action"
-                    Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+                    Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
                         Set-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Services\W32Time\TimeProviders\VMICTimeProvider -Name Enabled -Value 0
                     } -Credential $domainCred
                 }
@@ -713,20 +714,20 @@ foreach($Role in $Roles){
             #Action
             $Action = "Base Configure DHCP"
             Write-Verbose "Action: $Action - $Role"
-            Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARole-DHCP.ps1 -Credential $domainCred
+            Invoke-Command -VMName $($ServerData.VMName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARole-DHCP.ps1 -Credential $domainCred
 
             if($ServerRoleConfig -eq 'First'){
                 #Action
                 $Action = "Create DHCP Scopes"
                 Write-Verbose "Action: $Action"
-                Invoke-Command -VMName $($ServerData.ComputerName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARole-DHCP-Create-Scope.ps1 -ArgumentList $($NIC01RelatedData.NetIP), $($NIC01RelatedData.SubNet), $($NIC01RelatedData.DHCPStart), $($NIC01RelatedData.DHCPEnd), $($DomainData.DNSDomain), $($NIC01RelatedData.DNS[0]), $($NIC01RelatedData.DNS[1]), $($NIC01RelatedData.Gateway) -ErrorAction Stop -Credential $domainCred
+                Invoke-Command -VMName $($ServerData.VMName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARole-DHCP-Create-Scope.ps1 -ArgumentList $($NIC01RelatedData.NetIP), $($NIC01RelatedData.SubNet), $($NIC01RelatedData.DHCPStart), $($NIC01RelatedData.DHCPEnd), $($DomainData.DNSDomain), $($NIC01RelatedData.DNS[0]), $($NIC01RelatedData.DNS[1]), $($NIC01RelatedData.Gateway) -ErrorAction Stop -Credential $domainCred
             }
 
             if($ServerRoleConfig -eq 'Last'){
                 #Action
                 $Action = "Configure DHCP Replication"
                 Write-Output "Action: $Action - $Role"
-                Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+                Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
                     Param(
                         $PriDHCPServer,
                         $SecDHCPServer
@@ -741,7 +742,7 @@ foreach($Role in $Roles){
             $DHCPServiceAccountDomain = $DomainData.DomainNetBios
             $DHCPServiceAccountName = ($DomainData.DomainAccounts.DomainAccount | Where-Object Name -EQ 'SVC_ADDS_DHCP').name
             $DHCPServiceAccountPW = ($DomainData.DomainAccounts.DomainAccount | Where-Object Name -EQ 'SVC_ADDS_DHCP').PW
-            Invoke-Command -VMName $($ServerData.ComputerName) -ScriptBlock {
+            Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
                 [cmdletbinding(SupportsShouldProcess=$True)]
                 Param(
                     $DHCPServiceAccountDomain,$DHCPServiceAccountName,$DHCPServiceAccountPW
@@ -770,14 +771,14 @@ foreach($Role in $Roles){
             Update-VIALog -Data "Action: $Action - $App"
             $Source = 'D:\Windows ADK 10 1607\adksetup.exe'
             $Configuration = "MDT"
-            Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallADK.ps1 -ArgumentList $Source,$Configuration -ErrorAction Stop -Credential $domainCred 
+            Invoke-Command -VMName $ServerData.VMName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallADK.ps1 -ArgumentList $Source,$Configuration -ErrorAction Stop -Credential $domainCred 
 
             #Action
             $App = "MDT 8443"
             $Action = "Install Application"
             Update-VIALog -Data "Action: $Action - $App"
             $Source = 'D:\MDT 8443\MicrosoftDeploymentToolkit_x64.msi'
-            Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallMDT.ps1 -ArgumentList $Source -ErrorAction Stop  -Credential $domainCred
+            Invoke-Command -VMName $ServerData.VMName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallMDT.ps1 -ArgumentList $Source -ErrorAction Stop  -Credential $domainCred
         }
         'SCVM'{
             #Action
@@ -786,7 +787,7 @@ foreach($Role in $Roles){
             Update-VIALog -Data "Action: $Action - $App"
             $Source = 'D:\Windows ADK 10 1607\adksetup.exe'
             $Configuration = "SCVM"
-            Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallADK.ps1 -ArgumentList $Source,$Configuration -ErrorAction Stop -Credential $domainCred 
+            Invoke-Command -VMName $ServerData.VMName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallADK.ps1 -ArgumentList $Source,$Configuration -ErrorAction Stop -Credential $domainCred 
 
             #Action
             $App = "SQL 2014 STD SP1"
@@ -796,7 +797,7 @@ foreach($Role in $Roles){
             $SQLINSTANCENAME = "MSSQLSERVER"
             $SQLINSTANCEDIR = "E:\SQLDB"
             $SQLRole = 'SCVM2016'
-            Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSQLServer2014.ps1 -ArgumentList $Source,$SQLRole,$SQLINSTANCENAME,$SQLINSTANCEDIR -ErrorAction Stop  -Credential $domainCred
+            Invoke-Command -VMName $ServerData.VMName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSQLServer2014.ps1 -ArgumentList $Source,$SQLRole,$SQLINSTANCENAME,$SQLINSTANCEDIR -ErrorAction Stop  -Credential $domainCred
 
             #Action
             $App = "SCVMM 2016"
@@ -804,14 +805,14 @@ foreach($Role in $Roles){
             Update-VIALog -Data "Action: $Action - $App"
             $LocalGroup = "Administrators"
             $DomainUser = ($DomainData.DomainAccounts.DomainAccount | Where-Object AccountDescription -EQ 'Service Account for SCVMM').Name
-            Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Scripts\Add-VIADomainuserToLocalgroup.ps1 -ArgumentList $LocalGroup,$DomainUser -ErrorAction Stop  -Credential $domainCred
+            Invoke-Command -VMName $ServerData.VMName -FilePath C:\Setup\HYDv10\Scripts\Add-VIADomainuserToLocalgroup.ps1 -ArgumentList $LocalGroup,$DomainUser -ErrorAction Stop  -Credential $domainCred
 
             #Restart
             $App = "Server"
             $Action = "Restart"
             Update-VIALog -Data "Action: $Action - $App"
-            Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $domainCred
-            Wait-VIAServiceToRun -VMname $($ServerData.ComputerName) -Credentials $domainCred
+            Wait-VIAVMRestart -VMname $($ServerData.VMName) -Credentials $domainCred
+            Wait-VIAServiceToRun -VMname $($ServerData.VMName) -Credentials $domainCred
 
             #Action
             $App = "SCVMM 2016"
@@ -832,7 +833,7 @@ foreach($Role in $Roles){
             $SCVMMVmmServiceLocalAccount = '0'
             $SCVMMTopContainerName = "cn=dkm,"+$DomainData.DomainDS
             $SCVMMLibraryDrive = 'E:'
-            Invoke-Command -VMName $ServerData.ComputerName -Scriptblock{
+            Invoke-Command -VMName $ServerData.VMName -Scriptblock{
                 Param(
                 $Source,
                 $SCVMRole,
@@ -859,12 +860,12 @@ foreach($Role in $Roles){
             $SQLINSTANCENAME = "MSSQLSERVER"
             $SQLINSTANCEDIR = "E:\SQLDB"
             $SQLRole = 'SCOM2016'
-            Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSQLServer2014.ps1 -ArgumentList $Source,$SQLRole,$SQLINSTANCENAME,$SQLINSTANCEDIR -ErrorAction Stop  -Credential $domainCred
+            Invoke-Command -VMName $ServerData.VMName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSQLServer2014.ps1 -ArgumentList $Source,$SQLRole,$SQLINSTANCENAME,$SQLINSTANCEDIR -ErrorAction Stop  -Credential $domainCred
             
             #Restart
-            Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-            Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $domainCred
-            Wait-VIAServiceToRun -VMname $($ServerData.ComputerName) -Credentials $domainCred
+            Update-VIALog -Data "Restart $($ServerData.VMName)"
+            Wait-VIAVMRestart -VMname $($ServerData.VMName) -Credentials $domainCred
+            Wait-VIAServiceToRun -VMname $($ServerData.VMName) -Credentials $domainCred
             
             #Action
             $App = "SCOM 2016"
@@ -872,7 +873,7 @@ foreach($Role in $Roles){
             Update-VIALog -Data "Action: $Action - $App"
             $LocalGroup = "Administrators"
             $DomainUser = ($DomainData.DomainAccounts.DomainAccount| Where-Object AccountDescription -EQ 'Service Account for SCOM').Name
-            Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Scripts\Add-VIADomainuserToLocalgroup.ps1 -ArgumentList $LocalGroup,$DomainUser -ErrorAction Stop  -Credential $domainCred
+            Invoke-Command -VMName $ServerData.VMName -FilePath C:\Setup\HYDv10\Scripts\Add-VIADomainuserToLocalgroup.ps1 -ArgumentList $LocalGroup,$DomainUser -ErrorAction Stop  -Credential $domainCred
 
             #Action
             $App = "SCOM 2016 Server"
@@ -884,7 +885,7 @@ foreach($Role in $Roles){
             $Service01 = $Settings.settings.Services.Service | Where-Object Name -EQ SCOM2016
             $Source = 'D:\SC 2016 OM\setup.exe'
             $SCOMRole = 'OMServer'
-            Invoke-Command -VMName $($ServerData.ComputerName) -Scriptblock{
+            Invoke-Command -VMName $($ServerData.VMName) -Scriptblock{
                 Param(
                 $Source,
                 $SCOMRole,
@@ -908,7 +909,7 @@ foreach($Role in $Roles){
             #Install Console
             $Source = 'D:\SC 2016 OM\setup.exe'
             $SCOMRole = 'OMConsole'
-            Invoke-Command -VMName $ServerData.ComputerName -Scriptblock{
+            Invoke-Command -VMName $ServerData.VMName -Scriptblock{
                 Param(
                 $Source,
                 $SCOMRole
@@ -923,7 +924,7 @@ foreach($Role in $Roles){
             #Install Reporting
             $Source = 'D:\SC 2016 OM\setup.exe'
             $SCOMRole = 'OMReporting'
-            Invoke-Command -VMName $ServerData.ComputerName -Scriptblock{
+            Invoke-Command -VMName $ServerData.VMName -Scriptblock{
                 Param(
                 $Source,
                 $SCOMRole,
@@ -941,7 +942,7 @@ foreach($Role in $Roles){
             #Install WebConsole
             $Source = 'D:\SC 2016 OM\setup.exe'
             $SCOMRole = 'OMWebConsole'
-            Invoke-Command -VMName $ServerData.ComputerName -Scriptblock{
+            Invoke-Command -VMName $ServerData.VMName -Scriptblock{
                 Param(
                 $Source,
                 $SCOMRole
@@ -957,7 +958,7 @@ foreach($Role in $Roles){
             $SCOMAdminSecurityGroup = "$DomainName\Domain System Center Operations Manager Admins"
             $SCOMRunAsAccount = "$DomainName\SVC_SCOM_AA"
             $Domain = $DomainName
-            Invoke-Command -VMName $ServerData.ComputerName -Scriptblock{
+            Invoke-Command -VMName $ServerData.VMName -Scriptblock{
                 Param(
                 $ManagementGroupName,
                 $MOMAdminSecurityGroup,
@@ -974,7 +975,7 @@ foreach($Role in $Roles){
             $ProductKey = ($Settings.settings.ProductKeys.ProductKey | Where-Object -Property Name -EQ -Value ProduktKeySC2016).key
             if($ProductKey -ne 'NA'){
                 Update-VIALog -Data "Action: $Action - $App"
-                Invoke-Command -VMName $ServerData.ComputerName -Scriptblock{
+                Invoke-Command -VMName $ServerData.VMName -Scriptblock{
                     Param(
                     $ProductId
                     )
@@ -1000,12 +1001,12 @@ foreach($Role in $Roles){
             Update-VIALog -Data "Action: $Action - $App"
             $Source = 'D:\SQL 2014 STD SP1\setup.exe'
             $SQLRole = 'SCDP2016'
-            Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSQLServer2014.ps1 -ArgumentList $Source,$SQLRole,$SQLINSTANCENAME,$SQLINSTANCEDIR -ErrorAction Stop  -Credential $domainCred
+            Invoke-Command -VMName $ServerData.VMName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSQLServer2014.ps1 -ArgumentList $Source,$SQLRole,$SQLINSTANCENAME,$SQLINSTANCEDIR -ErrorAction Stop  -Credential $domainCred
 
             #Restart
-            Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-            Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $domainCred
-            Wait-VIAServiceToRun -VMname $($ServerData.ComputerName) -Credentials $domainCred
+            Update-VIALog -Data "Restart $($ServerData.VMName)"
+            Wait-VIAVMRestart -VMname $($ServerData.VMName) -Credentials $domainCred
+            Wait-VIAServiceToRun -VMname $($ServerData.VMName) -Credentials $domainCred
 
             #Action
             $App = "SC DPM 2016"
@@ -1019,7 +1020,7 @@ foreach($Role in $Roles){
             $UserName = $CustomerData.Name
             $CompanyName = $CustomerData.Name
             $SqlAccountPassword = "P@ssw0rd"
-            Invoke-Command -VMName $ServerData.ComputerName -ScriptBlock {
+            Invoke-Command -VMName $ServerData.VMName -ScriptBlock {
                 Param($Source,$Role,$Domain,$ProductKey,$UserName,$CompanyName,$SQLINSTANCENAME,$SqlAccountPassword)
                 C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSCDP2016.ps1 -Source $Source -Role $Role -Domain $Domain -ProductKey $ProductKey -UserName $UserName -CompanyName $CompanyName -SQLINSTANCENAME $SQLINSTANCENAME -SqlAccountPassword $SqlAccountPassword
             } -ArgumentList $Source,$Role,$Domain,$ProductKey,$UserName,$CompanyName,$SQLINSTANCENAME,$SqlAccountPassword -ErrorAction Stop  -Credential $domainCred
@@ -1036,7 +1037,7 @@ foreach($Role in $Roles){
             Update-VIALog -Data "Action: $Action - $App"
             $Source = 'D:\SQL 2014 STD SP1\setup.exe'
             $SQLRole = 'SCCM_CB'
-            Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSQLServer2014.ps1 -ArgumentList $Source,$SQLRole,$SQLINSTANCENAME,$SQLINSTANCEDIR -ErrorAction Stop  -Credential $domainCred
+            Invoke-Command -VMName $ServerData.VMName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSQLServer2014.ps1 -ArgumentList $Source,$SQLRole,$SQLINSTANCENAME,$SQLINSTANCEDIR -ErrorAction Stop  -Credential $domainCred
 
             #Action
             $App = "SQL Firewall Rules"
@@ -1045,33 +1046,33 @@ foreach($Role in $Roles){
             $ScriptBlock = {
                 New-NetFirewallRule -Name "SQL ports for ConfigMgr" -Enabled True -DisplayName "SQL ports for ConfigMgr" -Profile Domain -Protocol TCP -LocalPort 1433,4022
             }
-            Invoke-Command -VMName $ServerData.ComputerName -ScriptBlock $ScriptBlock -ErrorAction Stop  -Credential $domainCred
+            Invoke-Command -VMName $ServerData.VMName -ScriptBlock $ScriptBlock -ErrorAction Stop  -Credential $domainCred
 
             #Action
             $App = "SQL Memory Config"
             $Action = "Configure Application"
             Update-VIALog -Data "Action: $Action - $App"
             $SQLRole = 'SCCM_CB'
-            Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Scripts\Set-VIASQLMemoryConfiguration.ps1 -ArgumentList $SQLINSTANCENAME -ErrorAction Stop  -Credential $domainCred
+            Invoke-Command -VMName $ServerData.VMName -FilePath C:\Setup\HYDv10\Scripts\Set-VIASQLMemoryConfiguration.ps1 -ArgumentList $SQLINSTANCENAME -ErrorAction Stop  -Credential $domainCred
 
             #Action
             $App = "Add System to System"
             $Action = "Configure Application"
             Update-VIALog -Data "Action: $Action - $App"
-            Invoke-Command -VMName $ServerData.ComputerName -ScriptBlock {
+            Invoke-Command -VMName $ServerData.VMName -ScriptBlock {
                 C:\Setup\HYDv10\Scripts\Add-VIADomainuserToLocalgroup.ps1 -LocalGroup Administrators -DomainUser CM01$
             } -Credential $domainCred
 
             #Restart
-            Update-VIALog -Data "Restart $($ServerData.ComputerName)"
-            Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $domainCred
-            Wait-VIAServiceToRun -VMname $($ServerData.ComputerName) -Credentials $domainCred
+            Update-VIALog -Data "Restart $($ServerData.VMName)"
+            Wait-VIAVMRestart -VMname $($ServerData.VMName) -Credentials $domainCred
+            Wait-VIAServiceToRun -VMname $($ServerData.VMName) -Credentials $domainCred
 
             #Action
             $App = "Extend AD"
             $Action = "Configure Application"
             Update-VIALog -Data "Action: $Action - $App"
-            Invoke-Command -VMName $ServerData.ComputerName -ScriptBlock {
+            Invoke-Command -VMName $ServerData.VMName -ScriptBlock {
                 & 'D:\ConfigMgr CB\Source\SMSSETUP\BIN\X64\extadsch.exe'
             } -ErrorAction Stop  -Credential $domainCred
 
@@ -1079,7 +1080,7 @@ foreach($Role in $Roles){
             $App = "Create/Configure System Managment Container"
             $Action = "Configure Application"
             Update-VIALog -Data "Action: $Action - $App"
-            Invoke-Command -VMName $ServerData.ComputerName -ScriptBlock {
+            Invoke-Command -VMName $ServerData.VMName -ScriptBlock {
                 Add-WindowsFeature -Name 'RSAT-AD-PowerShell','RSAT-ADDS','RSAT-AD-AdminCenter','RSAT-ADDS-Tools' -IncludeAllSubFeature
                 C:\Setup\HYDv10\Scripts\Create-CCMContainer.ps1
             } -Credential $domainCred
@@ -1089,7 +1090,7 @@ foreach($Role in $Roles){
             $Action = "Install Application"
             Update-VIALog -Data "Action: $Action - $App"
             $Source = 'D:\ConfigMgr CB\Source\SMSSETUP\BIN\X64\setup.exe'
-            Invoke-Command -VMName $ServerData.ComputerName -ScriptBlock {
+            Invoke-Command -VMName $ServerData.VMName -ScriptBlock {
                 Param()
                 & 'D:\ConfigMgr CB\Source\SMSSETUP\BIN\X64\setup.exe' /script C:\Setup\HYDv10\Scripts\ConfigMgrUnattend.ini /NoUserInput
             } -ErrorAction Stop  -Credential $domainCred
@@ -1114,12 +1115,12 @@ switch ($FinishAction)
     'Reboot'{
         $Action = "Restart"
         Write-Verbose "Action: $Action"
-        Restart-VIAVM -VMname $($ServerData.ComputerName)
+        Restart-VIAVM -VMname $($ServerData.VMName)
     }
     'Shutdown'{
         $Action = "Shutdown"
         Write-Verbose "Action: $Action"
-        Stop-VM -Name $($ServerData.ComputerName)
+        Stop-VM -Name $($ServerData.VMName)
     }
     Default {}
 }
