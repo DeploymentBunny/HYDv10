@@ -1024,6 +1024,76 @@ foreach($Role in $Roles){
                 C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSCDP2016.ps1 -Source $Source -Role $Role -Domain $Domain -ProductKey $ProductKey -UserName $UserName -CompanyName $CompanyName -SQLINSTANCENAME $SQLINSTANCENAME -SqlAccountPassword $SqlAccountPassword
             } -ArgumentList $Source,$Role,$Domain,$ProductKey,$UserName,$CompanyName,$SQLINSTANCENAME,$SqlAccountPassword -ErrorAction Stop  -Credential $domainCred
         }
+        'SCCM_CB'{
+            #Get Servicedata
+            #$ServicesData = $Settings.settings.Services.Service | Where-Object -Property Name -EQ -Value 'SCDP2016'
+            $SQLINSTANCENAME = 'MSSQLServer'
+            $SQLINSTANCEDIR = "E:\SQLDB"
+
+            #Action
+            $App = "SQL 2014 STD SP1"
+            $Action = "Install Application"
+            Update-VIALog -Data "Action: $Action - $App"
+            $Source = 'D:\SQL 2014 STD SP1\setup.exe'
+            $SQLRole = 'SCCM_CB'
+            Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSQLServer2014.ps1 -ArgumentList $Source,$SQLRole,$SQLINSTANCENAME,$SQLINSTANCEDIR -ErrorAction Stop  -Credential $domainCred
+
+            #Action
+            $App = "SQL Firewall Rules"
+            $Action = "Configure Application"
+            Update-VIALog -Data "Action: $Action - $App"
+            $ScriptBlock = {
+                New-NetFirewallRule -Name "SQL ports for ConfigMgr" -Enabled True -DisplayName "SQL ports for ConfigMgr" -Profile Domain -Protocol TCP -LocalPort 1433,4022
+            }
+            Invoke-Command -VMName $ServerData.ComputerName -ScriptBlock $ScriptBlock -ErrorAction Stop  -Credential $domainCred
+
+            #Action
+            $App = "SQL Memory Config"
+            $Action = "Configure Application"
+            Update-VIALog -Data "Action: $Action - $App"
+            $SQLRole = 'SCCM_CB'
+            Invoke-Command -VMName $ServerData.ComputerName -FilePath C:\Setup\HYDv10\Scripts\Set-VIASQLMemoryConfiguration.ps1 -ArgumentList $SQLINSTANCENAME -ErrorAction Stop  -Credential $domainCred
+
+            #Action
+            $App = "Add System to System"
+            $Action = "Configure Application"
+            Update-VIALog -Data "Action: $Action - $App"
+            Invoke-Command -VMName $ServerData.ComputerName -ScriptBlock {
+                C:\Setup\HYDv10\Scripts\Add-VIADomainuserToLocalgroup.ps1 -LocalGroup Administrators -DomainUser CM01$
+            } -Credential $domainCred
+
+            #Restart
+            Update-VIALog -Data "Restart $($ServerData.ComputerName)"
+            Wait-VIAVMRestart -VMname $($ServerData.ComputerName) -Credentials $domainCred
+            Wait-VIAServiceToRun -VMname $($ServerData.ComputerName) -Credentials $domainCred
+
+            #Action
+            $App = "Extend AD"
+            $Action = "Configure Application"
+            Update-VIALog -Data "Action: $Action - $App"
+            Invoke-Command -VMName $ServerData.ComputerName -ScriptBlock {
+                & 'D:\ConfigMgr CB\Source\SMSSETUP\BIN\X64\extadsch.exe'
+            } -ErrorAction Stop  -Credential $domainCred
+
+            #Action
+            $App = "Create/Configure System Managment Container"
+            $Action = "Configure Application"
+            Update-VIALog -Data "Action: $Action - $App"
+            Invoke-Command -VMName $ServerData.ComputerName -ScriptBlock {
+                Add-WindowsFeature -Name 'RSAT-AD-PowerShell','RSAT-ADDS','RSAT-AD-AdminCenter','RSAT-ADDS-Tools' -IncludeAllSubFeature
+                C:\Setup\HYDv10\Scripts\Create-CCMContainer.ps1
+            } -Credential $domainCred
+
+            #Action
+            $App = "SCCM CB"
+            $Action = "Install Application"
+            Update-VIALog -Data "Action: $Action - $App"
+            $Source = 'D:\ConfigMgr CB\Source\SMSSETUP\BIN\X64\setup.exe'
+            Invoke-Command -VMName $ServerData.ComputerName -ScriptBlock {
+                Param()
+                & 'D:\ConfigMgr CB\Source\SMSSETUP\BIN\X64\setup.exe' /script C:\Setup\HYDv10\Scripts\ConfigMgrUnattend.ini /NoUserInput
+            } -ErrorAction Stop  -Credential $domainCred
+        }
         Default {}
     }
 }

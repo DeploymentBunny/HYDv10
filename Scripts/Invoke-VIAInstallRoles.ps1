@@ -559,6 +559,53 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools
     }
+    'SCCM_CB'
+    {
+        Write-Verbose "Adding Windows Features for selected role: $Role"
+        $ServicesToInstall = @(
+        'FS-FileServer',
+        'Web-Default-Doc',
+        'Web-Dir-Browsing',
+        'Web-Http-Errors',
+        'Web-Static-Content',
+        'Web-Http-Redirect',
+        'Web-Http-Logging',
+        'Web-Log-Libraries',
+        'Web-Request-Monitor',
+        'Web-Http-Tracing',
+        'Web-Stat-Compression',
+        'Web-Dyn-Compression',
+        'Web-Filtering',
+        'Web-Windows-Auth',
+        'Web-Net-Ext',
+        'Web-Net-Ext45',
+        'Web-Asp-Net',
+        'Web-Asp-Net45',
+        'Web-ISAPI-Ext',
+        'Web-ISAPI-Filter',
+        'Web-Mgmt-Console',
+        'Web-Mgmt-Compat',
+        'Web-Metabase',
+        'Web-WMI',
+        'NET-Framework-Core',
+        'NET-HTTP-Activation',
+        'NET-Non-HTTP-Activ',
+        'NET-Framework-45-Core',
+        'NET-Framework-45-ASPNET',
+        'NET-WCF-Services45',
+        'NET-WCF-HTTP-Activation45',
+        'NET-WCF-TCP-PortSharing45',
+        'BITS',
+        'BITS-IIS-Ext',
+        'RDC',
+        'RSAT-Bits-Server',
+        'WAS',
+        'WAS-Process-Model',
+        'WAS-NET-Environment',
+        'WAS-Config-APIs'
+        )
+        Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
+    }
     Default
     {
         Write-Warning "Nothing to do for role $Role"

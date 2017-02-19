@@ -1,7 +1,7 @@
 ﻿#Bootstrap Script for HYDv10
 
 #Read data from Bootstrap XML
-$Global:BootstrapFile = "C:\Setup\HYDv10\Config\Bootstrap_DEMOHOST03.xml"
+$Global:BootstrapFile = "C:\Setup\HYDv10\Config\Bootstrap_LCHOST.xml"
 [xml]$Global:Bootstrap = Get-Content $BootstrapFile -ErrorAction Stop
 
 #Set Vars
