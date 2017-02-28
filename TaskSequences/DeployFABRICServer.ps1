@@ -261,8 +261,6 @@ if(((($Teams.Name).count) -ge '1') -eq $true){
     }
 }
 
-
-
 #Deploy VM end
 
 ##############
@@ -347,7 +345,7 @@ Foreach($role in $roles){
 #Restart
 Update-VIALog -Data "Restart $($ServerData.VMName)"
 Wait-VIAVMRestart -VMname $($ServerData.VMName) -Credentials $DefaultCred
-Start-Sleep -Seconds 20
+if($ROLE -eq 'vConverged' -or 'VCompute'){Start-Sleep -Seconds 60}else{Start-Sleep -Seconds 20}
 Wait-VIAServiceToRun -VMname $($ServerData.VMName) -Credentials $DefaultCred
 
 #Configure Roles And Features
@@ -1095,6 +1093,8 @@ foreach($Role in $Roles){
                 & 'D:\ConfigMgr CB\Source\SMSSETUP\BIN\X64\setup.exe' /script C:\Setup\HYDv10\Scripts\ConfigMgrUnattend.ini /NoUserInput
             } -ErrorAction Stop  -Credential $domainCred
         }
+        'WAP'{
+}
         Default {}
     }
 }

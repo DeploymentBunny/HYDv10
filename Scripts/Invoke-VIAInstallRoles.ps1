@@ -220,17 +220,33 @@ if($MDTIntegration -eq "YES"){
 
 switch ($Role)
 {
-    'VCompute'
-    {
+    'VCompute'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
+        "FS-FileServer",
+        "Data-Center-Bridging",
+        "Failover-Clustering",
         "Hyper-V",
-        "Failover-Clustering"
+        'Multipath-IO',
+        'HostGuardian'
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
     }
-    'vConverged'
-    {
+    'vConverged'{
+        Write-Verbose "Adding Windows Features for selected role: $Role"
+        $ServicesToInstall = @(
+        "FS-FileServer",
+        "Data-Center-Bridging",
+        "Failover-Clustering",
+        "FS-Data-Deduplication",
+        "Hyper-V",
+        'Multipath-IO',
+        'HostGuardian',
+        'Storage-Replica' 
+        )
+        Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
+    }
+    'LABHOST'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "FS-FileServer",
@@ -241,30 +257,21 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
     }
-    LABHOST
-    {
+    'S2D'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "FS-FileServer",
         "Data-Center-Bridging",
         "Failover-Clustering",
         "FS-Data-Deduplication",
-        "Hyper-V"
+        "Hyper-V",
+        'Multipath-IO',
+        'HostGuardian',
+        'Storage-Replica'
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
     }
-    S2D
-    {
-        Write-Verbose "Adding Windows Features for selected role: $Role"
-        $ServicesToInstall = @(
-        "FS-FileServer",
-        "Data-Center-Bridging",
-        "Failover-Clustering"
-        )
-        Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
-    }
-    Storage
-    {
+    'Storage'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "FS-FileServer",
@@ -276,8 +283,7 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
     }
-    Storageclu
-    {
+    'Storageclu'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "FS-FileServer",
@@ -290,16 +296,14 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
     }
-    Compute
-    {
+    'Compute'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Hyper-V"
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
     }
-    ComputeClu
-    {
+    'ComputeClu'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Hyper-V",
@@ -307,8 +311,7 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
     }
-    HyperConv
-    {
+    'HyperConv'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Hyper-V",
@@ -318,8 +321,7 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
     }
-    FILE
-    {
+    'FILE'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "FS-FileServer",
@@ -329,13 +331,11 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
     }
-    RDGW
-    {
+    'RDGW'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         Install-WindowsFeature -Name "RDS-GateWay" -IncludeManagementTools -IncludeAllSubFeature -ErrorAction Stop
     }
-    ADDS
-    {
+    'ADDS'{
         $ServicesToInstall = @(
         "AD-Domain-Services",
         "Windows-Server-Backup",
@@ -343,26 +343,26 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
     }
-    DHCP
-    {
+    'DHCP'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         Add-WindowsFeature -Name DHCP -IncludeManagementTools
         Start-Sleep 2
 
     }
-    RRAS
-    {
+    'RRAS'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         Install-WindowsFeature Routing -IncludeManagementTools
         Install-RemoteAccess -VpnType Vpn
     }
-    RDGW
-    {
+    'RDGW'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         Install-WindowsFeature -Name RDS-GateWay -IncludeManagementTools -IncludeAllSubFeature
     }
-    MGMT
-    {
+    'WAPRDGW'{
+        Write-Verbose "Adding Windows Features for selected role: $Role"
+        Install-WindowsFeature -Name RDS-GateWay -IncludeManagementTools -IncludeAllSubFeature
+    }
+    'MGMT'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "RDS-RD-Server",
@@ -403,19 +403,16 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall
     }
-    DEPL
-    {
+    'DEPL'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         Add-WindowsFeature -Name WDS -IncludeAllSubFeature -IncludeManagementTools
         Add-WindowsFeature -Name FS-FileServer,FS-Data-Deduplication
     }
-    ADCA
-    {
+    'ADCA'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         Add-WindowsFeature -Name ADCS-Cert-Authority -IncludeManagementTools
     }
-    WSUS
-    {
+    'WSUS'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "UpdateServices-Services",
@@ -423,8 +420,7 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools
     }
-    WSUSIDB
-    {
+    'WSUSIDB'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "UpdateServices-Services",
@@ -432,8 +428,7 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools
     }
-    SCVM
-    {
+    'SCVM'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Hyper-V-Tools",
@@ -449,8 +444,7 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools
     }
-    SCDP
-    {
+    'SCDP'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Hyper-V-Tools",
@@ -462,8 +456,7 @@ switch ($Role)
         $Arguments = " /Online /Enable-feature /All /FeatureName:Microsoft-Hyper-V /FeatureName:Microsoft-Hyper-V-Management-PowerShell /quiet /norestart"
         Invoke-VIAExe -Executable $Executable -Arguments $Arguments
     }
-    SCOR
-    {
+    'SCOR'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Web-Common-Http",
@@ -477,8 +470,7 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools
     }
-    'SCOM'
-    {
+    'SCOM'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Web-Default-Doc",          
@@ -512,8 +504,7 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
     }
-    BitLockerAdmin
-    {
+    'BitLockerAdmin'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "RSAT-Feature-Tools-BitLocker",
@@ -522,8 +513,7 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools
     }
-    WEB
-    {
+    'WEB'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Web-Windows-Auth",
@@ -559,8 +549,43 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools
     }
-    'SCCM_CB'
-    {
+    'WAP'{
+        Write-Verbose "Adding Windows Features for selected role: $Role"
+        $ServicesToInstall = @(
+        "Web-Windows-Auth",
+        "Web-ISAPI-Ext",
+        "Web-Metabase",
+        "Web-WMI",
+        "NET-Framework-Features",
+        "Web-Asp-Net",
+        "Web-Asp-Net45",
+        "NET-HTTP-Activation",
+        "NET-Non-HTTP-Activ",
+        "Web-Static-Content",
+        "Web-Default-Doc",
+        "Web-Dir-Browsing",
+        "Web-Http-Errors",
+        "Web-Http-Redirect",
+        "Web-App-Dev",
+        "Web-Net-Ext",
+        "Web-Net-Ext45",
+        "Web-ISAPI-Filter",
+        "Web-Health",
+        "Web-Http-Logging",
+        "Web-Log-Libraries",
+        "Web-Request-Monitor",
+        "Web-HTTP-Tracing",
+        "Web-Security",
+        "Web-Filtering",
+        "Web-Performance",
+        "Web-Stat-Compression",
+        "Web-Mgmt-Console",
+        "Web-Scripting-Tools",
+        "Web-Mgmt-Compat"
+        )
+        Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools
+    }
+    'SCCM_CB'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         'FS-FileServer',
@@ -606,8 +631,7 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
     }
-    Default
-    {
+    Default{
         Write-Warning "Nothing to do for role $Role"
     }
     
