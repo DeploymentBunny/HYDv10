@@ -756,6 +756,8 @@ foreach($Role in $Roles){
             $RunAsAccountPassword = "P@ssw0rd"
             $CACommonName = 'Fabric-root-CA'
             Invoke-Command -VMName $($ServerData.VMName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARole-ADCA.ps1 -ArgumentList $RunAsAccount,$RunAsAccountPassword,$CACommonName -Verbose -Credential $domainCred
+            Wait-VIAVMRestart -VMname $($ServerData.VMName) -Credentials $DefaultCred
+            Wait-VIAServiceToRun -VMname $($ServerData.VMName) -Credentials $DefaultCred
         }
         Default {}
     }
@@ -1099,8 +1101,14 @@ foreach($Role in $Roles){
                 & 'D:\ConfigMgr CB\Source\SMSSETUP\BIN\X64\setup.exe' /script C:\Setup\HYDv10\Scripts\ConfigMgrUnattend.ini /NoUserInput
             } -ErrorAction Stop  -Credential $domainCred
         }
-        'WAP'{
-}
+        'WAP'{}
+        'WSUS'{
+            #Action
+            $App = "WSUS Metadata Sync"
+            $Action = "Execute"
+            Update-VIALog -Data "Action: $Action - $App"
+            Invoke-Command -VMName $ServerData.VMName -FilePath C:\Setup\HYDv10\Scripts\Set-VIARole-WSUS-SyncMetaData.ps1 -ErrorAction Stop -Credential $domainCred 
+        }
         Default {}
     }
 }
