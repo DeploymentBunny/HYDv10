@@ -220,6 +220,13 @@ if($MDTIntegration -eq "YES"){
 
 switch ($Role)
 {
+    'NetCon'{
+        Write-Verbose "Adding Windows Features for selected role: $Role"
+        $ServicesToInstall = @(
+        "NetworkController"
+        )
+        Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
+    }
     'VCompute'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
@@ -410,7 +417,7 @@ switch ($Role)
     }
     'ADCA'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
-        Add-WindowsFeature -Name ADCS-Cert-Authority -IncludeManagementTools
+        Add-WindowsFeature -Name ADCS-Cert-Authority -IncludeManagementTools -IncludeAllSubFeature
     }
     'WSUS'{
         Write-Verbose "Adding Windows Features for selected role: $Role"

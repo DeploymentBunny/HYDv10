@@ -146,7 +146,7 @@ if($DomainOrWorkGroup -eq 'Workgroup'){
 }
 
 if($DomainOrWorkGroup -eq 'Domain'){
-    $VIAUnattendXML = New-VIAUnattendXML -Computername $($ServerData.ComputerName) -OSDAdapter0IPAddressList $NIC01.IPAddress -DomainOrWorkGroup Domain -ProtectYourPC 3 -Verbose -OSDAdapter0Gateways $NIC01RelatedData.Gateway -OSDAdapter0DNS1 $NIC01RelatedData.DNS[0] -OSDAdapter0DNS2 $NIC01RelatedData.DNS[1] -OSDAdapter0SubnetMaskPrefix $NIC01RelatedData.SubNet -OrgName $CustomerData.Name -Fullname $CustomerData.Name -TimeZoneName $CommonSettingData.TimeZoneName -DNSDomain $DomainData.DNSDomain -DomainAdmin $DomainData.DomainAdmin -DomainAdminPassword $DomainData.DomainAdminPassword -DomainAdminDomain $DomainData.DomainAdminDomain
+    $VIAUnattendXML = New-VIAUnattendXML -Computername $($ServerData.ComputerName) -OSDAdapter0IPAddressList $NIC01.IPAddress -DomainOrWorkGroup Domain -ProtectYourPC 3 -Verbose -OSDAdapter0Gateways $NIC01RelatedData.Gateway -OSDAdapter0DNS1 $NIC01RelatedData.DNS[0] -OSDAdapter0DNS2 $NIC01RelatedData.DNS[1] -OSDAdapter0SubnetMaskPrefix $NIC01RelatedData.SubNet -OrgName $CustomerData.Name -Fullname $CustomerData.Name -TimeZoneName $CommonSettingData.TimeZoneName -DNSDomain $DomainData.DNSDomain -DomainAdmin $DomainData.DomainAdmin -DomainAdminPassword $DomainData.DomainAdminPassword -DomainAdminDomain $DomainData.DomainAdminDomain -MachineObjectOU $ServerData.MachineObjectOU
 }
 
 $VIASetupCompletecmd = New-VIASetupCompleteCMD -Command $VIASetupCompletecmdCommand -Verbose
@@ -355,7 +355,7 @@ foreach($Role in $Roles){
     Update-VIALog -Data "Action: $Action - $ROLE"
     switch ($Role)
     {
-        'DEPL' {
+        'DEPL'{
             $DataDiskLabel = "DataDisk01"
             $RunAsAccount = "Administrator"
             $RunAsAccountPassword = "P@ssw0rd"
@@ -368,7 +368,7 @@ foreach($Role in $Roles){
                 $DataDiskLabel
                 )
                 $DriveLetter = (Get-Volume -FileSystemLabel $DataDiskLabel).DriveLetter
-                $folders = 'ApplicationRoot','MDTBuildLab','MDTProduction'
+                $folders = 'ApplicationRoot'
                 Foreach($folder in $folders){
                     New-Item -Path ($DriveLetter + ":\$folder") -ItemType Directory
                     New-SmbShare -Path ($DriveLetter + ":\$folder") -Name $folder -FullAccess Everyone
@@ -750,6 +750,12 @@ foreach($Role in $Roles){
                 $DHCPSrvCred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList "$($DHCPServiceAccountDomain)\$($DHCPServiceAccountName)", (ConvertTo-SecureString $DHCPServiceAccountPW -AsPlainText -Force)
                 Set-DhcpServerDnsCredential -Credential $DHCPSrvCred
             } -ErrorAction SilentlyContinue -Credential $domainCred -ArgumentList $DHCPServiceAccountDomain,$DHCPServiceAccountName,$DHCPServiceAccountPW
+        }
+        'ADCA'{
+            $RunAsAccount = "Administrator"
+            $RunAsAccountPassword = "P@ssw0rd"
+            $CACommonName = 'Fabric-root-CA'
+            Invoke-Command -VMName $($ServerData.VMName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARole-ADCA.ps1 -ArgumentList $RunAsAccount,$RunAsAccountPassword,$CACommonName -Verbose -Credential $domainCred
         }
         Default {}
     }
