@@ -23,5 +23,5 @@ $WSUSSrvSubScrip.StartSynchronizationForCategoryOnly()
 While($WSUSSrvSubScrip.GetSynchronizationStatus() -ne 'NotProcessing') 
 {            
     Write-Warning "Still syncing"            
-    Start-Sleep -Seconds 5            
+    Start-Sleep -Seconds 30            
 }

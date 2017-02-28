@@ -752,10 +752,20 @@ foreach($Role in $Roles){
             } -ErrorAction SilentlyContinue -Credential $domainCred -ArgumentList $DHCPServiceAccountDomain,$DHCPServiceAccountName,$DHCPServiceAccountPW
         }
         'ADCA'{
+            #Set param
             $RunAsAccount = "Administrator"
             $RunAsAccountPassword = "P@ssw0rd"
             $CACommonName = 'Fabric-root-CA'
+            
+            #Install CA
             Invoke-Command -VMName $($ServerData.VMName) -FilePath C:\Setup\HYDv10\Scripts\Set-VIARole-ADCA.ps1 -ArgumentList $RunAsAccount,$RunAsAccountPassword,$CACommonName -Verbose -Credential $domainCred
+            
+            #Reboot Number 1
+            Wait-VIAVMRestart -VMname $($ServerData.VMName) -Credentials $DefaultCred
+            Wait-VIAServiceToRun -VMname $($ServerData.VMName) -Credentials $DefaultCred
+            Start-Sleep -Seconds 30
+            
+            #Reboot Number 2
             Wait-VIAVMRestart -VMname $($ServerData.VMName) -Credentials $DefaultCred
             Wait-VIAServiceToRun -VMname $($ServerData.VMName) -Credentials $DefaultCred
         }
