@@ -451,7 +451,35 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools
     }
+    'SCVM2016'{
+        Write-Verbose "Adding Windows Features for selected role: $Role"
+        $ServicesToInstall = @(
+        "Hyper-V-Tools",
+        "Hyper-V-PowerShell",
+        "UpdateServices-API",
+        "UpdateServices-UI"
+        "UpdateServices-RSAT",
+        "RSAT-Clustering",
+        "RSAT-AD-Tools",
+        "RSAT-DHCP",
+        "RSAT-DNS-Server",
+        "WDS-AdminPack"
+        )
+        Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools
+    }
     'SCDP'{
+        Write-Verbose "Adding Windows Features for selected role: $Role"
+        $ServicesToInstall = @(
+        "Hyper-V-Tools",
+        "Hyper-V-PowerShell"
+        )
+        Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
+        
+        $Executable = "dism.exe" 
+        $Arguments = " /Online /Enable-feature /All /FeatureName:Microsoft-Hyper-V /FeatureName:Microsoft-Hyper-V-Management-PowerShell /quiet /norestart"
+        Invoke-VIAExe -Executable $Executable -Arguments $Arguments
+    }
+    'SCDP2016'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Hyper-V-Tools",
@@ -475,9 +503,58 @@ switch ($Role)
         "Web-Request-Monitor",
         "Web-Stat-Compression"
         )
-        Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools
+        Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
+    }
+    'SCOR2016'{
+        Write-Verbose "Adding Windows Features for selected role: $Role"
+        $ServicesToInstall = @(
+        "Web-Common-Http",
+        "Web-Static-Content",
+        "Web-Default-Doc",
+        "Web-Dir-Browsing",
+        "Web-Http-Errors",
+        "Web-Http-Logging",
+        "Web-Request-Monitor",
+        "Web-Stat-Compression",
+        'NET-WCF-HTTP-Activation45'
+        )
+        Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
     }
     'SCOM'{
+        Write-Verbose "Adding Windows Features for selected role: $Role"
+        $ServicesToInstall = @(
+        "Web-Default-Doc",          
+        "Web-Dir-Browsing",         
+        "Web-Http-Errors",          
+        "Web-Static-Content",       
+        "Web-Http-Logging",         
+        "Web-Request-Monitor",      
+        "Web-Stat-Compression",     
+        "Web-Filtering",            
+        "Web-Windows-Auth",         
+        "Web-Net-Ext",              
+        "Web-Net-Ext45",            
+        "Web-Asp-Net",              
+        "Web-Asp-Net45",            
+        "Web-CGI",                  
+        "Web-ISAPI-Ext",            
+        "Web-ISAPI-Filter",         
+        "Web-Mgmt-Console",         
+        "Web-Mgmt-Compat",          
+        "Web-Metabase",             
+        "NET-Framework-Core",       
+        "NET-HTTP-Activation",      
+        "NET-Framework-45-Core",    
+        "NET-Framework-45-ASPNET",  
+        "NET-WCF-Services45",       
+        "NET-WCF-TCP-PortSharing45",
+        "WAS-Process-Model",        
+        "WAS-NET-Environment",      
+        "WAS-Config-APIs"
+        )
+        Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
+    }
+    'SCOM2016'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
         "Web-Default-Doc",          
@@ -638,6 +715,20 @@ switch ($Role)
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
     }
+    'SPF2016'{
+    Write-Output "Adding Windows Features for $Role"
+    $ServicesToInstall = @(
+    "Web-WebServer",
+    "Web-Scripting-Tools",
+    "Web-Basic-Auth",
+    "Web-Windows-Auth",
+    "Web-Url-Auth",
+    "Web-Asp-Net45",
+    "NET-WCF-HTTP-Activation45",
+    "ManagementOdata"        )
+    Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools
+    }
+
     Default{
         Write-Warning "Nothing to do for role $Role"
     }
