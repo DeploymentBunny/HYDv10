@@ -1004,6 +1004,16 @@ foreach($Role in $Roles){
             else{
                 Write-Verbose "No productkey specified"
             }
+
+            #Install SCVMM Client
+            $App = "SCOR 2016"
+            $Action = "Install SCVMM Client"
+            Update-VIALog -Data "Action: $Action - $App"
+            $ScriptBlock = {
+                $result = Start-Process -FilePath 'D:\SC 2016 VMM\setup.exe' -ArgumentList " /client /i /IACCEPTSCEULA" -NoNewWindow -PassThru -Wait
+                $result.ExitCode
+            }
+            Invoke-Command -VMName $ServerData.VMName -ScriptBlock $ScriptBlock -Credential $domainCred
         }
         'SCDP'{
             #Get Servicedata
@@ -1121,11 +1131,11 @@ foreach($Role in $Roles){
             Write-Verbose "SQLINSTANCEDIR: $SQLINSTANCEDIR"
 
             #Action
-            $App = "SQL 2014 STD SP1"
-            $Action = "Install Application"
+            $App = "SCOR 2016"
+            $Action = "Install SQL 2014 STD SP1"
             Update-VIALog -Data "Action: $Action - $App"
             $Source = 'D:\SQL 2014 STD SP1\setup.exe'
-            $SQLRole = 'SCOR2016'
+            $SQLRole = $Role
             Invoke-Command -VMName $ServerData.VMName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSQLServer2014.ps1 -ArgumentList $Source,$SQLRole,$SQLINSTANCENAME,$SQLINSTANCEDIR -ErrorAction Stop  -Credential $domainCred
 
             #Set vars for SCOR install
@@ -1142,8 +1152,8 @@ foreach($Role in $Roles){
             Write-Verbose "SCORProductKey: $SCORProductKey"
 
             #Action
-            $App = "Add $ServiceAccountName to local Administrators group"
-            $Action = "Configure Application"
+            $App = "SCOR 2016"
+            $Action = "Add $ServiceAccountName to local Administrators group"
             Update-VIALog -Data "Action: $Action - $App"
             $ScriptBlock = {
                 C:\Setup\HYDv10\Scripts\Add-VIADomainuserToLocalgroup.ps1 -LocalGroup Administrators -DomainUser $using:ServiceAccountName
@@ -1152,7 +1162,7 @@ foreach($Role in $Roles){
 
             #Action
             $App = "SCOR 2016"
-            $Action = "Install"
+            $Action = "Install SCOR2016"
             Update-VIALog -Data "Action: $Action - $App"
             $ScriptBlock = {
                 C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSCOR2016.ps1 -Setup "D:\SC 2016 OR\Setup\Setup.exe" -SCORProductKey $Using:SCORProductKey -SCORSAccount $Using:SCORSAccount -SCORSAccountPW $Using:SCORSAccountPW -SCORDBSrv $($Env:Computername +'\' + $Using:SQLINSTANCENAME) -Verbose
@@ -1160,7 +1170,6 @@ foreach($Role in $Roles){
             Invoke-Command -VMName $ServerData.VMName -ScriptBlock $ScriptBlock -Credential $domainCred
 
             #Firewall rule for SCOR 2016
-            #Open port 81 and 82 for SCOR
             $App = "SCOR 2016"
             $Action = "Open port 81 and 82"
             Update-VIALog -Data "Action: $Action - $App"
@@ -1168,16 +1177,6 @@ foreach($Role in $Roles){
                 New-NetFirewallRule -Name SCOR2016 -DisplayName "System Center Orchestrator" -Description "System Center Orchestrator" -Protocol TCP -LocalPort 81-82 -Enabled True -Profile Any -Action Allow 
             }
             Invoke-Command -VMName $ServerData.VMName -ScriptBlock $ScriptBlock -Credential $domainCred
-
-            #Add Roles And Features for SPF2016
-            $Action = "Add Roles And Features"
-            Update-VIALog -Data "Action: $Action - $ROLE"
-            $Return = Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
-                Param(
-                $Role
-                )
-                C:\Setup\HYDv10\Scripts\Invoke-VIAInstallRoles.ps1 -Role $ROLE
-            } -ArgumentList SPF2016 -ErrorAction Stop -Credential $DefaultCred
 
             #Set vars for SPF Install
             $ServiceAccount = $DomainData.DomainAccounts.DomainAccount | Where-Object -Property Name -EQ -Value SVC_SPF_SA
@@ -1197,10 +1196,21 @@ foreach($Role in $Roles){
             Write-Verbose "AdminSecurityGroupUsers: $AdminSecurityGroupUsers"
             Write-Verbose "ProviderSecurityGroupUsers: $ProviderSecurityGroupUsers"
             Write-Verbose "usageSecurityGroupUsers: $usageSecurityGroupUsers"
-            
+
+            #Add Roles And Features for SPF2016
+            $App = "SCOR 2016"
+            $Action = "Add Roles And Features for SPF2016"
+            Update-VIALog -Data "Action: $Action - $App"
+            $Return = Invoke-Command -VMName $($ServerData.VMName) -ScriptBlock {
+                Param(
+                $Role
+                )
+                C:\Setup\HYDv10\Scripts\Invoke-VIAInstallRoles.ps1 -Role $ROLE
+            } -ArgumentList SPF2016 -ErrorAction Stop -Credential $DefaultCred
+
             #Action
-            $App = "Add $WAPServiceAccount to local Administrators group"
-            $Action = "Configure Application"
+            $App = "SCOR 2016"
+            $Action = "Add $WAPServiceAccount to local Administrators group"
             Update-VIALog -Data "Action: $Action - $App"
             $ScriptBlock = {
                 C:\Setup\HYDv10\Scripts\Add-VIADomainuserToLocalgroup.ps1 -LocalGroup Administrators -DomainUser $using:WAPServiceAccount
@@ -1208,8 +1218,8 @@ foreach($Role in $Roles){
             Invoke-Command -VMName $ServerData.VMName -ScriptBlock $ScriptBlock -Credential $domainCred
 
             #Install Windows Communication Foundation (WCF) Data Services 5.0 for Open Data Protocol (OData) V3
-            $App = "Add $WAPServiceAccount to local Administrators group"
-            $Action = "Configure Application"
+            $App = "SCOR 2016"
+            $Action = "Install Windows Communication Foundation (WCF) Data Services 5.0 for Open Data Protocol (OData) V3"
             Update-VIALog -Data "Action: $Action - $App"
             $ScriptBlock = {
                 C:\Setup\HYDv10\Scripts\Invoke-VIAInstallWCF.ps1 -Setup D:\WcfDataServices5\WcfDataServices.exe 
@@ -1217,11 +1227,11 @@ foreach($Role in $Roles){
             Invoke-Command -VMName $ServerData.VMName -ScriptBlock $ScriptBlock -Credential $domainCred
 
             #Install ASPNET4
-            $App = "Add $WAPServiceAccount to local Administrators group"
-            $Action = "Configure Application"
+            $App = "SCOR 2016"
+            $Action = "Install ASPNET4"
             Update-VIALog -Data "Action: $Action - $App"
             $ScriptBlock = {
-                C:\Setup\HYDv10\Scripts\Invoke-VIAInstallADK.ps1 -Setup D:\AspNetMVC4\AspNetMVC4Setup.exe 
+                C:\Setup\HYDv10\Scripts\Invoke-VIAInstallAspNetMVC4Setup.ps1 -Setup D:\AspNetMVC4\AspNetMVC4Setup.exe 
             }
             Invoke-Command -VMName $ServerData.VMName -ScriptBlock $ScriptBlock -Credential $domainCred
 
@@ -1235,22 +1245,22 @@ foreach($Role in $Roles){
             }
             Invoke-Command -VMName $ServerData.VMName -ScriptBlock $ScriptBlock -Credential $domainCred
 
-            #Install SPF
-            \\fadepl01\ApplicationRoot\Script\Invoke-FAInstallSPF.ps1 `
-            -SPFSetup \\fadepl01\ApplicationRoot\Install-SCOR\Source\SPF\Setup.exe `
-            -SPFDomain $Domain `
-            -DatabaseServer $env:COMPUTERNAME `
-            -VmmSecurityGroupUsers """$Domain\$VmmSecurityGroupUsers""" `
-            -AdminSecurityGroupUsers """$Domain\$AdminSecurityGroupUsers""" `
-            -ProviderSecurityGroupUsers """$Domain\$ProviderSecurityGroupUsers""" `
-            -usageSecurityGroupUsers """$Domain\$usageSecurityGroupUsers""" `
-            -SPFServiceAccount $SPFServiceAccount `
-            -SPFServiceAccountPW $SPFServiceAccountPW `
-            -Verbose
+            $App = "SCOR 2016"
+            $Action = "Install SPF2016"
+            Update-VIALog -Data "Action: $Action - $App"
+            $ScriptBlock = {
+                C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSPF2016.ps1 -SPFSetup "D:\SC 2016 OR\SPF\Setup.exe" `
+                -SPFDomain $Using:DomainData.DomainNetBios `
+                -SPFServiceAccount $using:SPFServiceAccount `
+                -SPFServiceAccountPW $using:SPFServiceAccountPW `
+                -DatabaseServer $env:COMPUTERNAME `
+                -VmmSecurityGroupUsers """$($Using:DomainData.DomainNetBios)\$($Using:VmmSecurityGroupUsers)""" `
+                -AdminSecurityGroupUsers """$($Using:DomainData.DomainNetBios)\$($Using:AdminSecurityGroupUsers)""" `
+                -ProviderSecurityGroupUsers """$($Using:DomainData.DomainNetBios)\$($Using:ProviderSecurityGroupUsers)""" `
+                -usageSecurityGroupUsers """$($Using:DomainData.DomainNetBios)\$($Using:usageSecurityGroupUsers)""" -Verbose
+            }
+            Invoke-Command -VMName $ServerData.VMName -ScriptBlock $ScriptBlock -Credential $domainCred
 
-
- 
- 
             #Set vars for SMA Install
             $ServiceAccount = $DomainData.DomainAccounts.DomainAccount | Where-Object -Property Name -EQ -Value SVC_SMA_SA
             $SMAServiceAccount = $ServiceAccount.Name
@@ -1267,42 +1277,108 @@ foreach($Role in $Roles){
             Write-Verbose "SMADBAuth: $SMADBAuth"
             Write-Verbose "SMAAccessGroup: $SMAAccessGroup"
 
-             
+            #Action
+            $App = "SCOR 2016"
+            $Action = "Add $SMAServiceAccount to local Administrators group"
+            Update-VIALog -Data "Action: $Action - $App"
+            $ScriptBlock = {
+                C:\Setup\HYDv10\Scripts\Add-VIADomainuserToLocalgroup.ps1 -LocalGroup Administrators -DomainUser $using:SMAServiceAccount
+            }
+            Invoke-Command -VMName $ServerData.VMName -ScriptBlock $ScriptBlock -Credential $domainCred
 
+            # Install SMA Powershell Module 
+            $App = "SCOR 2016"
+            $Action = "Install SMA PowershellModuleInstaller.msi"
+            Update-VIALog -Data "Action: $Action - $App"
+            $ScriptBlock = {
+                $Result = Start-Process msiexec.exe -ArgumentList "/i ""D:\SC 2016 OR\SMA\PowershellModuleInstaller.msi"" /qn" -Wait -NoNewWindow -PassThru -Verbose
+                $result.ExitCode
+            }
+            Invoke-Command -VMName $ServerData.VMName -ScriptBlock $ScriptBlock -Credential $domainCred
+
+            # Install SMA
+            $App = "SCOR 2016"
+            $Action = "Install SMA WebServiceInstaller.msi"
+            Update-VIALog -Data "Action: $Action - $App"
+            $ScriptBlock = {
+                $Cert = Get-ChildItem Cert:\LocalMachine\My | where -Property Subject -like "CN=$env:COMPUTERNAME.$DNSDomain" | where -Property Issuer -NotLike "CN=$env:COMPUTERNAME.$DNSDomain" 
+                if ($Cert) { 
+                    $SPECIFYCERTIFICATE = "Yes"
+                    $CertSerial = $Cert.SerialNumber
+                } 
+                else { 
+                    $SPECIFYCERTIFICATE = "No" 
+                } 
+                $Domain = $($Using:DomainData.DomainNetBios)
+                $AppPoolAccount = "$Domain"+"\"+"$Using:SMAServiceAccount"
+                $ADMINGROUPMEMBERS = "$Domain"+"\"+"$Using:SMAAccessGroup"
+                $AppPoolAccount = "$Domain"+"\"+"$Using:SMAServiceAccount"
+                $CreateDatabase = "Yes"
+                $SMASQLServer = $Using:SMADBServer+", "+$Using:SMADBPort 
+
+                $SMAPARAMETERS = "APPOOLACCOUNT=""$AppPoolAccount"" ApPOOLPASSWORD=""$Using:SMAServiceAccountPW"" ADMINGROUPMEMBERS=""$ADMINGROUPMEMBERS"" CREATEDATABASE=""$CreateDatabase"" DATABASEAUTHENTICATION=""$Using:SMADBAuth"" SQLSERVER=""$SMASQLServer"" SPECIFYCERTIFICATE=""$SPECIFYCERTIFICATE"" CERTIFICATESERIAL=""$CertSerial"" PRODUCTKEY=""$Using:SCORProductKey""" 
+                $result = Start-Process msiexec.exe -ArgumentList "/i ""D:\SC 2016 OR\SMA\WebServiceInstaller.msi"" /qn /L*v $ENV:Temp\WebServiceInstaller2.log $SMAPARAMETERS" -Wait -NoNewWindow -PassThru -Verbose
+                $result.ExitCode
+            }
+            Invoke-Command -VMName $ServerData.VMName -ScriptBlock $ScriptBlock -Credential $domainCred
+
+            # Install SMA
+            $App = "SCOR 2016"
+            $Action = "Install SMA WorkerInstaller.msi"
+            Update-VIALog -Data "Action: $Action - $App"
+            $ScriptBlock = {
+                $Domain = $($Using:DomainData.DomainNetBios)
+                $AppPoolAccount = "$Domain"+"\"+"$Using:SMAServiceAccount"
+                $SMASQLServer = $Using:SMADBServer+", "+$Using:SMADBPort 
+                $SMARWPARAMETERS = "SERVICEACCOUNT=""$AppPoolAccount"" SERVICEPASSWORD=""$Using:SMAServiceAccountPW"" DATABASEAUTHENTICATION=""$Using:SMADBAuth"" SQLSERVER=""$SMASQLServer"" PRODUCTKEY=""$Using:SCORProductKey""" 
+                $Result = Start-Process msiexec.exe -ArgumentList "/i ""D:\SC 2016 OR\SMA\WorkerInstaller.msi"" /qn /L*v $ENV:Temp\RBWebServiceInstaller.log $SMAPARAMETERS" -Wait -NoNewWindow -PassThru -Verbose
+                Return $Result
+            }
+            $Result = Invoke-Command -VMName $ServerData.VMName -ScriptBlock $ScriptBlock -Credential $domainCred
+            Write-Verbose "Exitcode from $Action was: $($Result.ExitCode)"
+
+            #Test Retur
+            #$App = "Test Retur"
+            #$Action = "Test Retur"
+            #Update-VIALog -Data "Action: $Action - $App"
+            #$ScriptBlock = {
+            #    $Result = Start-Process cmd.exe -ArgumentList "/c dir c:\" -Wait -NoNewWindow -PassThru -Verbose
+            #    Return $Result
+            #}
+            #$Result = Invoke-Command -VMName $ServerData.VMName -ScriptBlock $ScriptBlock -Credential $domainCred
+            #$Result.Exitcode
 
             #Restart
             Update-VIALog -Data "Restart $($ServerData.VMName)"
             Wait-VIAVMRestart -VMname $($ServerData.VMName) -Credentials $domainCred
             Wait-VIAServiceToRun -VMname $($ServerData.VMName) -Credentials $domainCred
-
-            #Action
-            $App = "Extend AD"
-            $Action = "Configure Application"
-            Update-VIALog -Data "Action: $Action - $App"
-            Invoke-Command -VMName $ServerData.VMName -ScriptBlock {
-                & 'D:\ConfigMgr CB\Source\SMSSETUP\BIN\X64\extadsch.exe'
-            } -ErrorAction Stop  -Credential $domainCred
-
-            #Action
-            $App = "Create/Configure System Managment Container"
-            $Action = "Configure Application"
-            Update-VIALog -Data "Action: $Action - $App"
-            Invoke-Command -VMName $ServerData.VMName -ScriptBlock {
-                Add-WindowsFeature -Name 'RSAT-AD-PowerShell','RSAT-ADDS','RSAT-AD-AdminCenter','RSAT-ADDS-Tools' -IncludeAllSubFeature
-                C:\Setup\HYDv10\Scripts\Create-CCMContainer.ps1
-            } -Credential $domainCred
-
-            #Action
-            $App = "SCCM CB"
-            $Action = "Install Application"
-            Update-VIALog -Data "Action: $Action - $App"
-            $Source = 'D:\ConfigMgr CB\Source\SMSSETUP\BIN\X64\setup.exe'
-            Invoke-Command -VMName $ServerData.VMName -ScriptBlock {
-                Param()
-                & 'D:\ConfigMgr CB\Source\SMSSETUP\BIN\X64\setup.exe' /script C:\Setup\HYDv10\Scripts\ConfigMgrUnattend.ini /NoUserInput
-            } -ErrorAction Stop  -Credential $domainCred
         }
-        'WAP'{}
+        'WAP'{
+            #Action
+            $App = "WAP"
+            $Action = "SQL 2014 Express SP1"
+            Update-VIALog -Data "Action: $Action - $App"
+            $Source = 'D:\SQL 2014 Express SP1\SETUP.EXE'
+            $SQLINSTANCENAME = "MSSQLSERVER"
+            $SQLINSTANCEDIR = "E:\SQLDB"
+            $SecurityMode = "Mixed"
+            Invoke-Command -VMName $ServerData.VMName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSQLServer2014SP1Express.ps1 -ArgumentList $Source,$SQLINSTANCENAME,$SQLINSTANCEDIR,$SecurityMode -ErrorAction Stop  -Credential $domainCred
+
+            # Install SMA Webplatform installer 5 
+            $App = "WAP"
+            $Action = "Install WebPlatformInstaller_amd64_en-US.msi"
+            Update-VIALog -Data "Action: $Action - $App"
+            $ScriptBlock = {
+                $Result = Start-Process msiexec.exe -ArgumentList "/i ""D:\WebPlatformInstaller5\WebPlatformInstaller_amd64_en-US.msi"" /qn" -Wait -NoNewWindow -PassThru -Verbose
+                $result.ExitCode
+            }
+            Invoke-Command -VMName $ServerData.VMName -ScriptBlock $ScriptBlock -Credential $domainCred
+
+            #Restart
+            Update-VIALog -Data "Restart $($ServerData.VMName)"
+            Wait-VIAVMRestart -VMname $($ServerData.VMName) -Credentials $domainCred
+            Wait-VIAServiceToRun -VMname $($ServerData.VMName) -Credentials $domainCred
+        }
         'WSUS'{
             #Action
             $App = "WSUS Metadata Sync"

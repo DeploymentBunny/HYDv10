@@ -27,6 +27,8 @@ Param (
     $SCORDBSrv
 )
 
+$SCORProductKey
+
 switch ($Role)
 {
     Default

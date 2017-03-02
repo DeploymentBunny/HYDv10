@@ -13,7 +13,6 @@ Param (
 Try{
     #Install WCF
     Write-Output "Install WCF"
-    $Setup = $WCFSetup
     $sArgument = " /norestart /quiet"
     $Process = Start-Process $Setup -ArgumentList $sArgument -NoNewWindow -PassThru -Wait
     Write-Host "Process finished with return code: " $Process.ExitCode

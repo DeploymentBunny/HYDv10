@@ -223,7 +223,8 @@ switch ($Role)
     'NetCon'{
         Write-Verbose "Adding Windows Features for selected role: $Role"
         $ServicesToInstall = @(
-        "NetworkController"
+        "NetworkController",
+        "SoftwareLoadBalancer"
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
     }
@@ -716,23 +717,21 @@ switch ($Role)
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
     }
     'SPF2016'{
-    Write-Output "Adding Windows Features for $Role"
-    $ServicesToInstall = @(
-    "Web-WebServer",
-    "Web-Scripting-Tools",
-    "Web-Basic-Auth",
-    "Web-Windows-Auth",
-    "Web-Url-Auth",
-    "Web-Asp-Net45",
-    "NET-WCF-HTTP-Activation45",
-    "ManagementOdata"        )
-    Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools
+        Write-Output "Adding Windows Features for $Role"
+        $ServicesToInstall = @(
+        "Web-WebServer",
+        "Web-Scripting-Tools",
+        "Web-Basic-Auth",
+        "Web-Windows-Auth",
+        "Web-Url-Auth",
+        "Web-Asp-Net45",
+        "NET-WCF-HTTP-Activation45",
+        "ManagementOdata"        )
+        Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools
     }
-
     Default{
         Write-Warning "Nothing to do for role $Role"
     }
-    
 }
 
 #Custom Code Ends--------------------------------------
