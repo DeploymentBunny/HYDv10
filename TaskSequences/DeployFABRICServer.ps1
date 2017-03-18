@@ -249,8 +249,10 @@ foreach ($obj in ($ServerData.DataDisks.DataDisk | Where-Object Active -EQ $true
 
 #Action
 $Action = "Mount Media ISO"
-Update-VIALog -Data "Action: $Action"
-Set-VMDvdDrive -VMName $($ServerData.VMName) -Path $MediaISO
+if($MediaISO -ne 'NA'){
+    Update-VIALog -Data "Action: $Action"
+    Set-VMDvdDrive -VMName $($ServerData.VMName) -Path $MediaISO
+}
 
 #TBA
 #Configure Nic Teams
@@ -446,6 +448,7 @@ foreach($Role in $Roles){
             $InternetID = '80c41589-c5fc-4785-a673-e8b08996cfc2'
             $ExternalNicName = (($Settings.settings.Servers.Server | Where-Object Name -EQ SNAT01).NetworkAdapters.NetworkAdapter | Where-Object ConnectedToNetwork -EQ $InternetID).Name
             $ExternalNetname = ($Settings.settings.Networks.Network | Where-Object id -EQ $InternetID).Name
+            
             $RDGWIntIP = (($Settings.settings.Servers.Server | Where-Object Name -EQ RDGW01).NetworkAdapters.NetworkAdapter | Where-Object Name -EQ NIC01).IPAddress
             $RDGWExtIP = (($Settings.settings.Servers.Server | Where-Object Name -EQ SNAT01).NetworkAdapters.NetworkAdapter | Where-Object Name -EQ NIC02).IPAddress
             
@@ -477,7 +480,16 @@ foreach($Role in $Roles){
                 $RDGWIntIP,$InternalIPInterfaceAddressPrefix,$ExternalIPAddress,$ExternalPort,$Protocol,$ExternalNetname
                 )
                 New-NetNat -Name $ExternalNetname -InternalIPInterfaceAddressPrefix $InternalIPInterfaceAddressPrefix
-                Add-NetNatStaticMapping -NatName $ExternalNetname -Protocol $Protocol -ExternalPort $ExternalPort -InternalIPAddress $RDGWIntIP -ExternalIPAddress $ExternalIPAddress
+
+                try
+                {
+                    Add-NetNatStaticMapping -NatName $ExternalNetname -Protocol $Protocol -ExternalPort $ExternalPort -InternalIPAddress $RDGWIntIP -ExternalIPAddress $ExternalIPAddress
+                }
+                catch
+                {
+                    Write-Warning "Unable to create NAT rule"
+                }
+
             } -Credential $domainCred -ArgumentList $RDGWIntIP,$InternalIPInterfaceAddressPrefix,$ExternalIPAddress,$ExternalPort,$Protocol,$ExternalNetname
 
             #Not Tested

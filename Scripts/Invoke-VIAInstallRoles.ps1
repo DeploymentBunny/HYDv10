@@ -248,7 +248,6 @@ switch ($Role)
         "Failover-Clustering",
         "FS-Data-Deduplication",
         "Hyper-V",
-        'Multipath-IO',
         'HostGuardian',
         'Storage-Replica' 
         )
@@ -272,9 +271,6 @@ switch ($Role)
         "Data-Center-Bridging",
         "Failover-Clustering",
         "FS-Data-Deduplication",
-        "Hyper-V",
-        'Multipath-IO',
-        'HostGuardian',
         'Storage-Replica'
         )
         Install-WindowsFeature -Name $ServicesToInstall -IncludeManagementTools -IncludeAllSubFeature
