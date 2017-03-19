@@ -11,13 +11,13 @@ Param (
     $Setup,
 
     [Parameter(Mandatory=$true,Position=1)]
-    [ValidateSet("Full","MDT","SCCM","SCVM")]
-    $Role = "MDT"
+    [ValidateSet("Full","MDT","SCCM_CB","SCVM2016")]
+    $Role
 )
 
 switch ($Role)
 {
-    SCVM
+    'SCVM2016'
     {
     try
         {
@@ -35,7 +35,7 @@ switch ($Role)
           Break
         }
     }
-    MDT
+    'MDT'
     {
     try
         {

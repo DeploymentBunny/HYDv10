@@ -808,13 +808,13 @@ foreach($Role in $Roles){
             $Source = 'D:\MDT 8443\MicrosoftDeploymentToolkit_x64.msi'
             Invoke-Command -VMName $ServerData.VMName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallMDT.ps1 -ArgumentList $Source -ErrorAction Stop  -Credential $domainCred
         }
-        'SCVM'{
+        'SCVM2016'{
             #Action
             $App = "ADK 1607"
             $Action = "Install Application"
             Update-VIALog -Data "Action: $Action - $App"
             $Source = 'D:\Windows ADK 10 1607\adksetup.exe'
-            $Configuration = "SCVM"
+            $Configuration = "SCVM2016"
             Invoke-Command -VMName $ServerData.VMName -FilePath C:\Setup\HYDv10\Scripts\Invoke-VIAInstallADK.ps1 -ArgumentList $Source,$Configuration -ErrorAction Stop -Credential $domainCred 
 
             #Action
@@ -879,7 +879,7 @@ foreach($Role in $Roles){
                 C:\Setup\HYDv10\Scripts\Invoke-VIAInstallSCVM2016.ps1 $Source $SCVMRole $SCVMMDomain $SCVMMSAccount $SCVMMSAccountPW $SCVMMProductKey $SCVMMUserName $SCVMMCompanyName $SCVMMBitsTcpPort $SCVMMVmmServiceLocalAccount $SCVMMTopContainerName $SCVMMLibraryDrive
             } -ArgumentList $Source,$SCVMRole,$SCVMMDomain,$SCVMMSAccount,$SCVMMSAccountPW,$SCVMMProductKey,$SCVMMUserName,$SCVMMCompanyName,$SCVMMBitsTcpPort,$SCVMMVmmServiceLocalAccount,$SCVMMTopContainerName,$SCVMMLibraryDrive -ErrorAction Stop  -Credential $domainCred
         }
-        'SCOM'{
+        'SCOM2016'{
             #Action
             $App = "SQL 2014 STD SP1"
             $Action = "Install Application"
@@ -1027,7 +1027,7 @@ foreach($Role in $Roles){
             }
             Invoke-Command -VMName $ServerData.VMName -ScriptBlock $ScriptBlock -Credential $domainCred
         }
-        'SCDP'{
+        'SCDP2016'{
             #Get Servicedata
             $ServicesData = $Settings.settings.Services.Service | Where-Object -Property Name -EQ -Value 'SCDP2016'
             $SQLINSTANCENAME = $ServicesData.config.SQLINSTANCENAME
