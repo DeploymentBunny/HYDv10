@@ -326,6 +326,7 @@ If($SXSFolderCopy -eq $True){
 If ($PathtoPatchFolder -NE 'NA'){
     $items = Get-ChildItem -Path $PathtoPatchFolder -Recurse
     foreach($item in $items){
+        Write-Verbose "Adding $($item.FullName) to $VHDVolume"
         Add-WindowsPackage -PackagePath $item.FullName -Path $VHDVolume
     }
 }
