@@ -1,28 +1,29 @@
 Param(
-    [Parameter(mandatory=$False)]
+    [Parameter(mandatory=$True,HelpMessage="Name and path of Sourcefile.")]
     [ValidateNotNullOrEmpty()]
     [String]
+    [ValidateScript({Test-Path $_})] 
     $SourceFile,
 
-    [parameter(mandatory=$False)]
+    [parameter(mandatory=$True,HelpMessage="Name and path of VHD(x) file.")]
     [ValidateNotNullOrEmpty()]
     [String]
     $DestinationFile,
 
-    [parameter(mandatory=$False)]
+    [parameter(mandatory=$True,HelpMessage="BIOS or UEFI based disk layout")]
     [ValidateSet("BIOS","UEFI","COMBO")]
     [String]
-    $Disklayout = "UEFI",
+    $Disklayout,
 
-    [parameter(mandatory=$false)]
+    [parameter(mandatory=$True)]
     [ValidateNotNullOrEmpty()]
     [String]
     $Index = "1",
 
-    [parameter(mandatory=$false)]
+    [parameter(mandatory=$True)]
     [ValidateNotNullOrEmpty()]
     [String]
-    $SizeInMB = "80000",
+    $SizeInMB = "60000",
 
     [parameter(mandatory=$False)]
     [ValidateNotNullOrEmpty()]
@@ -32,22 +33,22 @@ Param(
     [parameter(mandatory=$False)]
     [ValidateNotNullOrEmpty()]
     [String]
-    $PathtoSXSFolder = 'NA',
+    $PathtoSXSFolder,
 
     [parameter(mandatory=$False)]
     [ValidateNotNullOrEmpty()]
     [String]
-    $PathtoExtraFolder = 'NA',
+    $PathtoExtraFolder,
 
     [parameter(mandatory=$False)]
     [ValidateNotNullOrEmpty()]
     [String]
-    $PathtoPatchFolder = 'NA',
+    $PathtoPatchFolder,
 
     [parameter(mandatory=$False)]
     [ValidateNotNullOrEmpty()]
     [String]
-    $PathtoPackagesFolder = 'NA',
+    $PathtoPackagesFolder,
 
     [Parameter(mandatory=$False)]
     [ValidateNotNullOrEmpty()]
@@ -129,31 +130,9 @@ Function New-FAVHD{
     Remove-Item $diskpartcmd -Force -ErrorAction SilentlyContinue
 }
 
-#Testing all path's
-if((Test-Path -Path $DestinationFile) -eq $True){Write-Warning "$DestinationFile already exists";BREAK}
-if((Test-Path -Path $SourceFile) -eq $false){Write-Warning "No access to $SourceFile";BREAK}
-
-If($SXSFolderCopy -eq $True){
-    if((Test-Path -Path $PathtoSXSFolder) -eq $false){Write-Warning "Unable to access $PathtoSXSFolder";BREAK}else{Write-verbose "Access to $PathtoSXSFolder is ok"}
-}
-
-If($PathtoExtraFolder -ne 'NA'){
-    if((Test-Path -Path $PathtoExtraFolder) -eq $false){Write-Warning "Unable to access $PathtoExtraFolder";BREAK}else{Write-verbose "Access to $PathtoExtraFolder is ok"}
-}
-
-If($PathtoPatchFolder -ne 'NA'){
-    if((Test-Path -Path $PathtoPatchFolder) -eq $false){Write-Warning "Unable to access $PathtoPatchFolder";BREAK}else{Write-verbose "Access to $PathtoPatchFolder is ok"}
-}
-
-If($PathtoPackagesFolder -ne 'NA'){
-    if((Test-Path -Path $PathtoPackagesFolder) -eq $false){Write-Warning "Unable to access $PathtoPackagesFolder";BREAK}else{Write-verbose "Access to $PathtoPackagesFolder is ok"}
-}
-
 #Apply WIM to VHD(x)
-Write-Verbose "Disklayout is set to $Disklayout"
 Switch ($Disklayout){
     BIOS{
-        Write-Verbose "Disklayout is set to $Disklayout"
         $VHDFile = $DestinationFile
         New-FAVHD -VHDFile $VHDFile -VHDSizeinMB $SizeinMB -VHDType EXPANDABLE
         Mount-DiskImage -ImagePath $VHDFile
@@ -176,7 +155,7 @@ Switch ($Disklayout){
         #Apply Image
         sleep 5
         $Exe = $DISMExe
-        $Args = " /apply-Image /ImageFile:$SourceFile /index:$Index /ApplyDir:$VHDVolume\"
+        $Args = " /apply-Image /ImageFile:""$SourceFile"" /index:$Index /ApplyDir:$VHDVolume\"
         Invoke-Exe -Executable $Exe -Arguments $Args -SuccessfulReturnCode 0 -Verbose
     }
     UEFI{
@@ -206,7 +185,7 @@ Switch ($Disklayout){
         #Apply Image
         sleep 5
         $Exe = $DISMExe
-        $Args = " /apply-Image /ImageFile:$SourceFile /index:$Index /ApplyDir:$VHDVolume\"
+        $Args = " /apply-Image /ImageFile:""$SourceFile"" /index:$Index /ApplyDir:$VHDVolume\"
         Invoke-Exe -Executable $Exe -Arguments $Args -SuccessfulReturnCode 0 -Verbose
     }
     COMBO{
@@ -235,7 +214,7 @@ Switch ($Disklayout){
         #Apply Image
         sleep 5
         $Exe = $DISMExe
-        $Args = " /apply-Image /ImageFile:$SourceFile /index:$Index /ApplyDir:$VHDVolume\"
+        $Args = " /apply-Image /ImageFile:""$SourceFile"" /index:$Index /ApplyDir:$VHDVolume\"
         Invoke-Exe -Executable $Exe -Arguments $Args -SuccessfulReturnCode 0 -Verbose    }
 }
 
@@ -316,42 +295,84 @@ Switch ($Disklayout){
     }
 }
 
-#Copy SXS Folders to VHD(X)
-If($SXSFolderCopy -eq $True){
-    Write-Verbose "Execute Copy-Item $PathtoSXSFolder $VHDVolume\Sources\SXS -Force -Recurse"
-    Copy-Item $PathtoSXSFolder $VHDVolume\Sources\SXS -Force -Recurse
+#Copy SXS Folders to VHD(X) 
+If($SXSFolderCopy){
+    If ($PathtoSXSFolder -like '') {
+        Write-Verbose "No SXS folder specified"
+        }
+        else
+        {
+        Write-Verbose "Execute Copy-Item $PathtoSXSFolder $VHDVolume\Sources\SXS -Force -Recurse"
+        Copy-Item $PathtoSXSFolder $VHDVolume\Sources\SXS -Force -Recurse
+    }
 }
 
 #Apply patches to VHD(X) 
-If ($PathtoPatchFolder -NE 'NA'){
-    $items = Get-ChildItem -Path $PathtoPatchFolder -Recurse
-    foreach($item in $items){
-        Write-Verbose "Adding $($item.FullName) to $VHDVolume"
-        Add-WindowsPackage -PackagePath $item.FullName -Path $VHDVolume
+#Not Enabled
+If ($PathtoPatchFolder -like '')
+    {
+        Write-Verbose "No Patch folder specified"
     }
+    else
+    {
+        if(Test-Path $PathtoPatchFolder)
+        {
+            Write-Warning "Not implemented"
+        }
+        else
+        {
+            Write-Warning "$PathtoPatchFolder does not exist!"
+        }
 }
- 
+
 #Copy Extra Folders to VHD(X) 
-If ($PathtoExtraFolder -NE 'NA'){
-    Write-Verbose "Execute Copy-Item $PathtoExtraFolder $VHDVolume\Extra -Force -Recurse"
-    Copy-Item $PathtoExtraFolder $VHDVolume\Extra -Force -Recurse
+If ($PathtoExtraFolder -like '')
+    {
+        Write-Verbose "No Extra folder specified"
+    }
+    else
+    {
+        if(Test-Path $PathtoExtraFolder){
+            Write-Verbose "Execute Copy-Item $PathtoExtraFolder $VHDVolume\Tools -Force -Recurse"
+            Copy-Item $PathtoExtraFolder $VHDVolume\Tools -Force -Recurse
+    }
+    else
+    {
+        Write-Warning "$PathtoExtraFolder does not exist!"
+    }
 }
 
 #Enable features 
 If($Features){
-    Foreach($Item in $Features){
-        Enable-WindowsOptionalFeature -FeatureName $Item -Source $PathtoSXSFolder -Path $VHDVolume -All
+    Foreach($Feature in $Features){
+        Enable-WindowsOptionalFeature -FeatureName $Feature -Source $PathtoSXSFolder -Path $VHDVolume -All
     }
 }
 
 #Apply packges to VHD(X) 
-If ($PathtoPackagesFolder -NE 'NA'){
-    $Items = Get-Childitem -Path $PathtoPackagesFolder
-    foreach ($Items in $Packges){
-        Add-WindowsPackage –PackagePath $Items.Fullname –Path $VHDVolume
+If ($PathtoPackagesFolder -like '')
+    {
+        Write-Verbose "No Packages folder specified"
+    }
+    else
+    {
+        if(Test-Path $PathtoPackagesFolder){
+            Write-Verbose "Searching for packages"
+            $Packges = Get-Childitem -Path $PathtoPackagesFolder -Filter *.cab
+                foreach ($Packge in $Packges)
+                {
+                    Add-WindowsPackage –Path $VHDVolume –PackagePath $Packge.Fullname
+
+                }
+
+    }
+    else
+    {
+        Write-Warning "$PathtoPatchFolder does not exist!"
     }
 }
 
-#Dismount VHDX
+
+# Dismount VHDX
 Dismount-DiskImage -ImagePath $VHDFile
 Return $VHDFile
