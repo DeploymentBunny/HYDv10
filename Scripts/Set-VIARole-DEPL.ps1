@@ -29,8 +29,8 @@ Param
     $RunAsAccountPassword
 )
 
-Write-Output "Configure role for $Role"
-$DataDisk = Get-Volume -FileSystemLabel "$DataDiskLabel"
+Write-Output "Configure role for DEPL"
+$DataDisk = Get-Volume -FileSystemLabel "$DataDiskLabel" -ErrorAction Stop
 $DriveLetter = $DataDisk.DriveLetter + ":"
 $RunAsAccountDomain = $env:USERDOMAIN
 

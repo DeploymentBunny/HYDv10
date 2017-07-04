@@ -23,11 +23,11 @@ Update-VIALog -Data "Reading $SettingsFile"
 #Check if update is needed
 Update-VIALog -Data "Check if update is needed"
 
-if(($Settings.FABRIC.CommonSettings.CommonSetting.PasswordUpdated) -eq $false){
+if(($Settings.Settings.CommonSettings.CommonSetting.PasswordUpdated) -eq $false){
     #Action
     $Action = "Updating $SettingsFile with new passwords"
     Update-VIALog -Data "Action: $Action"
-    foreach ($AccountName in $Settings.Fabric.DomainAccounts.DomainAccount)
+    foreach ($AccountName in $Settings.Settings.Domains.Domain.DomainAccounts.DomainAccount)
     {
         $ReturnData = New-VIARandomPassword -PasswordLength 16 -Complex $true
         $AccountName.PW = $ReturnData
@@ -37,7 +37,7 @@ if(($Settings.FABRIC.CommonSettings.CommonSetting.PasswordUpdated) -eq $false){
     #Action
     $Action = "Flag $SettingsFile as updated"
     Update-VIALog -Data "Action: $Action"
-    ($Settings.FABRIC.CommonSettings.CommonSetting).PasswordUpdated = 'True'
+    ($Settings.Settings.CommonSettings.CommonSetting).PasswordUpdated = 'True'
     $Settings.Save($SettingsFile)
 
 }
@@ -47,7 +47,7 @@ Update-VIALog -Data "Reading $SettingsFile"
 [xml]$Settings = Get-Content $SettingsFile
 
 
-if(($Settings.FABRIC.CommonSettings.CommonSetting.PasswordUpdated) -eq $true){
+if(($Settings.Settings.CommonSettings.CommonSetting.PasswordUpdated) -eq $true){
     #Action
     $Action = "$SettingsFile is already updated"
     Update-VIALog -Data "Action: $Action"
